@@ -14,7 +14,7 @@
   }
   #keyboard {
     border: 1px solid #000;
-    max-width: 50%;
+    max-width: 30%;
     width: 100%;
   }
   .key {
@@ -33,6 +33,21 @@
     fill: green;
 }
 
+.key.highlight {
+    fill: orange;
+}
+
+.white-key.highlight:hover {
+    fill: #d0d0d0;  
+}
+
+.black-key.highlight:hover {
+    fill: #404040;  
+}
+
+.key.highlight.active {
+    fill: green;
+}
 
 </style>
 </head>
@@ -96,15 +111,53 @@ function noteOff(noteNumber) {
 
   const svg = document.getElementById('keyboard');
 
+// ======
+
+let mouseDown = false;
+
+document.addEventListener('mousedown', (event) => {
+    if (event.buttons == 2) {  
+        mouseDown = true;
+        toggleKeyHighlight(event);
+    }
+});
+
+document.addEventListener('mouseup', () => {
+    mouseDown = false;
+});
+
+svg.addEventListener('mouseover', (event) => {
+    if (mouseDown && event.target.classList.contains('key')) {
+        toggleKeyHighlight(event);
+    }
+});
+
+function toggleKeyHighlight(event) {
+    const key = event.target;
+    if (key.classList.contains('highlight')) {
+        key.classList.remove('highlight');
+    } else {
+        key.classList.add('highlight');
+    }
+}
+
+svg.addEventListener('contextmenu', (event) => {
+    event.preventDefault();
+});
+
+//======
+
 function createKeyboard() {
-    svg.innerHTML = '';  // Clear previous keys
+    svg.innerHTML = '';  
 
-    const whiteKeyWidth = (svg.clientWidth / (7 * 7));  // 7 octaves, 7 white keys per octave
-    const blackKeyWidth = whiteKeyWidth * 0.6;
-    const blackKeyHeight = 90;
-    const whiteKeyHeight = 150;
-
-    let noteNumber = 24;  // C1 in MIDI
+    const keyboardWidth = svg.clientWidth;
+    const whiteKeyWidth = keyboardWidth / (7 * 7); 
+	
+	const blackKeyWidth = whiteKeyWidth * 0.6;
+    const blackKeyHeight = whiteKeyWidth * 2.4; 
+    const whiteKeyHeight = whiteKeyWidth * 4; 
+	
+	svg.setAttribute('height', whiteKeyHeight);
 
     for (let octave = 0; octave < 7; octave++) {
         let whiteKeyX = octave * whiteKeyWidth * 7;
@@ -155,14 +208,13 @@ function createKeyboard() {
 
             blackKeyX += whiteKeyWidth;
         }
-
-        //noteNumber++;  // Account for the next C note at the start of the next octave
     }
 }
 
 
-  window.addEventListener('resize', createKeyboard);  // Update keyboard on window resize
+  //window.addEventListener('resize', createKeyboard);  // Update keyboard on window resize
   createKeyboard();  // Initial keyboard creation
+  
 </script>
 
 </body>
