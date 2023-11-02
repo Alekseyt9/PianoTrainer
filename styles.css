@@ -1,0 +1,49 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+}
+
+#keyboard {
+    border: 1px solid #000;
+    max-width: 50%;
+    width: 100%;
+}
+
+.key {
+    cursor: pointer;
+}
+  
+.white-key:hover {
+    fill: #d0d0d0; 
+}
+
+.black-key:hover {
+    fill: #404040;  
+}
+
+.key.active {
+    fill: green;
+}
+
+.white-key.highlight {
+    fill: orange;
+}
+
+.black-key.highlight {
+    fill: #CC7000;
+}
+
+.white-key.highlight:hover {
+    fill: #d0d0d0;  
+}
+
+.black-key.highlight:hover {
+    fill: #404040;  
+}
+
+.key.highlight.active {
+    fill: green;
+}
