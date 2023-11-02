@@ -4,7 +4,6 @@ function createKeyboard() {
 
     const keyboardWidth = svg.clientWidth;
     const whiteKeyWidth = keyboardWidth / (7 * 7); 
-
     const blackKeyWidth = whiteKeyWidth * 0.6;
     const blackKeyHeight = whiteKeyWidth * 2.4; 
     const whiteKeyHeight = whiteKeyWidth * 4; 
@@ -14,8 +13,8 @@ function createKeyboard() {
     for (let octave = 0; octave < 7; octave++) {
         let whiteKeyX = octave * whiteKeyWidth * 7;
         let blackKeyX = whiteKeyX + whiteKeyWidth - (blackKeyWidth / 2);
-
         noteNumber = 24 + (octave * 12);
+        
         for (let i = 0; i < 7; i++) {
             const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
             rect.setAttribute('x', whiteKeyX);

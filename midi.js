@@ -1,7 +1,6 @@
 
 if (navigator.requestMIDIAccess) {
-    navigator.requestMIDIAccess()
-        .then(onMIDISuccess, onMIDIFailure);
+    navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
 } else {
     console.log("Web MIDI is not supported in this browser.");
 }
@@ -23,14 +22,15 @@ function onMIDIMessage(message) {
     const velocity = (message.data.length > 2) ? message.data[2] : 0;
 
     switch (command) {
-        case 144: // noteOn
+        case 144: 
             if (velocity > 0) {
                 noteOn(noteNumber);
             } else {
                 noteOff(noteNumber);
             }
             break;
-        case 128: // noteOff
+            
+        case 128: 
             noteOff(noteNumber);
             break;
     }

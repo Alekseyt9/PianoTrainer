@@ -1,6 +1,5 @@
 
 const svg = document.getElementById('keyboard');
-
 let mouseDown = false;
 
 document.addEventListener('mousedown', (event) => {
