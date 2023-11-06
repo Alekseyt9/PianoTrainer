@@ -2,7 +2,7 @@
 function createNotesMeta() {
     const notesMeta = [];
 
-    y = 12 * shiftY;
+    y = 12 * shiftY + startY;
 
     for (let octave = 1; octave <= 7; octave++) {
         for (let i = 0; i < 12; i++) {
