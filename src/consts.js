@@ -5,4 +5,4 @@ const svgK = document.getElementById('keyboard');
 const xmlns = "http://www.w3.org/2000/svg";
 const shiftY = 30;
 const startY = 0;
-const distY = 40;
+const distY = 30;

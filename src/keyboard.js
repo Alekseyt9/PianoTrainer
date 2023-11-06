@@ -2,6 +2,7 @@
 function createKeyboard() {
     svgK.innerHTML = '';  
 
+    const oStart = 1;
     const oCount = 4;
 
     const keyboardWidth = svgK.clientWidth;
@@ -12,9 +13,9 @@ function createKeyboard() {
 
     svgK.setAttribute('height', whiteKeyHeight);
 
-    for (let octave = 0; octave < oCount; octave++) {
-        let whiteKeyX = octave * whiteKeyWidth * 7;
-        let blackKeyX = whiteKeyX + whiteKeyWidth - (blackKeyWidth / 2);
+    for (let octave = oStart; octave <= oCount; octave++) {
+        let whiteKeyX = (octave - oStart) * whiteKeyWidth * 7;
+        //let blackKeyX = whiteKeyX + whiteKeyWidth - (blackKeyWidth / 2);
         noteNumber = 24 + (octave * 12);
         
         for (let i = 0; i < 7; i++) {
@@ -33,7 +34,7 @@ function createKeyboard() {
             noteNumber += (i == 2 || i == 6) ? 1 : 2;  
         }
 
-        blackKeyX = (octave * whiteKeyWidth * 7) + whiteKeyWidth - (blackKeyWidth / 2);
+        blackKeyX = ((octave-oStart) * whiteKeyWidth * 7) + whiteKeyWidth - (blackKeyWidth / 2);
         noteNumber = 25 + (octave * 12);  
 
         for (let i = 0; i < 7; i++) {

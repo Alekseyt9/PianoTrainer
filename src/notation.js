@@ -2,7 +2,12 @@
 function drawStaff(startY, color) {
     const w = svgN.clientWidth;
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 11; i++) {
+        if (i == 5)
+        {
+            continue;
+        }
+
         const line = document.createElementNS(xmlns, 'line');
         line.setAttribute('x1', '70');
         line.setAttribute('y1', startY + i * shiftY);
@@ -15,4 +20,3 @@ function drawStaff(startY, color) {
 }
 
 drawStaff(startY, 'black');
-drawStaff(startY + shiftY*5 + distY, 'black');
