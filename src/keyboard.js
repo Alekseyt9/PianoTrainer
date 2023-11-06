@@ -1,16 +1,18 @@
 
 function createKeyboard() {
-    svg.innerHTML = '';  
+    svgK.innerHTML = '';  
 
-    const keyboardWidth = svg.clientWidth;
-    const whiteKeyWidth = keyboardWidth / (7 * 7); 
+    const oCount = 4;
+
+    const keyboardWidth = svgK.clientWidth;
+    const whiteKeyWidth = keyboardWidth / (7 * oCount); 
     const blackKeyWidth = whiteKeyWidth * 0.6;
     const blackKeyHeight = whiteKeyWidth * 2.4; 
     const whiteKeyHeight = whiteKeyWidth * 4; 
 
-    svg.setAttribute('height', whiteKeyHeight);
+    svgK.setAttribute('height', whiteKeyHeight);
 
-    for (let octave = 0; octave < 7; octave++) {
+    for (let octave = 0; octave < oCount; octave++) {
         let whiteKeyX = octave * whiteKeyWidth * 7;
         let blackKeyX = whiteKeyX + whiteKeyWidth - (blackKeyWidth / 2);
         noteNumber = 24 + (octave * 12);
@@ -25,7 +27,7 @@ function createKeyboard() {
             rect.setAttribute('stroke', 'black');
             rect.setAttribute('class', 'key white-key');
             rect.setAttribute('data-note-number', noteNumber);
-            svg.appendChild(rect);
+            svgK.appendChild(rect);
 
             whiteKeyX += whiteKeyWidth;
             noteNumber += (i == 2 || i == 6) ? 1 : 2;  
@@ -45,7 +47,7 @@ function createKeyboard() {
                 blackRect.setAttribute('stroke', 'black');
                 blackRect.setAttribute('class', 'key black-key');
                 blackRect.setAttribute('data-note-number', noteNumber);
-                svg.appendChild(blackRect);
+                svgK.appendChild(blackRect);
                 noteNumber += 2;
             } else {
                 noteNumber++;  

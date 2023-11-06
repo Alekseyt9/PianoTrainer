@@ -3,19 +3,21 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="styles.css">
+        <link rel="stylesheet" type="text/css" href="styles/styles.css">
         <title>MIDI Keyboard</title>
     </head>
     <body>     
         <div id="container">
-            <svg id="notation" xmlns="http://www.w3.org/2000/svg" width="800" height="300"></svg>
+            <svg id="notation" xmlns="http://www.w3.org/2000/svg" width="800" height="350"></svg>
             <svg id="keyboard" xmlns="http://www.w3.org/2000/svg"></svg>
         </div>
 
-        <script type="text/javascript" src="midi.js"></script>
-        <script type="text/javascript" src="highlight.js"></script>
-        <script type="text/javascript" src="keyboard.js"></script>
-        <script type="text/javascript" src="notation.js"></script>
-        <script type="text/javascript" src="note_generator.js"></script>
+        <script type="text/javascript" src="src/consts.js"></script>
+        <script type="text/javascript" src="src/notes_metadata.js"></script>
+        <script type="text/javascript" src="src/midi.js"></script>
+        <script type="text/javascript" src="src/highlight.js"></script>
+        <script type="text/javascript" src="src/keyboard.js"></script>
+        <script type="text/javascript" src="src/notation.js"></script>
+        <script type="text/javascript" src="src/notes_generator.js"></script>
     </body>
 </html>

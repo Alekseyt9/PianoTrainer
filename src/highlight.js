@@ -1,5 +1,4 @@
 
-const svg = document.getElementById('keyboard');
 let mouseDown = false;
 
 document.addEventListener('mousedown', (event) => {
@@ -13,7 +12,7 @@ document.addEventListener('mouseup', () => {
     mouseDown = false;
 });
 
-svg.addEventListener('mouseover', (event) => {
+svgK.addEventListener('mouseover', (event) => {
     if (mouseDown && event.target.classList.contains('key')) {
         toggleKeyHighlight(event);
     }
@@ -28,6 +27,6 @@ function toggleKeyHighlight(event) {
     }
 }
 
-svg.addEventListener('contextmenu', (event) => {
+svgK.addEventListener('contextmenu', (event) => {
     event.preventDefault();
 });
