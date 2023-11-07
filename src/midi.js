@@ -41,11 +41,37 @@ function noteOn(noteNumber) {
     if (key) {
         key.classList.add('active');
     }
+
+    var keyM = meta.find(x => x.midiNum == noteNumber);
+    if (keyM){
+        var note = createNote(keyM.y, keyM.name, noteNumber, 'gray');
+        pressedKeyMap[noteNumber] = note;        
+    }
+
+
+    if (currentNote && keyM.midiNum == currentNote.getAttribute("midiNum"))
+    {
+        generateSampleNote();
+    }
 }
 
 function noteOff(noteNumber) {
     const key = document.querySelector(`[data-note-number="${noteNumber}"]`);
     if (key) {
         key.classList.remove('active');
+    }
+
+    var keyM = meta.find(x => x.midiNum == noteNumber);
+    if (keyM){
+        var noteOld = pressedKeyMap[noteNumber];
+        if (!noteOld)
+            return;
+
+        var note = document.getElementById(noteOld.id);
+        if (note)
+        {
+            note.remove();
+            delete pressedKeyMap[noteNumber];
+        }
     }
 }

@@ -1,18 +1,27 @@
     
 let notes = [];
 
-function createNote(y, name) {
+function createNote(y, name, midiNum, color = 'black') {
+    const svgWidth = svgN.clientWidth || svgN.getBoundingClientRect().width;
+    const centerX = svgWidth / 2;
+
     const note = document.createElementNS(xmlns, 'ellipse');
-    note.setAttribute('cx', '200');  
+    note.setAttribute('cx', centerX);  
     note.setAttribute('cy', y);
     note.setAttribute('rx', '20'); 
     note.setAttribute('ry', '14');
     note.setAttribute('fill', 'none');
-    note.setAttribute('stroke', 'black');
+    note.setAttribute('stroke', color);
     note.setAttribute('stroke-width', '2');
     note.setAttribute('name', name);
+    note.setAttribute('id', generateRandomId());
+    note.setAttribute('midiNum', midiNum);
     svgN.appendChild(note);
     return note;
+}
+
+function generateRandomId() {
+    return 'note-' + Math.random().toString(36).substr(2, 9);
 }
 
 function animate() {
@@ -39,16 +48,26 @@ function generateNotes() {
     }
 }
 
-const keys = document.querySelectorAll('.key');
-keys.forEach(key => key.addEventListener('mousedown', keyPressHandler));
-
-function keyPressHandler(event) {
-    const key = event.target;
-    const noteNumber = key.dataset.noteNumber;
-
-    var keyM = meta.find(x => x.midiNum == noteNumber);
-    createNote(keyM.y, keyM.name); 
+function getRandomElementFromArray(array) {
+    const randomIndex = Math.floor(Math.random() * array.length);
+    return array[randomIndex];
 }
+
+var currentNote;
+
+function generateSampleNote()
+{
+    if (currentNote)
+    {
+        currentNote.remove();
+        currentNote = null;
+    }
+
+    var hMeta = getHighlightedKeysMetadata();
+    var nMeta = getRandomElementFromArray(hMeta);
+    currentNote = createNote(nMeta.y, nMeta.name, nMeta.midiNum);
+}
+
 
 //generateNotes();
 //animate();

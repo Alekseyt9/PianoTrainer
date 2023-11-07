@@ -15,7 +15,6 @@ function createKeyboard() {
 
     for (let octave = oStart; octave <= oCount; octave++) {
         let whiteKeyX = (octave - oStart) * whiteKeyWidth * 7;
-        //let blackKeyX = whiteKeyX + whiteKeyWidth - (blackKeyWidth / 2);
         noteNumber = 24 + (octave * 12);
         
         for (let i = 0; i < 7; i++) {
@@ -29,6 +28,16 @@ function createKeyboard() {
             rect.setAttribute('class', 'key white-key');
             rect.setAttribute('data-note-number', noteNumber);
             svgK.appendChild(rect);
+
+            rect.addEventListener('mousedown', function(event) {
+                handleKeyDown(event.target);
+            });
+            rect.addEventListener('mouseup', function(event) {
+                handleKeyUp(event.target);
+            });
+            rect.addEventListener('mouseleave', function(event) {
+                handleKeyUp(event.target);
+            });
 
             whiteKeyX += whiteKeyWidth;
             noteNumber += (i == 2 || i == 6) ? 1 : 2;  
@@ -50,6 +59,17 @@ function createKeyboard() {
                 blackRect.setAttribute('data-note-number', noteNumber);
                 svgK.appendChild(blackRect);
                 noteNumber += 2;
+
+                blackRect.addEventListener('mousedown', function(event) {
+                    handleKeyDown(event.target);
+                });
+                blackRect.addEventListener('mouseup', function(event) {
+                    handleKeyUp(event.target);
+                });
+                blackRect.addEventListener('mouseleave', function(event) {
+                    handleKeyUp(event.target);
+                });
+
             } else {
                 noteNumber++;  
             }
@@ -57,6 +77,16 @@ function createKeyboard() {
             blackKeyX += whiteKeyWidth;
         }
     }
+}
+
+function handleKeyDown(keyElement) {
+    var noteNumber = keyElement.getAttribute('data-note-number');
+    noteOn(noteNumber);
+}
+
+function handleKeyUp(keyElement) {
+    var noteNumber = keyElement.getAttribute('data-note-number');
+    noteOff(noteNumber);
 }
 
 createKeyboard();  

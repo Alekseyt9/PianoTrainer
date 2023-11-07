@@ -25,6 +25,8 @@ function toggleKeyHighlight(event) {
     } else {
         key.classList.add('highlight');
     }
+
+    generateSampleNote();
 }
 
 svgK.addEventListener('contextmenu', (event) => {

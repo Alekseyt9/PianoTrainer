@@ -42,7 +42,8 @@ function getHighlightedKeysMetadata() {
         const noteNumber = key.getAttribute('data-note-number');
         const midiNum = parseInt(noteNumber, 10);
 
-        return meta.find(x => x.midiNum = midiNum);
+        var note = meta.find(x => x.midiNum == midiNum);
+        return note;
     });
 
     return highlightedKeysMetadata;
