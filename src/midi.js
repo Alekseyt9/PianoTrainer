@@ -48,10 +48,9 @@ function noteOn(noteNumber) {
         pressedKeyMap[noteNumber] = note;        
     }
 
-
     if (currentNote && keyM.midiNum == currentNote.getAttribute("midiNum"))
     {
-        generateSampleNote();
+        cleanSampleNote();
     }
 }
 
@@ -73,5 +72,10 @@ function noteOff(noteNumber) {
             note.remove();
             delete pressedKeyMap[noteNumber];
         }
+    }
+
+    if (currentNote == null)
+    {
+        generateSampleNote();
     }
 }

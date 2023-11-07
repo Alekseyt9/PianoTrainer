@@ -34,20 +34,6 @@ function animate() {
     requestAnimationFrame(animate);
 }
 
-function generateNotes() {
-    //var hMeta = getHighlightedKeysMetadata();
-
-    let staffLines = [];
-    for (let i = 1*12; i < 5*12; i++)
-    {
-        var n = meta[i];
-        if (!n.isWhite)
-            continue;
-        const note = createNote(n.y, n.name);
-        notes.push(note);
-    }
-}
-
 function getRandomElementFromArray(array) {
     const randomIndex = Math.floor(Math.random() * array.length);
     return array[randomIndex];
@@ -55,19 +41,20 @@ function getRandomElementFromArray(array) {
 
 var currentNote;
 
-function generateSampleNote()
+function cleanSampleNote()
 {
     if (currentNote)
     {
         currentNote.remove();
         currentNote = null;
     }
+}
 
+function generateSampleNote()
+{
+    cleanSampleNote();
     var hMeta = getHighlightedKeysMetadata();
     var nMeta = getRandomElementFromArray(hMeta);
     currentNote = createNote(nMeta.y, nMeta.name, nMeta.midiNum);
 }
 
-
-//generateNotes();
-//animate();
