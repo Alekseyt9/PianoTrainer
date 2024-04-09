@@ -1,4 +1,4 @@
-    
+  
 let notes = [];
 
 function createNote(y, name, midiNum, color = 'black') {
@@ -17,7 +17,61 @@ function createNote(y, name, midiNum, color = 'black') {
     note.setAttribute('id', generateRandomId());
     note.setAttribute('midiNum', midiNum);
     svgN.appendChild(note);
-    return note;
+
+    let und = drawUnderlines(y, color);
+
+    return [note, ...und];
+}
+
+function drawUnderlines(y, color)
+{
+    let lines = [];
+
+    if (y < startY){
+        let ycur = startY - distY;
+        const c = Math.ceil((startY - y) / distY - 0.5);
+        for (let i=0; i<c; i++)
+        {
+            lines.push(drawUnderline(ycur, color));
+            ycur -= distY;
+        }
+    }
+
+    if (y == startY + distY * 5)
+    {
+        lines.push(drawUnderline(y, color));
+    }
+
+    const topy = distY * 11 + distY;
+    if (y > topy)
+    {     
+        let ycur = topy + distY;
+        const c = Math.ceil((y - topy) / distY - 0.5);
+        for (let i=0; i<c; i++)
+        {
+            lines.push(drawUnderline(ycur, color));
+            ycur += distY;
+        }
+    }
+
+    return lines;
+}
+
+function drawUnderline(y, color)
+{
+    const svgWidth = svgN.clientWidth || svgN.getBoundingClientRect().width;
+    const centerX = svgWidth / 2;
+
+    const line = document.createElementNS(xmlns, 'line');
+    line.setAttribute('x1', centerX - 30);
+    line.setAttribute('y1', y);
+    line.setAttribute('x2', centerX + 30);
+    line.setAttribute('y2', y);
+    line.setAttribute('stroke', color);
+    line.setAttribute('stroke-width', '1');
+    svgN.appendChild(line);
+
+    return line;
 }
 
 function generateRandomId() {
@@ -39,14 +93,14 @@ function getRandomElementFromArray(array) {
     return array[randomIndex];
 }
 
-var currentNote;
+var currentNotes;
 
 function cleanSampleNote()
 {
-    if (currentNote)
+    if (currentNotes)
     {
-        currentNote.remove();
-        currentNote = null;
+        currentNotes.forEach(x => x.remove());  
+        currentNotes = null;
     }
 }
 
@@ -55,6 +109,7 @@ function generateSampleNote()
     cleanSampleNote();
     var hMeta = getHighlightedKeysMetadata();
     var nMeta = getRandomElementFromArray(hMeta);
-    currentNote = createNote(nMeta.y, nMeta.name, nMeta.midiNum);
+    if (nMeta){
+        currentNotes = createNote(nMeta.y, nMeta.name, nMeta.midiNum);
+    }
 }
-

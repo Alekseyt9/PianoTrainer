@@ -44,11 +44,11 @@ function noteOn(noteNumber) {
 
     var keyM = meta.find(x => x.midiNum == noteNumber);
     if (keyM){
-        var note = createNote(keyM.y, keyM.name, noteNumber, 'gray');
-        pressedKeyMap[noteNumber] = note;        
+        var notes = createNote(keyM.y, keyM.name, noteNumber, 'gray');
+        pressedKeyMap[noteNumber] = notes;        
     }
 
-    if (currentNote && keyM.midiNum == currentNote.getAttribute("midiNum"))
+    if (currentNotes && keyM.midiNum == currentNotes[0].getAttribute("midiNum"))
     {
         cleanSampleNote();
     }
@@ -62,19 +62,17 @@ function noteOff(noteNumber) {
 
     var keyM = meta.find(x => x.midiNum == noteNumber);
     if (keyM){
-        var noteOld = pressedKeyMap[noteNumber];
-        if (!noteOld)
-            return;
-
-        var note = document.getElementById(noteOld.id);
-        if (note)
+        var notesOld = pressedKeyMap[noteNumber];
+        if (!notesOld)
         {
-            note.remove();
-            delete pressedKeyMap[noteNumber];
+            return;
         }
+
+        notesOld.forEach(x => x.remove());  
+        delete pressedKeyMap[noteNumber];
     }
 
-    if (currentNote == null)
+    if (currentNotes == null)
     {
         generateSampleNote();
     }
