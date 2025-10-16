@@ -1,4 +1,4 @@
-body.theme-sunrise {
+﻿body.theme-sunrise {
     --body-bg: radial-gradient(circle at 80% 10%, #ffb86c 0%, #ff5f87 45%, #521262 100%);
     --text-primary: #fff9f2;
     --text-muted: rgba(255, 247, 240, 0.7);
@@ -47,7 +47,7 @@ body.theme-sunrise {
     --midi-error: #ff6f91;
     --midi-pending: #ffe066;
     --exercise-complete: #ffb86c;
-    --exercise-upcoming: rgba(255, 210, 189, 0.9);
+    --exercise-upcoming: rgba(255, 194, 160, 0.95);
     --switch-track-off: rgba(255, 200, 160, 0.45);
     --switch-track-on: #ff9ecb;
     --switch-handle: #fff9f2;
@@ -55,3 +55,6 @@ body.theme-sunrise {
     --accent-pulse-low: rgba(255, 158, 203, 0.42);
     --accent-pulse-high: rgba(255, 212, 242, 0.85);
 }
+
+
+

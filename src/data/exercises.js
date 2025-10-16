@@ -1,20 +1,20 @@
-export const exercises = [
+﻿export const exercises = [
     {
         id: 'octaves-1',
-        title: 'Большая → Вторая октавы',
-        description: 'Сыграй ноты C большой, малой, первой и второй октав подряд.',
+        title: 'Octaves: Low to High C',
+        description: 'Play C notes from the low (C2) up to the high (C5) octave in order.',
         steps: [
-            { notes: [36], label: 'C2 (большая)' },
-            { notes: [48], label: 'C3 (малая)' },
-            { notes: [60], label: 'C4 (первая)' },
-            { notes: [72], label: 'C5 (вторая)' }
+            { notes: [36], label: 'C2' },
+            { notes: [48], label: 'C3' },
+            { notes: [60], label: 'C4' },
+            { notes: [72], label: 'C5' }
         ],
         loop: true
     },
     {
         id: 'white-scale-up',
-        title: 'Белые клавиши: C-D-E-F',
-        description: 'Короткая последовательность на белых клавишах первой октавы.',
+        title: 'White Keys: C-D-E-F',
+        description: 'Short pattern on the white keys of the first octave.',
         steps: [
             { notes: [60], label: 'C4' },
             { notes: [62], label: 'D4' },
@@ -25,8 +25,8 @@ export const exercises = [
     },
     {
         id: 'c-major-octave',
-        title: 'Гамма C мажор (C2 → C5)',
-        description: 'Полная гамма C мажор от большой до второй октавы.',
+        title: 'C Major Scale (C2 -> C5)',
+        description: 'Full C major scale ascending from C2 to C5.',
         steps: [
             { notes: [36], label: 'C2' },
             { notes: [38], label: 'D2' },
@@ -54,3 +54,4 @@ export const exercises = [
         loop: false
     }
 ];
+

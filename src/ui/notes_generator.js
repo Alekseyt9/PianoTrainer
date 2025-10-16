@@ -1,4 +1,4 @@
-import { xmlns, startY, distY } from '../core/consts.js';
+﻿import { xmlns, startY, distY } from '../core/consts.js';
 import { getNotationSvg } from '../core/context.js';
 import { getPressedKeyMap } from '../core/state.js';
 import { findNoteByMidi } from '../data/notes_metadata.js';
@@ -85,19 +85,6 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
 
             exerciseElements.push(...noteElements);
         });
-
-        if (step.label) {
-            const text = notationSvg.ownerDocument.createElementNS(xmlns, 'text');
-            text.setAttribute('x', stepX);
-            text.setAttribute('y', startY + distY * 12.5);
-            text.setAttribute('text-anchor', 'middle');
-            text.setAttribute('fill', strokeColor);
-            text.setAttribute('font-size', '14');
-            text.setAttribute('font-weight', isCurrent ? '700' : '500');
-            text.textContent = step.label;
-            notationSvg.appendChild(text);
-            exerciseElements.push(text);
-        }
     });
 }
 
@@ -231,3 +218,9 @@ function getNotationCenterX() {
 function generateRandomId() {
     return `note-${Math.random().toString(36).slice(2, 11)}`;
 }
+
+
+
+
+
+

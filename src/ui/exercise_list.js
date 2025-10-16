@@ -28,13 +28,6 @@ export function initExerciseList() {
 
         button.appendChild(title);
 
-        if (exercise.description) {
-            const hint = document.createElement('span');
-            hint.className = 'exercise-item-desc';
-            hint.textContent = exercise.description;
-            button.appendChild(hint);
-        }
-
         button.addEventListener('click', () => {
             loadExerciseById(exercise.id);
         });

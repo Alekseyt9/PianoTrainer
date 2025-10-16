@@ -1,20 +1,20 @@
-import { noteOn, noteOff } from './playback.js';
+﻿import { noteOn, noteOff } from './playback.js';
 
 export function initMIDI({ onStatusChange } = {}) {
     if (!navigator.requestMIDIAccess) {
-        onStatusChange?.('error', 'Не поддерживается');
+        onStatusChange?.('error', 'Not supported');
         console.warn('Web MIDI is not supported in this browser.');
         return;
     }
 
-    onStatusChange?.('pending', 'Подключение...');
+    onStatusChange?.('pending', 'Connecting...');
     navigator.requestMIDIAccess()
         .then(access => onMIDISuccess(access, onStatusChange))
         .catch(() => onMIDIFailure(onStatusChange));
 }
 
 function onMIDISuccess(midiAccess, onStatusChange) {
-    onStatusChange?.('connected', 'Подключено');
+    onStatusChange?.('connected', 'Connected');
     const inputs = midiAccess.inputs.values();
     for (let input = inputs.next(); input && !input.done; input = inputs.next()) {
         input.value.onmidimessage = onMIDIMessage;
@@ -22,7 +22,7 @@ function onMIDISuccess(midiAccess, onStatusChange) {
 }
 
 function onMIDIFailure(onStatusChange) {
-    onStatusChange?.('error', 'Ошибка доступа');
+    onStatusChange?.('error', 'Access error');
     console.warn('Could not access your MIDI devices. Ensure the page is served over HTTPS and your browser supports Web MIDI.');
 }
 

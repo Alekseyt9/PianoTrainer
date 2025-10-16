@@ -150,12 +150,6 @@
     font-weight: 600;
 }
 
-.exercise-item-desc {
-    margin: 0;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-}
-
 #exercise-details {
     margin-top: auto;
     padding-top: 12px;
@@ -524,4 +518,5 @@
         max-height: 160px;
     }
 }
+
 

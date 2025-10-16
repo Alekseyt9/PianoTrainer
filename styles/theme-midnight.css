@@ -1,4 +1,4 @@
-body.theme-midnight {
+﻿body.theme-midnight {
     --body-bg: #202124;
     --text-primary: #f1f3f4;
     --text-muted: rgba(241, 243, 244, 0.55);
@@ -51,5 +51,7 @@ body.theme-midnight {
     --highlight-white-glow: rgba(249, 168, 37, 0.8);
     --highlight-black-glow: rgba(255, 193, 7, 0.85);
     --exercise-complete: #6fcf97;
-    --exercise-upcoming: rgba(183, 199, 255, 0.88);
+    --exercise-upcoming: rgba(200, 215, 255, 0.95);
 }
+
+

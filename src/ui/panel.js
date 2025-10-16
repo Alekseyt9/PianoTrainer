@@ -1,13 +1,14 @@
-import { getKeyboardRange, setKeyboardRange } from './keyboard.js';
+﻿import { getKeyboardRange, setKeyboardRange } from './keyboard.js';
 import { setHintsEnabled, areHintsEnabled } from './notes_generator.js';
 
 const SETTINGS_STORAGE_KEY = 'pianoTrainerSettings';
-const AVAILABLE_THEMES = ['midnight', 'aurora', 'sunrise', 'citrus'];
+const AVAILABLE_THEMES = ['midnight', 'light', 'aurora', 'sunrise', 'citrus'];
 
 let midiContainerElement = null;
 let midiValueElement = null;
 let scoreElement = null;
 let themeSelectElement = null;
+let exerciseLabelElement = null;
 let settings = {};
 let score = 0;
 
@@ -21,6 +22,7 @@ export function initPanel({ onThemeChange } = {}) {
     midiContainerElement = document.getElementById('status-midi');
     midiValueElement = document.getElementById('status-midi-value');
     scoreElement = document.getElementById('status-score-value');
+    exerciseLabelElement = document.getElementById('status-exercise-value');
 
     const range = getKeyboardRange();
     if (rangeStartSelect && rangeEndSelect) {
@@ -59,7 +61,7 @@ export function initPanel({ onThemeChange } = {}) {
 
     initialiseTimer();
     updateScore(0);
-    updateMidiStatus('pending', 'Ожидание');
+    updateMidiStatus('pending', 'Waiting');
 }
 
 export function updateMidiStatus(state, text) {
@@ -87,6 +89,12 @@ export function getHintsEnabled() {
     return areHintsEnabled();
 }
 
+export function setCurrentExerciseTitle(title) {
+    if (exerciseLabelElement) {
+        exerciseLabelElement.textContent = title || 'Note Hunt';
+    }
+}
+
 function updateScore(value) {
     score = value;
     if (scoreElement) {
@@ -97,7 +105,11 @@ function updateScore(value) {
 function applyTheme(theme) {
     const normalized = AVAILABLE_THEMES.includes(theme) ? theme : 'midnight';
     AVAILABLE_THEMES.forEach(name => document.body.classList.remove(`theme-${name}`));
-    document.body.classList.add(`theme-${normalized}`);
+    if (normalized !== 'midnight') {
+        document.body.classList.add(`theme-${normalized}`);
+    } else {
+        document.body.classList.add('theme-midnight');
+    }
     if (themeSelectElement) {
         themeSelectElement.value = normalized;
     }
@@ -143,3 +155,5 @@ function persistSettings(patch) {
         console.warn('Unable to persist settings', error);
     }
 }
+
+

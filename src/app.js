@@ -1,10 +1,10 @@
 import { initContext } from './core/context.js';
 import { registerScoreHandler } from './core/playback.js';
 import { initMIDI } from './core/midi.js';
-import { initNotation } from './ui/notation.js';
+import { initNotation, refreshStaffWidth } from './ui/notation.js';
 import { initKeyboard } from './ui/keyboard.js';
 import { renderExerciseSteps, setHintsEnabled } from './ui/notes_generator.js';
-import { initPanel, updateMidiStatus, incrementScore, getHintsEnabled } from './ui/panel.js';
+import { initPanel, updateMidiStatus, incrementScore, getHintsEnabled, setCurrentExerciseTitle } from './ui/panel.js';
 import { initExerciseList } from './ui/exercise_list.js';
 import { initExercise, onExerciseChange } from './core/exercise.js';
 
@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     initNotation();
+    refreshStaffWidth();
+    window.addEventListener('resize', refreshStaffWidth);
     initKeyboard();
     initPanel();
     initExerciseList();
@@ -25,13 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
     setHintsEnabled(getHintsEnabled());
 
     initExercise();
-    const statusExercise = document.getElementById('status-exercise-value');
-
     onExerciseChange(({ exercise, index }) => {
         renderExerciseSteps(exercise, index);
-        if (statusExercise) {
-            statusExercise.textContent = exercise ? exercise.title : '—';
-        }
+        setCurrentExerciseTitle(exercise ? exercise.title : 'None');
     });
 
     registerScoreHandler(() => incrementScore());
