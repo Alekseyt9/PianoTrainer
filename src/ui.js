@@ -1,3 +1,18 @@
+const SETTINGS_STORAGE_KEY = 'pianoTrainerSettings';
+const AVAILABLE_THEMES = ['midnight', 'aurora', 'sunrise', 'citrus'];
+
+function loadPersistedSettings() {
+    try {
+        const saved = localStorage.getItem(SETTINGS_STORAGE_KEY);
+        if (!saved) {
+            return {};
+        }
+        return JSON.parse(saved);
+    } catch (_) {
+        return {};
+    }
+}
+
 function initInterface() {
     const infoToggle = document.getElementById('info-toggle');
     const infoPanel = document.getElementById('info-panel');
@@ -7,6 +22,53 @@ function initInterface() {
     const timeValue = document.getElementById('status-time-value');
     const midiContainer = document.getElementById('status-midi');
     const midiValue = document.getElementById('status-midi-value');
+    const hintsToggle = document.getElementById('toggle-hints');
+    const themeSelect = document.getElementById('theme-select');
+
+    let settings = loadPersistedSettings();
+
+    const saveSettings = (patch) => {
+        settings = { ...settings, ...patch };
+        try {
+            localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+        } catch (error) {
+            console.warn('Unable to persist settings', error);
+        }
+    };
+
+    const applyThemeClass = (theme) => {
+        if (!document.body) {
+            return;
+        }
+        AVAILABLE_THEMES.forEach(name => {
+            document.body.classList.remove(`theme-${name}`);
+        });
+        document.body.classList.add(`theme-${theme}`);
+    };
+
+    const setTheme = (theme, { persist = true } = {}) => {
+        const normalized = AVAILABLE_THEMES.includes(theme) ? theme : 'midnight';
+        applyThemeClass(normalized);
+        if (themeSelect) {
+            themeSelect.value = normalized;
+        }
+        if (persist) {
+            saveSettings({ theme: normalized });
+        }
+    };
+
+    const setHints = (enabled, { persist = true } = {}) => {
+        const normalized = Boolean(enabled);
+        if (hintsToggle) {
+            hintsToggle.checked = normalized;
+        }
+        if (typeof setStaffHintsEnabled === 'function') {
+            setStaffHintsEnabled(normalized);
+        }
+        if (persist) {
+            saveSettings({ hints: normalized });
+        }
+    };
 
     if (infoToggle && infoPanel) {
         infoToggle.addEventListener('click', () => {
@@ -42,6 +104,21 @@ function initInterface() {
         rangeStartSelect.addEventListener('change', applyRange);
         rangeEndSelect.addEventListener('change', applyRange);
     }
+
+    if (hintsToggle) {
+        hintsToggle.addEventListener('change', (event) => {
+            setHints(event.target.checked);
+        });
+    }
+
+    if (themeSelect) {
+        themeSelect.addEventListener('change', (event) => {
+            setTheme(event.target.value);
+        });
+    }
+
+    setTheme(settings.theme || 'midnight', { persist: false });
+    setHints(settings.hints !== false, { persist: false });
 
     let score = 0;
     const updateScore = () => {

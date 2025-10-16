@@ -1,4 +1,292 @@
 
+:root {
+    --body-bg: #202124;
+    --text-primary: #f1f3f4;
+    --text-muted: rgba(241, 243, 244, 0.55);
+    --panel-bg: #31353b;
+    --panel-shadow-1: rgba(0, 0, 0, 0.35);
+    --panel-shadow-2: rgba(0, 0, 0, 0.25);
+    --info-button-border: rgba(255, 255, 255, 0.2);
+    --info-button-bg: rgba(0, 0, 0, 0.15);
+    --info-button-hover-bg: rgba(255, 255, 255, 0.12);
+    --info-panel-bg: rgba(20, 21, 23, 0.95);
+    --info-panel-border: rgba(255, 255, 255, 0.07);
+    --range-chip-bg: rgba(0, 0, 0, 0.18);
+    --range-chip-shadow: rgba(0, 0, 0, 0.25);
+    --range-label-color: rgba(241, 243, 244, 0.8);
+    --range-select-bg: rgba(255, 255, 255, 0.08);
+    --range-select-border: rgba(255, 255, 255, 0.12);
+    --range-select-focus-border: rgba(138, 180, 248, 0.8);
+    --range-select-focus-ring: rgba(138, 180, 248, 0.25);
+    --select-option-bg: #e3e7ef;
+    --select-option-color: #101114;
+    --container-bg: #2a2d32;
+    --container-shadow-1: rgba(0, 0, 0, 0.45);
+    --container-shadow-2: rgba(0, 0, 0, 0.3);
+    --notation-bg-top: rgba(248, 249, 252, 0.92);
+    --notation-bg-bottom: rgba(230, 233, 238, 0.88);
+    --notation-border: rgba(255, 255, 255, 0.18);
+    --notation-shadow-inner: rgba(0, 0, 0, 0.25);
+    --notation-shadow-outer: rgba(0, 0, 0, 0.35);
+    --keyboard-bg-top: rgba(255, 255, 255, 0.06);
+    --keyboard-bg-bottom: rgba(255, 255, 255, 0.12);
+    --accent: #8ab4f8;
+    --accent-strong: #c0d9ff;
+    --accent-stroke: #d2e3fc;
+    --highlight-white: #fbc252;
+    --highlight-white-stroke: #f9a825;
+    --highlight-black: #f6a000;
+    --highlight-black-stroke: #f2b600;
+    --status-bar-bg: #31353b;
+    --status-shadow-1: rgba(0, 0, 0, 0.35);
+    --status-shadow-2: rgba(0, 0, 0, 0.25);
+    --hint-pointer-fill: #fbbc04;
+    --hint-pointer-stroke: #f29900;
+    --hint-tooltip-bg: rgba(255, 255, 255, 0.96);
+    --hint-tooltip-text: #202124;
+    --midi-connected: #8ab4f8;
+    --midi-error: #f28b82;
+    --midi-pending: #fdd663;
+    --accent-shadow: rgba(138, 180, 248, 0.85);
+    --accent-strong-shadow: rgba(155, 231, 255, 0.85);
+    --highlight-white-glow: rgba(249, 168, 37, 0.8);
+    --highlight-black-glow: rgba(255, 193, 7, 0.85);
+    --switch-track-off: rgba(255, 255, 255, 0.18);
+    --switch-track-on: #8ab4f8;
+    --switch-handle: #ffffff;
+    --theme-select-bg: var(--range-select-bg);
+    --accent-pulse-low: rgba(138, 180, 248, 0.5);
+    --accent-pulse-high: rgba(192, 217, 255, 0.9);
+}
+
+body.theme-midnight {
+    --body-bg: #202124;
+    --text-primary: #f1f3f4;
+    --text-muted: rgba(241, 243, 244, 0.55);
+    --panel-bg: #31353b;
+    --panel-shadow-1: rgba(0, 0, 0, 0.35);
+    --panel-shadow-2: rgba(0, 0, 0, 0.25);
+    --info-button-border: rgba(255, 255, 255, 0.2);
+    --info-button-bg: rgba(0, 0, 0, 0.15);
+    --info-button-hover-bg: rgba(255, 255, 255, 0.12);
+    --info-panel-bg: rgba(20, 21, 23, 0.95);
+    --info-panel-border: rgba(255, 255, 255, 0.07);
+    --range-chip-bg: rgba(0, 0, 0, 0.18);
+    --range-chip-shadow: rgba(0, 0, 0, 0.25);
+    --range-label-color: rgba(241, 243, 244, 0.8);
+    --range-select-bg: rgba(255, 255, 255, 0.08);
+    --range-select-border: rgba(255, 255, 255, 0.12);
+    --range-select-focus-border: rgba(138, 180, 248, 0.8);
+    --range-select-focus-ring: rgba(138, 180, 248, 0.25);
+    --select-option-bg: #e3e7ef;
+    --select-option-color: #101114;
+    --container-bg: #2a2d32;
+    --container-shadow-1: rgba(0, 0, 0, 0.45);
+    --container-shadow-2: rgba(0, 0, 0, 0.3);
+    --notation-bg-top: rgba(248, 249, 252, 0.92);
+    --notation-bg-bottom: rgba(230, 233, 238, 0.88);
+    --notation-border: rgba(255, 255, 255, 0.18);
+    --notation-shadow-inner: rgba(0, 0, 0, 0.25);
+    --notation-shadow-outer: rgba(0, 0, 0, 0.35);
+    --keyboard-bg-top: rgba(255, 255, 255, 0.06);
+    --keyboard-bg-bottom: rgba(255, 255, 255, 0.12);
+    --accent: #8ab4f8;
+    --accent-strong: #c0d9ff;
+    --accent-stroke: #d2e3fc;
+    --highlight-white: #fbc252;
+    --highlight-white-stroke: #f9a825;
+    --highlight-black: #f6a000;
+    --highlight-black-stroke: #f2b600;
+    --status-bar-bg: #31353b;
+    --status-shadow-1: rgba(0, 0, 0, 0.35);
+    --status-shadow-2: rgba(0, 0, 0, 0.25);
+    --hint-pointer-fill: #fbbc04;
+    --hint-pointer-stroke: #f29900;
+    --hint-tooltip-bg: rgba(255, 255, 255, 0.96);
+    --hint-tooltip-text: #202124;
+    --midi-connected: #8ab4f8;
+    --midi-error: #f28b82;
+    --midi-pending: #fdd663;
+    --accent-shadow: rgba(138, 180, 248, 0.85);
+    --accent-strong-shadow: rgba(155, 231, 255, 0.85);
+    --highlight-white-glow: rgba(249, 168, 37, 0.8);
+    --highlight-black-glow: rgba(255, 193, 7, 0.85);
+}
+
+body.theme-aurora {
+    --body-bg: radial-gradient(circle at 20% 20%, #41c6ff 0%, #1b1e5b 55%, #050a25 100%);
+    --text-primary: #e9f7ff;
+    --text-muted: rgba(233, 247, 255, 0.65);
+    --panel-bg: rgba(25, 37, 82, 0.78);
+    --panel-shadow-1: rgba(12, 42, 94, 0.45);
+    --panel-shadow-2: rgba(7, 28, 65, 0.32);
+    --info-button-border: rgba(142, 221, 255, 0.45);
+    --info-button-bg: rgba(38, 102, 150, 0.4);
+    --info-button-hover-bg: rgba(132, 214, 255, 0.35);
+    --info-panel-bg: rgba(14, 27, 66, 0.95);
+    --info-panel-border: rgba(130, 215, 255, 0.4);
+    --range-chip-bg: rgba(42, 80, 150, 0.35);
+    --range-chip-shadow: rgba(11, 33, 70, 0.4);
+    --range-label-color: rgba(215, 240, 255, 0.82);
+    --range-select-bg: rgba(164, 227, 255, 0.24);
+    --range-select-border: rgba(180, 236, 255, 0.45);
+    --range-select-focus-border: rgba(120, 239, 255, 0.9);
+    --range-select-focus-ring: rgba(120, 239, 255, 0.3);
+    --select-option-bg: #e6f7ff;
+    --select-option-color: #103150;
+    --container-bg: rgba(17, 29, 70, 0.92);
+    --container-shadow-1: rgba(12, 45, 108, 0.45);
+    --container-shadow-2: rgba(6, 25, 59, 0.35);
+    --notation-bg-top: rgba(247, 253, 255, 0.96);
+    --notation-bg-bottom: rgba(200, 233, 255, 0.92);
+    --notation-border: rgba(150, 220, 255, 0.55);
+    --notation-shadow-inner: rgba(15, 58, 128, 0.22);
+    --notation-shadow-outer: rgba(10, 35, 92, 0.45);
+    --keyboard-bg-top: rgba(160, 234, 255, 0.18);
+    --keyboard-bg-bottom: rgba(88, 183, 255, 0.35);
+    --accent: #7ae0ff;
+    --accent-strong: #b7f3ff;
+    --accent-stroke: #e0f7ff;
+    --highlight-white: #ffd166;
+    --highlight-white-stroke: #ffb347;
+    --highlight-black: #ff7b7b;
+    --highlight-black-stroke: #ff4f7b;
+    --status-bar-bg: rgba(21, 38, 86, 0.82);
+    --status-shadow-1: rgba(12, 42, 94, 0.45);
+    --status-shadow-2: rgba(7, 28, 65, 0.32);
+    --hint-pointer-fill: #93f5ff;
+    --hint-pointer-stroke: #48d5ff;
+    --hint-tooltip-bg: rgba(216, 247, 255, 0.96);
+    --hint-tooltip-text: #0b1d38;
+    --midi-connected: #7ae0ff;
+    --midi-error: #ff8b94;
+    --midi-pending: #ffd166;
+    --accent-shadow: rgba(122, 224, 255, 0.85);
+    --accent-strong-shadow: rgba(183, 243, 255, 0.88);
+    --highlight-white-glow: rgba(255, 201, 102, 0.82);
+    --highlight-black-glow: rgba(255, 127, 150, 0.85);
+    --switch-track-off: rgba(122, 180, 255, 0.35);
+    --switch-track-on: #7ae0ff;
+    --switch-handle: #e9f7ff;
+    --theme-select-bg: rgba(164, 227, 255, 0.24);
+}
+
+body.theme-sunrise {
+    --body-bg: radial-gradient(circle at 80% 10%, #ffb86c 0%, #ff5f87 45%, #521262 100%);
+    --text-primary: #fff9f2;
+    --text-muted: rgba(255, 247, 240, 0.7);
+    --panel-bg: rgba(101, 33, 95, 0.82);
+    --panel-shadow-1: rgba(82, 18, 97, 0.5);
+    --panel-shadow-2: rgba(64, 5, 70, 0.36);
+    --info-button-border: rgba(255, 199, 139, 0.55);
+    --info-button-bg: rgba(255, 170, 128, 0.35);
+    --info-button-hover-bg: rgba(255, 210, 173, 0.45);
+    --info-panel-bg: rgba(78, 19, 82, 0.95);
+    --info-panel-border: rgba(255, 199, 139, 0.55);
+    --range-chip-bg: rgba(255, 200, 160, 0.32);
+    --range-chip-shadow: rgba(64, 5, 70, 0.45);
+    --range-label-color: rgba(255, 245, 235, 0.82);
+    --range-select-bg: rgba(255, 218, 185, 0.4);
+    --range-select-border: rgba(255, 199, 139, 0.65);
+    --range-select-focus-border: rgba(255, 242, 175, 0.9);
+    --range-select-focus-ring: rgba(255, 250, 200, 0.35);
+    --select-option-bg: #fff0e0;
+    --select-option-color: #57233c;
+    --container-bg: rgba(92, 27, 88, 0.88);
+    --container-shadow-1: rgba(82, 18, 97, 0.5);
+    --container-shadow-2: rgba(64, 5, 70, 0.36);
+    --notation-bg-top: rgba(255, 248, 240, 0.96);
+    --notation-bg-bottom: rgba(255, 227, 210, 0.92);
+    --notation-border: rgba(255, 205, 180, 0.6);
+    --notation-shadow-inner: rgba(111, 38, 95, 0.24);
+    --notation-shadow-outer: rgba(72, 15, 84, 0.48);
+    --keyboard-bg-top: rgba(255, 209, 183, 0.3);
+    --keyboard-bg-bottom: rgba(255, 138, 181, 0.45);
+    --accent: #ff9ecb;
+    --accent-strong: #ffd4f2;
+    --accent-stroke: #ffe3f6;
+    --highlight-white: #ffd166;
+    --highlight-white-stroke: #ff9f1c;
+    --highlight-black: #ff6f91;
+    --highlight-black-stroke: #ff3f88;
+    --status-bar-bg: rgba(101, 33, 95, 0.82);
+    --status-shadow-1: rgba(82, 18, 97, 0.5);
+    --status-shadow-2: rgba(64, 5, 70, 0.36);
+    --hint-pointer-fill: #ffd166;
+    --hint-pointer-stroke: #ff9f1c;
+    --hint-tooltip-bg: rgba(255, 247, 238, 0.98);
+    --hint-tooltip-text: #4a1b3c;
+    --midi-connected: #ffd166;
+    --midi-error: #ff6f91;
+    --midi-pending: #ffe066;
+    --accent-shadow: rgba(255, 158, 203, 0.85);
+    --accent-strong-shadow: rgba(255, 212, 242, 0.85);
+    --highlight-white-glow: rgba(255, 209, 102, 0.85);
+    --highlight-black-glow: rgba(255, 111, 145, 0.85);
+    --switch-track-off: rgba(255, 200, 160, 0.45);
+    --switch-track-on: #ff9ecb;
+    --switch-handle: #fff9f2;
+    --theme-select-bg: rgba(255, 218, 185, 0.4);
+}
+
+body.theme-citrus {
+    --body-bg: radial-gradient(circle at 25% 15%, #faff81 0%, #3ad29f 45%, #0f7c42 100%);
+    --text-primary: #0f2417;
+    --text-muted: rgba(15, 36, 23, 0.65);
+    --panel-bg: rgba(245, 255, 214, 0.88);
+    --panel-shadow-1: rgba(16, 82, 60, 0.35);
+    --panel-shadow-2: rgba(10, 60, 42, 0.28);
+    --info-button-border: rgba(16, 82, 60, 0.35);
+    --info-button-bg: rgba(58, 210, 159, 0.25);
+    --info-button-hover-bg: rgba(15, 124, 66, 0.2);
+    --info-panel-bg: rgba(245, 255, 214, 0.98);
+    --info-panel-border: rgba(10, 112, 70, 0.45);
+    --range-chip-bg: rgba(250, 255, 184, 0.8);
+    --range-chip-shadow: rgba(13, 97, 63, 0.28);
+    --range-label-color: rgba(15, 36, 23, 0.7);
+    --range-select-bg: rgba(15, 124, 66, 0.15);
+    --range-select-border: rgba(15, 124, 66, 0.35);
+    --range-select-focus-border: rgba(250, 255, 129, 0.9);
+    --range-select-focus-ring: rgba(250, 255, 129, 0.35);
+    --select-option-bg: #f0ffe3;
+    --select-option-color: #12472a;
+    --container-bg: rgba(245, 255, 214, 0.92);
+    --container-shadow-1: rgba(16, 82, 60, 0.35);
+    --container-shadow-2: rgba(10, 60, 42, 0.28);
+    --notation-bg-top: rgba(255, 255, 255, 0.98);
+    --notation-bg-bottom: rgba(232, 255, 214, 0.94);
+    --notation-border: rgba(18, 158, 101, 0.35);
+    --notation-shadow-inner: rgba(13, 97, 63, 0.2);
+    --notation-shadow-outer: rgba(14, 79, 52, 0.28);
+    --keyboard-bg-top: rgba(250, 255, 129, 0.45);
+    --keyboard-bg-bottom: rgba(58, 210, 159, 0.35);
+    --accent: #0f7c42;
+    --accent-strong: #3ad29f;
+    --accent-stroke: #0f7c42;
+    --highlight-white: #ffbf69;
+    --highlight-white-stroke: #ff9f1c;
+    --highlight-black: #2ec4b6;
+    --highlight-black-stroke: #0d9488;
+    --status-bar-bg: rgba(245, 255, 214, 0.88);
+    --status-shadow-1: rgba(16, 82, 60, 0.35);
+    --status-shadow-2: rgba(10, 60, 42, 0.28);
+    --hint-pointer-fill: #ffbf69;
+    --hint-pointer-stroke: #ff9f1c;
+    --hint-tooltip-bg: rgba(255, 255, 240, 0.98);
+    --hint-tooltip-text: #0f2417;
+    --midi-connected: #0f7c42;
+    --midi-error: #d7263d;
+    --midi-pending: #ffbf69;
+    --accent-shadow: rgba(15, 124, 66, 0.7);
+    --accent-strong-shadow: rgba(58, 210, 159, 0.75);
+    --highlight-white-glow: rgba(255, 191, 105, 0.85);
+    --highlight-black-glow: rgba(46, 196, 182, 0.75);
+    --switch-track-off: rgba(15, 124, 66, 0.25);
+    --switch-track-on: #0f7c42;
+    --switch-handle: #f3ffe8;
+    --theme-select-bg: rgba(15, 124, 66, 0.15);
+}
+
 body {
     display: flex;
     justify-content: center;
@@ -6,8 +294,8 @@ body {
     min-height: 100vh;
     height: 100vh;
     margin: 0;
-    background-color: #202124;
-    color: #f1f3f4;
+    background: var(--body-bg);
+    color: var(--text-primary);
     font-family: 'Segoe UI', Roboto, sans-serif;
     overflow: hidden;
 }
@@ -26,9 +314,9 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 14px 24px;
-    background: #31353b;
+    background: var(--panel-bg);
     border-radius: 18px;
-    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.35), 0 6px 12px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 16px 30px var(--panel-shadow-1), 0 6px 12px var(--panel-shadow-2);
     position: relative;
 }
 
@@ -52,9 +340,9 @@ body {
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(0, 0, 0, 0.15);
-    color: #f1f3f4;
+    border: 1px solid var(--info-button-border);
+    background: var(--info-button-bg);
+    color: var(--text-primary);
     font-weight: 600;
     font-size: 1rem;
     cursor: pointer;
@@ -63,9 +351,9 @@ body {
 
 .info-button:hover,
 .info-button:focus {
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--info-button-hover-bg);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 12px var(--panel-shadow-2);
     outline: none;
 }
 
@@ -73,6 +361,8 @@ body {
     display: flex;
     align-items: center;
     gap: 20px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 .info-panel {
@@ -81,12 +371,12 @@ body {
     right: 28px;
     width: 320px;
     padding: 16px 18px;
-    background: rgba(20, 21, 23, 0.95);
+    background: var(--info-panel-bg);
     border-radius: 14px;
-    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 18px 36px var(--panel-shadow-1);
     font-size: 0.92rem;
     line-height: 1.4;
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    border: 1px solid var(--info-panel-border);
     z-index: 5;
 }
 
@@ -102,26 +392,26 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    background: rgba(0, 0, 0, 0.18);
+    background: var(--range-chip-bg);
     border-radius: 14px;
     padding: 10px 16px;
-    box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0 0 12px var(--range-chip-shadow);
 }
 
 .range-controls label {
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: rgba(241, 243, 244, 0.8);
+    color: var(--range-label-color);
 }
 
 .range-controls select {
     appearance: none;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: var(--range-select-bg);
+    border: 1px solid var(--range-select-border);
     border-radius: 10px;
     padding: 6px 28px 6px 12px;
-    color: #f1f3f4;
+    color: var(--text-primary);
     font-size: 1rem;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -133,16 +423,112 @@ body {
 
 .range-controls select:focus {
     outline: none;
-    border-color: rgba(138, 180, 248, 0.8);
-    box-shadow: 0 0 0 3px rgba(138, 180, 248, 0.25);
+    border-color: var(--range-select-focus-border);
+    box-shadow: 0 0 0 3px var(--range-select-focus-ring);
 }
 
 .range-controls select option {
-    color: #101114;
+    color: var(--select-option-color);
     font-weight: 600;
     letter-spacing: 0.05em;
     padding: 6px 12px;
-    background-color: #e3e7ef;
+    background-color: var(--select-option-bg);
+}
+
+.settings-controls {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.switch-control {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.switch-label {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.78rem;
+}
+
+.switch-control input {
+    display: none;
+}
+
+.switch-track {
+    position: relative;
+    width: 46px;
+    height: 24px;
+    border-radius: 999px;
+    background: var(--switch-track-off);
+    transition: background 0.25s ease;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.25);
+}
+
+.switch-handle {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--switch-handle);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.switch-control input:checked + .switch-track {
+    background: var(--switch-track-on);
+}
+
+.switch-control input:checked + .switch-track .switch-handle {
+    transform: translateX(22px);
+}
+
+.theme-picker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--range-chip-bg);
+    padding: 8px 14px;
+    border-radius: 14px;
+    box-shadow: inset 0 0 12px var(--range-chip-shadow);
+}
+
+.theme-picker span {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--range-label-color);
+}
+
+.theme-picker select {
+    appearance: none;
+    background: var(--theme-select-bg);
+    border: 1px solid var(--range-select-border);
+    border-radius: 10px;
+    padding: 6px 28px 6px 12px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    line-height: 1.2;
+}
+
+.theme-picker select:focus {
+    outline: none;
+    border-color: var(--range-select-focus-border);
+    box-shadow: 0 0 0 3px var(--range-select-focus-ring);
 }
 
 #container {
@@ -151,19 +537,19 @@ body {
     align-items: center;
     gap: 16px;
     padding: 18px 24px;
-    background: #2a2d32;
+    background: var(--container-bg);
     border-radius: 18px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45), 0 8px 16px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 40px var(--container-shadow-1), 0 8px 16px var(--container-shadow-2);
     flex: 1 1 auto;
     overflow: visible;
 }
 
 #notation {
     margin: 0;
-    background: linear-gradient(180deg, rgba(248, 249, 252, 0.92) 0%, rgba(230, 233, 238, 0.88) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: linear-gradient(180deg, var(--notation-bg-top) 0%, var(--notation-bg-bottom) 100%);
+    border: 1px solid var(--notation-border);
     border-radius: 14px;
-    box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.25), 0 10px 22px rgba(0, 0, 0, 0.35);
+    box-shadow: inset 0 0 12px var(--notation-shadow-inner), 0 10px 22px var(--notation-shadow-outer);
     height: clamp(260px, 45vh, 400px);
 }
 
@@ -171,7 +557,7 @@ body {
     /* ensure svg respects container rounding */
     width: 100%;
     max-width: 900px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.12) 100%);
+    background: linear-gradient(180deg, var(--keyboard-bg-top) 0%, var(--keyboard-bg-bottom) 100%);
     border-radius: 18px;
     overflow: hidden;
     box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
@@ -194,22 +580,22 @@ body {
 }
 
 .key.active {
-    fill: #8ab4f8;
-    stroke: #d2e3fc;
+    fill: var(--accent);
+    stroke: var(--accent-stroke);
     animation: activePulse 1.2s ease-in-out infinite alternate;
-    filter: drop-shadow(0 0 12px rgba(138, 180, 248, 0.85));
+    filter: drop-shadow(0 0 12px var(--accent-shadow));
 }
 
 .white-key.highlight {
-    fill: #fbc252;
-    stroke: #f9a825;
-    filter: drop-shadow(0 0 10px rgba(249, 168, 37, 0.8));
+    fill: var(--highlight-white);
+    stroke: var(--highlight-white-stroke);
+    filter: drop-shadow(0 0 10px var(--highlight-white-glow));
 }
 
 .black-key.highlight {
-    fill: #f6a000;
-    stroke: #f2b600;
-    filter: drop-shadow(0 0 12px rgba(255, 193, 7, 0.85));
+    fill: var(--highlight-black);
+    stroke: var(--highlight-black-stroke);
+    filter: drop-shadow(0 0 12px var(--highlight-black-glow));
 }
 
 .white-key.highlight:hover {
@@ -221,9 +607,9 @@ body {
 }
 
 .key.highlight.active {
-    fill: #9be7ff;
+    fill: var(--accent-strong);
     stroke: #e0f7ff;
-    filter: drop-shadow(0 0 14px rgba(155, 231, 255, 0.85));
+    filter: drop-shadow(0 0 14px var(--accent-strong-shadow));
 }
 
 .note-pointer {
@@ -244,9 +630,9 @@ body {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 12px;
     padding: 14px 24px;
-    background: #31353b;
+    background: var(--status-bar-bg);
     border-radius: 18px;
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.35), 0 6px 10px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 14px 28px var(--status-shadow-1), 0 6px 10px var(--status-shadow-2);
     flex: 0 0 auto;
 }
 
@@ -260,7 +646,7 @@ body {
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: rgba(241, 243, 244, 0.55);
+    color: var(--text-muted);
 }
 
 .status-item span:last-child {
@@ -269,24 +655,24 @@ body {
 }
 
 .midi-status.connected #status-midi-value {
-    color: #8ab4f8;
+    color: var(--midi-connected);
 }
 
 .midi-status.error #status-midi-value {
-    color: #f28b82;
+    color: var(--midi-error);
 }
 
 .midi-status.pending #status-midi-value {
-    color: #fdd663;
+    color: var(--midi-pending);
 }
 
 @keyframes activePulse {
     from {
-        fill: #8ab4f8;
+        fill: var(--accent);
         filter: drop-shadow(0 0 8px rgba(138, 180, 248, 0.5));
     }
     to {
-        fill: #c0d9ff;
+        fill: var(--accent-strong);
         filter: drop-shadow(0 0 16px rgba(192, 217, 255, 0.9));
     }
 }

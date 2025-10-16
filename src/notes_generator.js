@@ -95,10 +95,6 @@ function recenterNotesOnStaff() {
         } else if (tagName === 'line') {
             element.setAttribute('x1', centerX - underlineHalfWidth);
             element.setAttribute('x2', centerX + underlineHalfWidth);
-        } else if (element.classList && element.classList.contains('note-pointer')) {
-            refreshSamplePointer(element.dataset.targetId);
-        } else if (tagName === 'g' && element.classList && element.classList.contains('note-tooltip')) {
-            refreshSamplePointer(element.dataset.targetId);
         }
     };
 
@@ -113,33 +109,22 @@ function recenterNotesOnStaff() {
             }
         });
     }
-}
 
-function refreshSamplePointer(targetId) {
-    if (!targetId) {
-        return;
-    }
-    const noteElement = document.getElementById(targetId);
-    if (!noteElement) {
-        return;
-    }
-    const pointer = svgN.querySelector(`polygon.note-pointer[data-target-id="${targetId}"]`);
-    const tooltipGroup = svgN.querySelector(`g.note-tooltip[data-target-id="${targetId}"]`);
-    positionSamplePointer(pointer, tooltipGroup, noteElement);
+    repositionHintElements();
 }
 
 function createSamplePointer(noteElement, label) {
     if (!noteElement) {
-        return [];
+        return null;
     }
 
     const targetId = noteElement.getAttribute('id');
     const pointer = document.createElementNS(xmlns, 'polygon');
     pointer.classList.add('note-pointer');
     pointer.setAttribute('data-target-id', targetId);
-    pointer.setAttribute('fill', '#fbbc04');
-    pointer.setAttribute('stroke', '#f29900');
-    pointer.setAttribute('stroke-width', '1');
+    pointer.style.fill = 'var(--hint-pointer-fill)';
+    pointer.style.stroke = 'var(--hint-pointer-stroke)';
+    pointer.style.strokeWidth = '1.5px';
     svgN.appendChild(pointer);
 
     const tooltipGroup = document.createElementNS(xmlns, 'g');
@@ -156,7 +141,7 @@ function createSamplePointer(noteElement, label) {
 
     positionSamplePointer(pointer, tooltipGroup, noteElement);
 
-    return [pointer, tooltipGroup];
+    return { pointer, tooltip: tooltipGroup };
 }
 
 function positionSamplePointer(pointer, tooltipGroup, noteElement) {
@@ -184,7 +169,7 @@ function positionSamplePointer(pointer, tooltipGroup, noteElement) {
         tooltipText.setAttribute('dominant-baseline', 'middle');
         tooltipText.setAttribute('font-size', '14');
         tooltipText.setAttribute('font-weight', '600');
-        tooltipText.setAttribute('fill', '#202124');
+        tooltipText.style.fill = 'var(--hint-tooltip-text)';
     }
 
     if (tooltipRect && tooltipText) {
@@ -197,21 +182,58 @@ function positionSamplePointer(pointer, tooltipGroup, noteElement) {
         tooltipRect.setAttribute('height', bbox.height + paddingY * 2);
         tooltipRect.setAttribute('rx', 10);
         tooltipRect.setAttribute('ry', 10);
-        tooltipRect.setAttribute('fill', 'rgba(255, 255, 255, 0.96)');
-        tooltipRect.setAttribute('stroke', '#fbbc04');
-        tooltipRect.setAttribute('stroke-width', '1');
+        tooltipRect.style.fill = 'var(--hint-tooltip-bg)';
+        tooltipRect.style.stroke = 'var(--hint-pointer-stroke)';
+        tooltipRect.style.strokeWidth = '1.5px';
     }
 }
 
 var currentNotes;
+var currentHint = null;
+var currentNoteMeta = null;
+var staffHintsEnabled = true;
+
+function removeHintElements() {
+    if (currentHint) {
+        if (currentHint.pointer) {
+            currentHint.pointer.remove();
+        }
+        if (currentHint.tooltip) {
+            currentHint.tooltip.remove();
+        }
+    }
+    currentHint = null;
+}
+
+function applyHintToCurrentNote() {
+    removeHintElements();
+    if (!staffHintsEnabled || !currentNotes || !currentNotes.length || !currentNoteMeta) {
+        return;
+    }
+
+    const hint = createSamplePointer(currentNotes[0], currentNoteMeta.name);
+    if (hint) {
+        currentHint = hint;
+    }
+}
+
+function repositionHintElements() {
+    if (!currentHint || !currentNotes || !currentNotes.length) {
+        return;
+    }
+
+    positionSamplePointer(currentHint.pointer, currentHint.tooltip, currentNotes[0]);
+}
 
 function cleanSampleNote()
 {
+    removeHintElements();
     if (currentNotes)
     {
         currentNotes.forEach(x => x.remove());  
         currentNotes = null;
     }
+    currentNoteMeta = null;
 }
 
 function generateSampleNote()
@@ -225,7 +247,23 @@ function generateSampleNote()
     const nMeta = getRandomElementFromArray(hMeta);
     if (nMeta && typeof nMeta.y === 'number'){
         currentNotes = createNote(nMeta.y, nMeta.name, nMeta.midiNum);
-        const pointerElements = createSamplePointer(currentNotes[0], nMeta.name);
-        currentNotes.push(...pointerElements);
+        currentNoteMeta = nMeta;
+        applyHintToCurrentNote();
     }
 }
+
+function setStaffHintsEnabled(enabled) {
+    staffHintsEnabled = Boolean(enabled);
+    if (staffHintsEnabled) {
+        applyHintToCurrentNote();
+    } else {
+        removeHintElements();
+    }
+}
+
+function getStaffHintsEnabled() {
+    return staffHintsEnabled;
+}
+
+window.setStaffHintsEnabled = setStaffHintsEnabled;
+window.getStaffHintsEnabled = getStaffHintsEnabled;
