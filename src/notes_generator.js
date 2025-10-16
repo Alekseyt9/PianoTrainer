@@ -13,6 +13,9 @@ function createNote(y, name, midiNum, color = 'black') {
     note.setAttribute('name', name);
     note.setAttribute('id', generateRandomId());
     note.setAttribute('midiNum', midiNum);
+    const noteTitle = document.createElementNS(xmlns, 'title');
+    noteTitle.textContent = name;
+    note.appendChild(noteTitle);
     svgN.appendChild(note);
 
     let und = drawUnderlines(y, color);
@@ -92,6 +95,10 @@ function recenterNotesOnStaff() {
         } else if (tagName === 'line') {
             element.setAttribute('x1', centerX - underlineHalfWidth);
             element.setAttribute('x2', centerX + underlineHalfWidth);
+        } else if (element.classList && element.classList.contains('note-pointer')) {
+            refreshSamplePointer(element.dataset.targetId);
+        } else if (tagName === 'g' && element.classList && element.classList.contains('note-tooltip')) {
+            refreshSamplePointer(element.dataset.targetId);
         }
     };
 
@@ -105,6 +112,94 @@ function recenterNotesOnStaff() {
                 noteGroup.forEach(adjustElement);
             }
         });
+    }
+}
+
+function refreshSamplePointer(targetId) {
+    if (!targetId) {
+        return;
+    }
+    const noteElement = document.getElementById(targetId);
+    if (!noteElement) {
+        return;
+    }
+    const pointer = svgN.querySelector(`polygon.note-pointer[data-target-id="${targetId}"]`);
+    const tooltipGroup = svgN.querySelector(`g.note-tooltip[data-target-id="${targetId}"]`);
+    positionSamplePointer(pointer, tooltipGroup, noteElement);
+}
+
+function createSamplePointer(noteElement, label) {
+    if (!noteElement) {
+        return [];
+    }
+
+    const targetId = noteElement.getAttribute('id');
+    const pointer = document.createElementNS(xmlns, 'polygon');
+    pointer.classList.add('note-pointer');
+    pointer.setAttribute('data-target-id', targetId);
+    pointer.setAttribute('fill', '#fbbc04');
+    pointer.setAttribute('stroke', '#f29900');
+    pointer.setAttribute('stroke-width', '1');
+    svgN.appendChild(pointer);
+
+    const tooltipGroup = document.createElementNS(xmlns, 'g');
+    tooltipGroup.classList.add('note-tooltip');
+    tooltipGroup.setAttribute('data-target-id', targetId);
+
+    const tooltipRect = document.createElementNS(xmlns, 'rect');
+    const tooltipText = document.createElementNS(xmlns, 'text');
+    tooltipText.textContent = label;
+
+    tooltipGroup.appendChild(tooltipRect);
+    tooltipGroup.appendChild(tooltipText);
+    svgN.appendChild(tooltipGroup);
+
+    positionSamplePointer(pointer, tooltipGroup, noteElement);
+
+    return [pointer, tooltipGroup];
+}
+
+function positionSamplePointer(pointer, tooltipGroup, noteElement) {
+    if (!pointer || !tooltipGroup || !noteElement) {
+        return;
+    }
+
+    const cx = parseFloat(noteElement.getAttribute('cx'));
+    const cy = parseFloat(noteElement.getAttribute('cy'));
+    const pointerHeight = 22;
+    const pointerWidth = 24;
+    const baseY = cy - 20;
+    const tipY = baseY - pointerHeight;
+
+    pointer.setAttribute('points', `${cx},${tipY} ${cx - pointerWidth / 2},${baseY} ${cx + pointerWidth / 2},${baseY}`);
+
+    const tooltipText = tooltipGroup.querySelector('text');
+    const tooltipRect = tooltipGroup.querySelector('rect');
+
+    const textY = tipY - 18;
+    if (tooltipText) {
+        tooltipText.setAttribute('x', cx);
+        tooltipText.setAttribute('y', textY);
+        tooltipText.setAttribute('text-anchor', 'middle');
+        tooltipText.setAttribute('dominant-baseline', 'middle');
+        tooltipText.setAttribute('font-size', '14');
+        tooltipText.setAttribute('font-weight', '600');
+        tooltipText.setAttribute('fill', '#202124');
+    }
+
+    if (tooltipRect && tooltipText) {
+        const bbox = tooltipText.getBBox();
+        const paddingX = 12;
+        const paddingY = 6;
+        tooltipRect.setAttribute('x', bbox.x - paddingX);
+        tooltipRect.setAttribute('y', bbox.y - paddingY);
+        tooltipRect.setAttribute('width', bbox.width + paddingX * 2);
+        tooltipRect.setAttribute('height', bbox.height + paddingY * 2);
+        tooltipRect.setAttribute('rx', 10);
+        tooltipRect.setAttribute('ry', 10);
+        tooltipRect.setAttribute('fill', 'rgba(255, 255, 255, 0.96)');
+        tooltipRect.setAttribute('stroke', '#fbbc04');
+        tooltipRect.setAttribute('stroke-width', '1');
     }
 }
 
@@ -130,5 +225,7 @@ function generateSampleNote()
     const nMeta = getRandomElementFromArray(hMeta);
     if (nMeta && typeof nMeta.y === 'number'){
         currentNotes = createNote(nMeta.y, nMeta.name, nMeta.midiNum);
+        const pointerElements = createSamplePointer(currentNotes[0], nMeta.name);
+        currentNotes.push(...pointerElements);
     }
 }
