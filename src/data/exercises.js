@@ -2,7 +2,7 @@ export const exercises = [
     {
         id: 'octaves-1',
         title: 'Большая → Вторая октавы',
-        description: 'Сыграй C большой, малой, первой и второй октав подряд.',
+        description: 'Сыграй ноты C большой, малой, первой и второй октав подряд.',
         steps: [
             { notes: [36], label: 'C2 (большая)' },
             { notes: [48], label: 'C3 (малая)' },

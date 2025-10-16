@@ -1,12 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang="ru">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="styles/styles.css">
-        <title>MIDI Keyboard</title>
+        <link rel="stylesheet" href="styles/theme-default.css">
+        <link rel="stylesheet" href="styles/theme-midnight.css">
+        <link rel="stylesheet" href="styles/theme-aurora.css">
+        <link rel="stylesheet" href="styles/theme-sunrise.css">
+        <link rel="stylesheet" href="styles/theme-citrus.css">
+        <link rel="stylesheet" href="styles/base.css">
+        <title>Piano Trainer</title>
     </head>
-    <body>   
+    <body>
         <div id="app">
             <header class="top-bar">
                 <div class="brand">
@@ -56,10 +61,20 @@
                     </div>
                 </div>
             </header>
-            <main id="container">
-                <svg id="notation" xmlns="http://www.w3.org/2000/svg" width="800" height="500"></svg>
-                <svg id="keyboard" xmlns="http://www.w3.org/2000/svg"></svg>
-            </main>
+            <div id="workspace">
+                <aside id="exercise-panel">
+                    <h2 class="panel-title">Упражнения</h2>
+                    <nav id="exercise-list"></nav>
+                    <div id="exercise-details">
+                        <h3 id="exercise-details-title"></h3>
+                        <p id="exercise-details-description"></p>
+                    </div>
+                </aside>
+                <main id="container">
+                    <svg id="notation" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet"></svg>
+                    <svg id="keyboard" xmlns="http://www.w3.org/2000/svg"></svg>
+                </main>
+            </div>
             <footer class="status-bar">
                 <div class="status-item">
                     <span class="status-label">Режим</span>
@@ -75,7 +90,7 @@
                 </div>
                 <div class="status-item midi-status" id="status-midi">
                     <span class="status-label">MIDI</span>
-                    <span id="status-midi-value">Не подключено</span>
+                    <span id="status-midi-value">Ожидание</span>
                 </div>
             </footer>
         </div>
