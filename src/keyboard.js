@@ -1,10 +1,16 @@
 
+let keyboardRange = { start: 1, end: 4 };
+
 function createKeyboard() {
     svgK.innerHTML = '';  
 
-    const oStart = 1;
-    const oEnd = 4; // inclusive upper bound of the rendered octaves
+    const oStart = keyboardRange.start;
+    const oEnd = keyboardRange.end; // inclusive upper bound of the rendered octaves
     const octaveCount = oEnd - oStart + 1;
+
+    if (octaveCount <= 0) {
+        return;
+    }
 
     const defs = document.createElementNS(xmlns, 'defs');
     const createGradient = (id, stops) => {
@@ -128,9 +134,7 @@ function handleKeyUp(keyElement) {
     noteOff(noteNumber);
 }
 
-createKeyboard();  
-
-window.addEventListener('resize', () => {
+function rebuildKeyboardPreservingState() {
     const highlightedNotes = Array.from(svgK.querySelectorAll('.key.highlight'))
         .map(key => Number(key.getAttribute('data-note-number')));
     const activeNotes = Array.from(svgK.querySelectorAll('.key.active'))
@@ -155,4 +159,41 @@ window.addEventListener('resize', () => {
     if (typeof recenterNotesOnStaff === 'function') {
         recenterNotesOnStaff();
     }
+}
+
+function setKeyboardRange(start, end) {
+    const MIN_OCTAVE = 1;
+    const MAX_OCTAVE = 7;
+    let newStart = Math.max(MIN_OCTAVE, Math.min(MAX_OCTAVE, Number(start) || MIN_OCTAVE));
+    let newEnd = Math.max(MIN_OCTAVE, Math.min(MAX_OCTAVE, Number(end) || MAX_OCTAVE));
+
+    if (newStart > newEnd) {
+        newEnd = newStart;
+    }
+
+    if (keyboardRange.start === newStart && keyboardRange.end === newEnd) {
+        return keyboardRange;
+    }
+
+    keyboardRange = { start: newStart, end: newEnd };
+    rebuildKeyboardPreservingState();
+
+    if (typeof generateSampleNote === 'function') {
+        generateSampleNote();
+    }
+
+    return keyboardRange;
+}
+
+function getKeyboardRange() {
+    return { ...keyboardRange };
+}
+
+createKeyboard();  
+
+window.addEventListener('resize', () => {
+    rebuildKeyboardPreservingState();
 });
+
+window.setKeyboardRange = setKeyboardRange;
+window.getKeyboardRange = getKeyboardRange;

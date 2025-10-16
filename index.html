@@ -6,16 +6,70 @@
         <link rel="stylesheet" type="text/css" href="styles/styles.css">
         <title>MIDI Keyboard</title>
     </head>
-    <body>     
-        <div id="container">
-            <svg id="notation" xmlns="http://www.w3.org/2000/svg" width="800" height="500"></svg>
-            <svg id="keyboard" xmlns="http://www.w3.org/2000/svg"></svg>
+    <body>   
+        <div id="app">
+            <header class="top-bar">
+                <div class="brand">
+                    <span class="app-title">Piano Trainer</span>
+                    <button id="info-toggle" class="info-button" aria-expanded="false" aria-controls="info-panel">
+                        <span class="info-icon">i</span>
+                    </button>
+                </div>
+                <div class="top-bar-right">
+                    <div id="info-panel" class="info-panel" hidden>
+                        <p>Правым кликом отметьте нужные клавиши, затем сыграйте подсказанную ноту на MIDI-клавиатуре.</p>
+                    </div>
+                    <div class="range-controls">
+                        <label for="range-start">Стартовая октава</label>
+                        <select id="range-start" aria-label="Стартовая октава">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                        </select>
+                        <label for="range-end">Конечная октава</label>
+                        <select id="range-end" aria-label="Конечная октава">
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4" selected>4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                        </select>
+                    </div>
+                </div>
+            </header>
+            <main id="container">
+                <svg id="notation" xmlns="http://www.w3.org/2000/svg" width="800" height="500"></svg>
+                <svg id="keyboard" xmlns="http://www.w3.org/2000/svg"></svg>
+            </main>
+            <footer class="status-bar">
+                <div class="status-item">
+                    <span class="status-label">Режим</span>
+                    <span id="status-exercise-value">Поиск нот</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Счёт</span>
+                    <span id="status-score-value">0</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Время</span>
+                    <span id="status-time-value">00:00</span>
+                </div>
+                <div class="status-item midi-status" id="status-midi">
+                    <span class="status-label">MIDI</span>
+                    <span id="status-midi-value">Не подключено</span>
+                </div>
+            </footer>
         </div>
 
         <script type="text/javascript" src="src/consts.js"></script>
         <script type="text/javascript" src="src/notes_metadata.js"></script>        
         <script type="text/javascript" src="src/highlight.js"></script>
         <script type="text/javascript" src="src/keyboard.js"></script>
+        <script type="text/javascript" src="src/ui.js"></script>
         <script type="text/javascript" src="src/notation.js"></script>
         <script type="text/javascript" src="src/notes_generator.js"></script>
         <script type="text/javascript" src="src/midi.js"></script>

@@ -1,11 +1,20 @@
 
 if (navigator.requestMIDIAccess) {
+    if (typeof updateMidiStatus === 'function') {
+        updateMidiStatus('pending', 'Подключение...');
+    }
     navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
 } else {
     console.log("Web MIDI is not supported in this browser.");
+    if (typeof updateMidiStatus === 'function') {
+        updateMidiStatus('error', 'Не поддерживается');
+    }
 }
 
 function onMIDISuccess(midiAccess) {
+    if (typeof updateMidiStatus === 'function') {
+        updateMidiStatus('connected', 'Подключено');
+    }
     const inputs = midiAccess.inputs.values();
     for (let input = inputs.next(); input && !input.done; input = inputs.next()) {
         input.value.onmidimessage = onMIDIMessage;
@@ -14,6 +23,9 @@ function onMIDISuccess(midiAccess) {
 
 function onMIDIFailure() {
     console.warn("Could not access your MIDI devices. Ensure the page is served over HTTPS and your browser supports Web MIDI.");
+    if (typeof updateMidiStatus === 'function') {
+        updateMidiStatus('error', 'Ошибка доступа');
+    }
 }
 
 function onMIDIMessage(message) {
@@ -51,6 +63,9 @@ function noteOn(noteNumber) {
     if (currentNotes && keyMeta && noteNumber === Number(currentNotes[0].getAttribute("midiNum")))
     {
         cleanSampleNote();
+        if (typeof incrementTrainerScore === 'function') {
+            incrementTrainerScore();
+        }
     }
 }
 
