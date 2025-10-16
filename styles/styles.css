@@ -169,6 +169,8 @@ body.theme-aurora {
     --switch-track-on: #7ae0ff;
     --switch-handle: #e9f7ff;
     --theme-select-bg: rgba(164, 227, 255, 0.24);
+    --accent-pulse-low: rgba(122, 224, 255, 0.45);
+    --accent-pulse-high: rgba(183, 243, 255, 0.88);
 }
 
 body.theme-sunrise {
@@ -227,6 +229,8 @@ body.theme-sunrise {
     --switch-track-on: #ff9ecb;
     --switch-handle: #fff9f2;
     --theme-select-bg: rgba(255, 218, 185, 0.4);
+    --accent-pulse-low: rgba(255, 158, 203, 0.42);
+    --accent-pulse-high: rgba(255, 212, 242, 0.85);
 }
 
 body.theme-citrus {
@@ -285,6 +289,8 @@ body.theme-citrus {
     --switch-track-on: #0f7c42;
     --switch-handle: #f3ffe8;
     --theme-select-bg: rgba(15, 124, 66, 0.15);
+    --accent-pulse-low: rgba(15, 124, 66, 0.45);
+    --accent-pulse-high: rgba(58, 210, 159, 0.7);
 }
 
 body {
@@ -363,6 +369,10 @@ body {
     gap: 20px;
     flex-wrap: wrap;
     justify-content: flex-end;
+}
+
+.hidden-control {
+    display: none !important;
 }
 
 .info-panel {
@@ -531,6 +541,14 @@ body {
     box-shadow: 0 0 0 3px var(--range-select-focus-ring);
 }
 
+.theme-picker select option {
+    background-color: var(--select-option-bg);
+    color: var(--select-option-color);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 8px 12px;
+}
+
 #container {
     display: flex;
     flex-direction: column;
@@ -669,10 +687,10 @@ body {
 @keyframes activePulse {
     from {
         fill: var(--accent);
-        filter: drop-shadow(0 0 8px rgba(138, 180, 248, 0.5));
+        filter: drop-shadow(0 0 8px var(--accent-pulse-low));
     }
     to {
         fill: var(--accent-strong);
-        filter: drop-shadow(0 0 16px rgba(192, 217, 255, 0.9));
+        filter: drop-shadow(0 0 16px var(--accent-pulse-high));
     }
 }

@@ -11,15 +11,12 @@
             <header class="top-bar">
                 <div class="brand">
                     <span class="app-title">Piano Trainer</span>
-                    <button id="info-toggle" class="info-button" aria-expanded="false" aria-controls="info-panel">
-                        <span class="info-icon">i</span>
-                    </button>
                 </div>
                 <div class="top-bar-right">
                     <div id="info-panel" class="info-panel" hidden>
                         <p>Правым кликом отметьте нужные клавиши, затем сыграйте подсказанную ноту на MIDI-клавиатуре.</p>
                     </div>
-                    <div class="range-controls">
+                    <div class="range-controls hidden-control">
                         <label for="range-start">Стартовая октава</label>
                         <select id="range-start" aria-label="Стартовая октава">
                             <option value="1">1</option>
@@ -33,15 +30,15 @@
                         <select id="range-end" aria-label="Конечная октава">
                             <option value="2">2</option>
                             <option value="3">3</option>
-                            <option value="4" selected>4</option>
+                            <option value="4">4</option>
                             <option value="5">5</option>
                             <option value="6">6</option>
                             <option value="7">7</option>
                         </select>
                     </div>
                     <div class="settings-controls">
-                        <label class="switch-control">
-                            <input type="checkbox" id="toggle-hints" checked>
+                        <label class="switch-control hidden-control">
+                            <input type="checkbox" id="toggle-hints">
                             <span class="switch-track">
                                 <span class="switch-handle"></span>
                             </span>

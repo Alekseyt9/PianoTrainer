@@ -71,11 +71,8 @@ function initInterface() {
     };
 
     if (infoToggle && infoPanel) {
-        infoToggle.addEventListener('click', () => {
-            const isHidden = infoPanel.hasAttribute('hidden');
-            infoPanel.toggleAttribute('hidden', !isHidden);
-            infoToggle.setAttribute('aria-expanded', String(isHidden));
-        });
+        infoPanel.setAttribute('hidden', 'hidden');
+        infoToggle.setAttribute('aria-expanded', 'false');
     }
 
     const syncRangeControls = (range) => {
@@ -97,7 +94,7 @@ function initInterface() {
     if (rangeStartSelect && rangeEndSelect) {
         const initialRange = typeof getKeyboardRange === 'function'
             ? getKeyboardRange()
-            : { start: 1, end: 4 };
+            : { start: 2, end: 5 };
 
         syncRangeControls(initialRange);
 
@@ -118,7 +115,7 @@ function initInterface() {
     }
 
     setTheme(settings.theme || 'midnight', { persist: false });
-    setHints(settings.hints !== false, { persist: false });
+    setHints(settings.hints ?? false, { persist: false });
 
     let score = 0;
     const updateScore = () => {

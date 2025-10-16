@@ -1,5 +1,5 @@
 
-let keyboardRange = { start: 1, end: 4 };
+let keyboardRange = { start: 2, end: 5 };
 
 function createKeyboard() {
     svgK.innerHTML = '';  
