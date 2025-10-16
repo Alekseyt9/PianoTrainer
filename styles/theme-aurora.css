@@ -1,5 +1,5 @@
 body.theme-aurora {
-    --body-bg: radial-gradient(circle at 20% 20%, #41c6ff 0%, #1b1e5b 55%, #050a25 100%);
+    --body-bg: #243d8f;
     --text-primary: #e9f7ff;
     --text-muted: rgba(233, 247, 255, 0.65);
     --panel-bg: rgba(25, 37, 82, 0.78);
@@ -22,8 +22,7 @@ body.theme-aurora {
     --container-bg: rgba(17, 29, 70, 0.92);
     --container-shadow-1: rgba(12, 45, 108, 0.45);
     --container-shadow-2: rgba(6, 25, 59, 0.35);
-    --notation-bg-top: rgba(247, 253, 255, 0.96);
-    --notation-bg-bottom: rgba(200, 233, 255, 0.92);
+    --notation-bg: rgba(247, 253, 255, 0.96);
     --notation-border: rgba(150, 220, 255, 0.55);
     --notation-shadow-inner: rgba(15, 58, 128, 0.22);
     --notation-shadow-outer: rgba(10, 35, 92, 0.45);

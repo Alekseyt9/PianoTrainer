@@ -1,5 +1,5 @@
 ﻿body.theme-light {
-    --body-bg: linear-gradient(180deg, #f7f9fc 0%, #eef1f6 100%);
+    --body-bg: #f3f5fb;
     --text-primary: #1a1c24;
     --text-muted: rgba(26, 28, 36, 0.55);
     --panel-bg: #ffffff;
@@ -22,8 +22,7 @@
     --container-bg: #ffffff;
     --container-shadow-1: rgba(15, 23, 42, 0.18);
     --container-shadow-2: rgba(15, 23, 42, 0.08);
-    --notation-bg-top: rgba(255, 255, 255, 0.95);
-    --notation-bg-bottom: rgba(241, 245, 252, 0.9);
+    --notation-bg: rgba(245, 248, 254, 0.94);
     --notation-border: rgba(15, 23, 42, 0.08);
     --notation-shadow-inner: rgba(15, 23, 42, 0.06);
     --notation-shadow-outer: rgba(15, 23, 42, 0.12);
@@ -59,4 +58,5 @@
     --accent-pulse-low: rgba(63, 102, 241, 0.35);
     --accent-pulse-high: rgba(111, 141, 248, 0.55);
 }
+
 

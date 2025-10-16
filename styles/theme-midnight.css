@@ -22,8 +22,7 @@
     --container-bg: #2a2d32;
     --container-shadow-1: rgba(0, 0, 0, 0.45);
     --container-shadow-2: rgba(0, 0, 0, 0.3);
-    --notation-bg-top: rgba(248, 249, 252, 0.92);
-    --notation-bg-bottom: rgba(230, 233, 238, 0.88);
+    --notation-bg: rgba(248, 249, 252, 0.92);
     --notation-border: rgba(255, 255, 255, 0.18);
     --notation-shadow-inner: rgba(0, 0, 0, 0.25);
     --notation-shadow-outer: rgba(0, 0, 0, 0.35);

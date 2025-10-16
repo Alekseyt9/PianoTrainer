@@ -63,10 +63,10 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
         const completed = stepIndex < currentIndex;
         const isCurrent = stepIndex === currentIndex;
         const strokeColor = completed
-            ? 'var(--exercise-complete, #6fcf97)'
+            ? '#6b7280'
             : isCurrent
-                ? 'var(--accent)'
-                : 'var(--exercise-upcoming, rgba(255, 255, 255, 0.75))';
+                ? '#1f2937'
+                : '#9ca3af';
 
         (step.notes || []).forEach((midiNumber, chordIndex) => {
             const meta = findNoteByMidi(midiNumber);
@@ -79,8 +79,8 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
             const noteElements = createNote(meta.y, meta.name, meta.midiNum, {
                 cx,
                 stroke: strokeColor,
-                strokeWidth: isCurrent ? 2.8 : 2.2,
-                opacity: completed ? 0.9 : isCurrent ? 1 : 0.8
+                strokeWidth: isCurrent ? 3.2 : 2.6,
+                opacity: completed ? 0.9 : isCurrent ? 1 : 0.9
             });
 
             exerciseElements.push(...noteElements);
@@ -132,7 +132,7 @@ function createNote(y, name, midiNum, options = {}) {
 
     const {
         cx = getNotationCenterX(),
-        stroke = 'black',
+        stroke = '#374151',
         strokeWidth = 2,
         opacity = 1
     } = options;
@@ -218,6 +218,7 @@ function getNotationCenterX() {
 function generateRandomId() {
     return `note-${Math.random().toString(36).slice(2, 11)}`;
 }
+
 
 
 

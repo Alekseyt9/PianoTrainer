@@ -1,5 +1,5 @@
-body.theme-citrus {
-    --body-bg: radial-gradient(circle at 25% 15%, #faff81 0%, #3ad29f 45%, #0f7c42 100%);
+﻿body.theme-citrus {
+    --body-bg: #2d9d65;
     --text-primary: #0f2417;
     --text-muted: rgba(15, 36, 23, 0.65);
     --panel-bg: rgba(245, 255, 214, 0.88);
@@ -22,8 +22,7 @@ body.theme-citrus {
     --container-bg: rgba(245, 255, 214, 0.92);
     --container-shadow-1: rgba(16, 82, 60, 0.35);
     --container-shadow-2: rgba(10, 60, 42, 0.28);
-    --notation-bg-top: rgba(255, 255, 255, 0.98);
-    --notation-bg-bottom: rgba(232, 255, 214, 0.94);
+    --notation-bg: rgba(244, 255, 225, 0.95);
     --notation-border: rgba(18, 158, 101, 0.35);
     --notation-shadow-inner: rgba(13, 97, 63, 0.2);
     --notation-shadow-outer: rgba(14, 79, 52, 0.28);
@@ -55,3 +54,4 @@ body.theme-citrus {
     --accent-pulse-low: rgba(15, 124, 66, 0.45);
     --accent-pulse-high: rgba(58, 210, 159, 0.7);
 }
+

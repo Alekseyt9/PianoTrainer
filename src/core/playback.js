@@ -1,4 +1,4 @@
-import { findNoteByMidi } from '../data/notes_metadata.js';
+﻿import { findNoteByMidi } from '../data/notes_metadata.js';
 import { getKeyboardSvg } from './context.js';
 import { setPressedKey, getPressedKey, deletePressedKey } from './state.js';
 import { createVisualNote, removeVisualNote, areHintsEnabled } from '../ui/notes_generator.js';
@@ -26,7 +26,7 @@ export function noteOn(noteNumber) {
         return;
     }
 
-    const visualElements = createVisualNote(noteMeta, { color: areHintsEnabled() ? 'gray' : 'gray' });
+    const visualElements = createVisualNote(noteMeta, { color: '#4b5563' });
     setPressedKey(noteNumber, visualElements);
 
     const result = handleNoteInput(noteNumber);
@@ -50,3 +50,4 @@ export function noteOff(noteNumber) {
         deletePressedKey(noteNumber);
     }
 }
+

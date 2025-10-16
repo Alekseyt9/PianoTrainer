@@ -1,5 +1,7 @@
-﻿import { getNotationSvg } from '../core/context.js';
+import { getNotationSvg } from '../core/context.js';
 import { shiftY, startY } from '../core/consts.js';
+
+let notationResizeObserver;
 
 export function initNotation() {
     const notationSvg = getNotationSvg();
@@ -9,10 +11,12 @@ export function initNotation() {
 
     notationSvg.innerHTML = '';
     drawStaff(notationSvg, startY, 'black');
+    refreshStaffWidth();
+    observeNotationResize(notationSvg);
 }
 
 function drawStaff(svg, offsetY, color) {
-    const width = svg.clientWidth || svg.getBoundingClientRect().width;
+    const width = getStaffWidth(svg);
     for (let i = 0; i < 11; i++) {
         if (i === 5) {
             continue;
@@ -30,13 +34,47 @@ function drawStaff(svg, offsetY, color) {
     }
 }
 
+function getStaffWidth(svg) {
+    const viewBox = svg.viewBox && svg.viewBox.baseVal;
+    if (viewBox && viewBox.width) {
+        return viewBox.width;
+    }
+
+    const { width } = svg.getBoundingClientRect();
+    if (width) {
+        return width;
+    }
+
+    return svg.clientWidth || 0;
+}
+
+function observeNotationResize(svg) {
+    if (typeof ResizeObserver === 'undefined') {
+        return;
+    }
+
+    if (notationResizeObserver) {
+        notationResizeObserver.disconnect();
+    }
+
+    notationResizeObserver = new ResizeObserver(() => {
+        refreshStaffWidth();
+    });
+
+    notationResizeObserver.observe(svg);
+}
+
 export function refreshStaffWidth() {
     const notationSvg = getNotationSvg();
     if (!notationSvg) {
         return;
     }
 
-    const width = notationSvg.clientWidth || notationSvg.getBoundingClientRect().width;
+    const width = getStaffWidth(notationSvg);
+    if (!width) {
+        return;
+    }
+
     Array.from(notationSvg.querySelectorAll('line.staff-line')).forEach(line => {
         line.setAttribute('x1', '0');
         line.setAttribute('x2', width.toString());

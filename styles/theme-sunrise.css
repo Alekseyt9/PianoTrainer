@@ -1,5 +1,5 @@
 ﻿body.theme-sunrise {
-    --body-bg: radial-gradient(circle at 80% 10%, #ffb86c 0%, #ff5f87 45%, #521262 100%);
+    --body-bg: #7a2e69;
     --text-primary: #fff9f2;
     --text-muted: rgba(255, 247, 240, 0.7);
     --panel-bg: rgba(101, 33, 95, 0.82);
@@ -22,8 +22,7 @@
     --container-bg: rgba(92, 27, 88, 0.88);
     --container-shadow-1: rgba(82, 18, 97, 0.5);
     --container-shadow-2: rgba(64, 5, 70, 0.36);
-    --notation-bg-top: rgba(255, 248, 240, 0.96);
-    --notation-bg-bottom: rgba(255, 227, 210, 0.92);
+    --notation-bg: rgba(255, 240, 226, 0.94);
     --notation-border: rgba(255, 205, 180, 0.6);
     --notation-shadow-inner: rgba(111, 38, 95, 0.24);
     --notation-shadow-outer: rgba(72, 15, 84, 0.48);
@@ -55,6 +54,7 @@
     --accent-pulse-low: rgba(255, 158, 203, 0.42);
     --accent-pulse-high: rgba(255, 212, 242, 0.85);
 }
+
 
 
 
