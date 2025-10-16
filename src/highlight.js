@@ -2,7 +2,8 @@
 let mouseDown = false;
 
 document.addEventListener('mousedown', (event) => {
-    if (event.buttons == 2) {  
+    // Right mouse button toggles key selection mode
+    if (event.buttons === 2) {  
         mouseDown = true;
         toggleKeyHighlight(event);
     }

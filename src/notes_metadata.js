@@ -2,7 +2,7 @@
 function createNotesMeta() {
     const notesMeta = [];
 
-    y = 12 * shiftY + startY;
+    let y = 12 * shiftY + startY; // starting ledger-line anchor for assigning staff positions
 
     for (let octave = 1; octave <= 7; octave++) {
         for (let i = 0; i < 12; i++) {
@@ -10,7 +10,7 @@ function createNotesMeta() {
             const midiNum = 24 + (octave - 1) * 12 + i; 
             const isWhite = !(noteName.includes('#')); 
 
-            var note = {
+            const note = {
                 name: noteName,
                 midiNum: midiNum,
                 octave: octave,
@@ -18,7 +18,7 @@ function createNotesMeta() {
             };
             notesMeta.push(note);
 
-            if (octave >= 2 && octave <=5 )
+            if (octave >= 2 && octave <= 5)
             {
                 if (isWhite){
                     note.y = y;
@@ -42,9 +42,9 @@ function getHighlightedKeysMetadata() {
         const noteNumber = key.getAttribute('data-note-number');
         const midiNum = parseInt(noteNumber, 10);
 
-        var note = meta.find(x => x.midiNum == midiNum);
+        const note = meta.find(x => x.midiNum === midiNum);
         return note;
-    });
+    }).filter(note => note && note.isWhite && typeof note.y === 'number');
 
     return highlightedKeysMetadata;
 }

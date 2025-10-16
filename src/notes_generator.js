@@ -1,6 +1,3 @@
-  
-let notes = [];
-
 function createNote(y, name, midiNum, color = 'black') {
     const svgWidth = svgN.clientWidth || svgN.getBoundingClientRect().width;
     const centerX = svgWidth / 2;
@@ -37,16 +34,16 @@ function drawUnderlines(y, color)
         }
     }
 
-    if (y == startY + distY * 5)
+    if (y === startY + distY * 5)
     {
         lines.push(drawUnderline(y, color));
     }
 
-    const topy = distY * 11 + distY;
-    if (y > topy)
+    const topY = startY + distY * 10;
+    if (y > topY)
     {     
-        let ycur = topy + distY;
-        const c = Math.ceil((y - topy) / distY - 0.5);
+        let ycur = topY + distY;
+        const c = Math.ceil((y - topY) / distY - 0.5);
         for (let i=0; i<c; i++)
         {
             lines.push(drawUnderline(ycur, color));
@@ -78,19 +75,37 @@ function generateRandomId() {
     return 'note-' + Math.random().toString(36).substr(2, 9);
 }
 
-function animate() {
-    notes.forEach(note => {
-        const cx = parseFloat(note.getAttribute('cx')) - 2; 
-        if (cx > 10) {  
-            note.setAttribute('cx', cx);
-        }
-    });
-    requestAnimationFrame(animate);
-}
-
 function getRandomElementFromArray(array) {
     const randomIndex = Math.floor(Math.random() * array.length);
     return array[randomIndex];
+}
+
+function recenterNotesOnStaff() {
+    const svgWidth = svgN.clientWidth || svgN.getBoundingClientRect().width;
+    const centerX = svgWidth / 2;
+    const underlineHalfWidth = 30;
+
+    const adjustElement = (element) => {
+        const tagName = element.tagName.toLowerCase();
+        if (tagName === 'ellipse') {
+            element.setAttribute('cx', centerX);
+        } else if (tagName === 'line') {
+            element.setAttribute('x1', centerX - underlineHalfWidth);
+            element.setAttribute('x2', centerX + underlineHalfWidth);
+        }
+    };
+
+    if (currentNotes) {
+        currentNotes.forEach(adjustElement);
+    }
+
+    if (pressedKeyMap && typeof pressedKeyMap === 'object') {
+        Object.values(pressedKeyMap).forEach(noteGroup => {
+            if (Array.isArray(noteGroup)) {
+                noteGroup.forEach(adjustElement);
+            }
+        });
+    }
 }
 
 var currentNotes;
@@ -107,9 +122,13 @@ function cleanSampleNote()
 function generateSampleNote()
 {
     cleanSampleNote();
-    var hMeta = getHighlightedKeysMetadata();
-    var nMeta = getRandomElementFromArray(hMeta);
-    if (nMeta){
+    const hMeta = getHighlightedKeysMetadata();
+    if (!hMeta.length) {
+        return;
+    }
+
+    const nMeta = getRandomElementFromArray(hMeta);
+    if (nMeta && typeof nMeta.y === 'number'){
         currentNotes = createNote(nMeta.y, nMeta.name, nMeta.midiNum);
     }
 }

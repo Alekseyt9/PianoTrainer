@@ -13,7 +13,7 @@ function onMIDISuccess(midiAccess) {
 }
 
 function onMIDIFailure() {
-    console.log("Could not access your MIDI devices.");
+    console.warn("Could not access your MIDI devices. Ensure the page is served over HTTPS and your browser supports Web MIDI.");
 }
 
 function onMIDIMessage(message) {
@@ -42,13 +42,13 @@ function noteOn(noteNumber) {
         key.classList.add('active');
     }
 
-    var keyM = meta.find(x => x.midiNum == noteNumber);
-    if (keyM){
-        var notes = createNote(keyM.y, keyM.name, noteNumber, 'gray');
+    const keyMeta = meta.find(note => note.midiNum === noteNumber);
+    if (keyMeta){
+        const notes = createNote(keyMeta.y, keyMeta.name, noteNumber, 'gray');
         pressedKeyMap[noteNumber] = notes;        
     }
 
-    if (currentNotes && keyM.midiNum == currentNotes[0].getAttribute("midiNum"))
+    if (currentNotes && keyMeta && noteNumber === Number(currentNotes[0].getAttribute("midiNum")))
     {
         cleanSampleNote();
     }
@@ -60,9 +60,9 @@ function noteOff(noteNumber) {
         key.classList.remove('active');
     }
 
-    var keyM = meta.find(x => x.midiNum == noteNumber);
-    if (keyM){
-        var notesOld = pressedKeyMap[noteNumber];
+    const keyMeta = meta.find(note => note.midiNum === noteNumber);
+    if (keyMeta){
+        const notesOld = pressedKeyMap[noteNumber];
         if (!notesOld)
         {
             return;
@@ -72,7 +72,7 @@ function noteOff(noteNumber) {
         delete pressedKeyMap[noteNumber];
     }
 
-    if (currentNotes == null)
+    if (currentNotes === null || currentNotes === undefined)
     {
         generateSampleNote();
     }

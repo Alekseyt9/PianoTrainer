@@ -3,7 +3,7 @@ function drawStaff(startY, color) {
     const w = svgN.clientWidth;
 
     for (let i = 0; i < 11; i++) {
-        if (i == 5)
+        if (i === 5)
         {
             continue;
         }
