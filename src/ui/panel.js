@@ -34,7 +34,7 @@ export function initPanel({ onThemeChange } = {}) {
         });
     }
 
-    const initialHints = settings.hints ?? false;
+    const initialHints = settings.hints ?? true;
     setHintsEnabled(initialHints);
     if (hintsToggle) {
         hintsToggle.checked = initialHints;

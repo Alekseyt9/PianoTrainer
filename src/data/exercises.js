@@ -1,3 +1,56 @@
-// Placeholder for future exercise definitions.
-// Exporting an empty array for now to simplify future integration.
-export const exercises = [];
+export const exercises = [
+    {
+        id: 'octaves-1',
+        title: 'Большая → Вторая октавы',
+        description: 'Сыграй C большой, малой, первой и второй октав подряд.',
+        steps: [
+            { notes: [36], label: 'C2 (большая)' },
+            { notes: [48], label: 'C3 (малая)' },
+            { notes: [60], label: 'C4 (первая)' },
+            { notes: [72], label: 'C5 (вторая)' }
+        ],
+        loop: true
+    },
+    {
+        id: 'white-scale-up',
+        title: 'Белые клавиши: C-D-E-F',
+        description: 'Короткая последовательность на белых клавишах первой октавы.',
+        steps: [
+            { notes: [60], label: 'C4' },
+            { notes: [62], label: 'D4' },
+            { notes: [64], label: 'E4' },
+            { notes: [65], label: 'F4' }
+        ],
+        loop: true
+    },
+    {
+        id: 'c-major-octave',
+        title: 'Гамма C мажор (C2 → C5)',
+        description: 'Полная гамма C мажор от большой до второй октавы.',
+        steps: [
+            { notes: [36], label: 'C2' },
+            { notes: [38], label: 'D2' },
+            { notes: [40], label: 'E2' },
+            { notes: [41], label: 'F2' },
+            { notes: [43], label: 'G2' },
+            { notes: [45], label: 'A2' },
+            { notes: [47], label: 'B2' },
+            { notes: [48], label: 'C3' },
+            { notes: [50], label: 'D3' },
+            { notes: [52], label: 'E3' },
+            { notes: [53], label: 'F3' },
+            { notes: [55], label: 'G3' },
+            { notes: [57], label: 'A3' },
+            { notes: [59], label: 'B3' },
+            { notes: [60], label: 'C4' },
+            { notes: [62], label: 'D4' },
+            { notes: [64], label: 'E4' },
+            { notes: [65], label: 'F4' },
+            { notes: [67], label: 'G4' },
+            { notes: [69], label: 'A4' },
+            { notes: [71], label: 'B4' },
+            { notes: [72], label: 'C5' }
+        ],
+        loop: false
+    }
+];

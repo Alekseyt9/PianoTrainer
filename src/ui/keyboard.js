@@ -2,7 +2,7 @@ import { getKeyboardSvg } from '../core/context.js';
 import { noteOn, noteOff } from '../core/playback.js';
 import { rebuildNotationCenter } from './notes_generator.js';
 
-let keyboardRange = { start: 2, end: 5 };
+let keyboardRange = { start: 1, end: 4 };
 
 export function initKeyboard() {
     rebuildKeyboardPreservingState();
@@ -38,19 +38,10 @@ export function rebuildKeyboardPreservingState() {
         return;
     }
 
-    const highlighted = Array.from(keyboardSvg.querySelectorAll('.key.highlight'))
-        .map(key => Number(key.getAttribute('data-note-number')));
     const active = Array.from(keyboardSvg.querySelectorAll('.key.active'))
         .map(key => Number(key.getAttribute('data-note-number')));
 
     renderKeyboard();
-
-    highlighted.forEach(noteNumber => {
-        const key = keyboardSvg.querySelector(`[data-note-number="${noteNumber}"]`);
-        if (key) {
-            key.classList.add('highlight');
-        }
-    });
 
     active.forEach(noteNumber => {
         const key = keyboardSvg.querySelector(`[data-note-number="${noteNumber}"]`);
