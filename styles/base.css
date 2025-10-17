@@ -56,7 +56,7 @@
 
 
 
-card {
+.card {
     border: none;
 }
 
@@ -72,6 +72,8 @@ card {
 
 .top-bar {
     position: relative;
+    min-height: 64px;
+    padding: 12px 24px;
 }
 
 .brand {
@@ -110,8 +112,8 @@ card {
     outline: none;
 }
 
-.top-bar-right {
-    gap: 20px;
+.settings-controls {
+    gap: 12px;
 }
 
 #workspace {
@@ -610,4 +612,10 @@ card {
 }
 
 
+
+\n.app-title, .panel-title, .status-label {\n    color: var(--heading-color, var(--text-primary));\n}\n
+
+.theme-picker span {
+    color: var(--heading-color, var(--text-primary));
+}
 

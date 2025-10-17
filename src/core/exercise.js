@@ -50,9 +50,10 @@ export function handleNoteInput(midiNumber) {
     }
 
     currentIndex += 1;
-    const finished = currentIndex >= exercise.steps.length;
-    if (finished) {
-        currentIndex = 0;
+    let finished = false;
+    if (currentIndex >= exercise.steps.length) {
+        finished = true;
+        advanceToNextExercise();
     }
     notify();
     return { correct: true, finished };
@@ -61,6 +62,17 @@ export function handleNoteInput(midiNumber) {
 function notify() {
     const snapshot = getSnapshot();
     listeners.forEach(listener => listener(snapshot));
+}
+
+function advanceToNextExercise() {
+    if (!currentExercise || !exercises.length) {
+        return;
+    }
+
+    const currentIndexInList = exercises.findIndex(ex => ex.id === currentExercise.id);
+    const nextExercise = exercises[(currentIndexInList + 1) % exercises.length];
+    currentExercise = nextExercise;
+    currentIndex = 0;
 }
 
 function getSnapshot() {

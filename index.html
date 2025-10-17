@@ -15,11 +15,11 @@
     <body>
     <div id="app-wrapper" class="d-flex flex-column gap-3">
         <div id="app" class="d-flex flex-column gap-3">
-            <header class="top-bar card panel-card shadow-sm px-4 py-3 d-flex align-items-center justify-content-between">
-                <div class="brand d-flex align-items-center gap-3">
-                    <span class="app-title">Piano Trainer</span>
-                </div>
-                <div class="top-bar-right d-flex align-items-center gap-3 flex-wrap justify-content-end">
+            <header class="top-bar card panel-card shadow-sm px-4 py-2">
+                <div class="d-flex align-items-center w-100 gap-3 flex-wrap">
+                    <div class="brand d-flex align-items-center gap-3">
+                        <span class="app-title">Piano Trainer</span>
+                    </div>
                     <div id="info-panel" class="info-panel" hidden>
                         <p>Right-click to select training keys, then play the prompted note on your MIDI keyboard.</p>
                     </div>
@@ -44,7 +44,7 @@
                         </select>
                     </div>
                     <div class="settings-controls d-flex align-items-center gap-2 ms-auto">
-                        <label class="switch-control hidden-control">
+                        <label class="switch-control hidden-control mb-0">
                             <input type="checkbox" id="toggle-hints">
                             <span class="switch-track">
                                 <span class="switch-handle"></span>
@@ -52,7 +52,7 @@
                             <span class="switch-label">Hints</span>
                         </label>
                         <label class="theme-picker mb-0">
-                            <span>Theme</span>
+                            <span class="text-uppercase small">Theme</span>
                             <select id="theme-select" aria-label="Choose theme">
                                 <option value="midnight">Midnight</option>
                                 <option value="light">Light</option>
