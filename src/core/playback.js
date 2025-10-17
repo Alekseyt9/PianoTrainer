@@ -3,6 +3,7 @@ import { getKeyboardSvg, getNotationSvg } from './context.js';
 import { setPressedKey, getPressedKey, deletePressedKey } from './state.js';
 import { createVisualNote, getNoteCx, removeVisualNote } from '../ui/notes_generator.js';
 import { getCurrentExercise, getCurrentIndex, handleNoteInput } from './exercise.js';
+import { getThemeColor } from '../ui/theme.js';
 
 let onScoreIncrement = null;
 
@@ -27,8 +28,9 @@ export function noteOn(noteNumber) {
     }
 
     const targetCx = resolveCurrentStepCx(noteNumber);
+    const playbackColor = getThemeColor('--playback-note-stroke', '#4b5563');
     const visualElements = createVisualNote(noteMeta, {
-        color: '#4b5563',
+        color: playbackColor,
         cx: targetCx
     });
     setPressedKey(noteNumber, visualElements);
@@ -84,22 +86,26 @@ function resolveCurrentStepCx(noteNumber) {
     const chord = step.notes.map(Number);
     const normalizedNote = Number(noteNumber);
     const chordIndex = chord.findIndex(n => n === normalizedNote);
-    const totalSteps = exercise.steps.length;
+    const windowSize = Math.max(1, Number(exercise.displayWindow) || exercise.steps.length);
+    const chunkStart = Math.floor(currentIndex / windowSize) * windowSize;
+    const chunkEnd = Math.min(chunkStart + windowSize, exercise.steps.length);
+    const visibleSteps = Math.max(1, chunkEnd - chunkStart);
+    const localStepIndex = currentIndex - chunkStart;
 
     if (chordIndex === -1) {
         const centerIndex = (chord.length - 1) / 2;
         return getNoteCx({
-            stepIndex: currentIndex,
+            stepIndex: localStepIndex,
             chordIndex: centerIndex,
             chordSize: chord.length,
-            totalSteps
+            totalSteps: visibleSteps
         });
     }
 
     return getNoteCx({
-        stepIndex: currentIndex,
+        stepIndex: localStepIndex,
         chordIndex,
         chordSize: chord.length,
-        totalSteps
+        totalSteps: visibleSteps
     });
 }

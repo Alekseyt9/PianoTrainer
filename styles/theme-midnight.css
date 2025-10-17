@@ -19,13 +19,14 @@
     --range-select-focus-ring: rgba(138, 180, 248, 0.25);
     --select-option-bg: #e3e7ef;
     --select-option-color: #101114;
-    --container-bg: rgba(248, 249, 252, 0.98);
-    --container-shadow-1: rgba(15, 23, 42, 0.14);
-    --container-shadow-2: rgba(15, 23, 42, 0.08);
-    --notation-bg: rgba(248, 249, 252, 0.98);
+    --container-bg: rgba(33, 36, 42, 0.98);
+    --container-shadow-1: rgba(0, 0, 0, 0.4);
+    --container-shadow-2: rgba(0, 0, 0, 0.28);
+    --notation-bg: rgba(28, 30, 36, 0.96);
     --notation-border: rgba(148, 163, 184, 0.35);
-    --notation-shadow-inner: rgba(71, 85, 105, 0.12);
-    --notation-shadow-outer: rgba(15, 23, 42, 0.18);
+    --notation-shadow-inner: rgba(12, 16, 24, 0.35);
+    --notation-shadow-outer: rgba(12, 16, 24, 0.45);
+    --notation-staff-line-color: rgba(241, 245, 249, 0.85);
     --keyboard-bg-top: rgba(255, 255, 255, 0.06);
     --keyboard-bg-bottom: rgba(255, 255, 255, 0.12);
     --accent: #8ab4f8;
@@ -51,6 +52,10 @@
     --highlight-black-glow: rgba(255, 193, 7, 0.85);
     --exercise-complete: #6fcf97;
     --exercise-upcoming: rgba(200, 215, 255, 0.95);
+    --exercise-note-current: #f8fafc;
+    --exercise-note-completed: rgba(203, 213, 225, 0.95);
+    --exercise-note-upcoming: rgba(148, 163, 184, 0.9);
+    --playback-note-stroke: rgba(226, 232, 240, 0.95);
 }
 
 

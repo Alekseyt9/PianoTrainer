@@ -6,7 +6,7 @@ import { initKeyboard } from './ui/keyboard.js';
 import { renderExerciseSteps, setHintsEnabled } from './ui/notes_generator.js';
 import { initPanel, updateMidiStatus, incrementScore, getHintsEnabled, setCurrentExerciseTitle } from './ui/panel.js';
 import { initExerciseList } from './ui/exercise_list.js';
-import { initExercise, onExerciseChange } from './core/exercise.js';
+import { initExercise, onExerciseChange, getCurrentExercise, getCurrentIndex } from './core/exercise.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const notationElement = document.getElementById('notation');
@@ -21,7 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
     refreshStaffWidth();
     window.addEventListener('resize', refreshStaffWidth);
     initKeyboard();
-    initPanel();
+    initPanel({
+        onThemeChange: () => {
+            refreshStaffWidth();
+            renderExerciseSteps(getCurrentExercise(), getCurrentIndex(), { preserveSnapshot: true });
+        }
+    });
     initExerciseList();
 
     setHintsEnabled(getHintsEnabled());

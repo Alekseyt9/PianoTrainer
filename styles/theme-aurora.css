@@ -26,6 +26,7 @@ body.theme-aurora {
     --notation-border: rgba(120, 200, 255, 0.45);
     --notation-shadow-inner: rgba(15, 58, 128, 0.12);
     --notation-shadow-outer: rgba(10, 35, 92, 0.18);
+    --notation-staff-line-color: rgba(16, 52, 110, 0.82);
     --keyboard-bg-top: rgba(160, 234, 255, 0.18);
     --keyboard-bg-bottom: rgba(88, 183, 255, 0.35);
     --accent: #7ae0ff;
@@ -57,4 +58,8 @@ body.theme-aurora {
     --theme-select-bg: rgba(164, 227, 255, 0.24);
     --accent-pulse-low: rgba(122, 224, 255, 0.45);
     --accent-pulse-high: rgba(183, 243, 255, 0.88);
+    --exercise-note-current: #0f305e;
+    --exercise-note-completed: rgba(26, 86, 138, 0.85);
+    --exercise-note-upcoming: rgba(59, 130, 246, 0.7);
+    --playback-note-stroke: rgba(17, 78, 134, 0.85);
 }

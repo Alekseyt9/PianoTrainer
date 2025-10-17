@@ -1,5 +1,6 @@
 import { getNotationSvg } from '../core/context.js';
 import { shiftY, startY } from '../core/consts.js';
+import { getThemeColor } from './theme.js';
 
 let notationResizeObserver;
 
@@ -11,7 +12,8 @@ export function initNotation() {
 
     notationSvg.innerHTML = '';
     updateNotationViewBox(notationSvg);
-    drawStaff(notationSvg, startY, 'black');
+    const staffColor = getThemeColor('--notation-staff-line-color', '#000000');
+    drawStaff(notationSvg, startY, staffColor);
     refreshStaffWidth();
     observeNotationResize(notationSvg);
 }
@@ -77,9 +79,12 @@ export function refreshStaffWidth() {
         return;
     }
 
+    const staffColor = getThemeColor('--notation-staff-line-color', '#000000');
+
     Array.from(notationSvg.querySelectorAll('line.staff-line')).forEach(line => {
         line.setAttribute('x1', '0');
         line.setAttribute('x2', width.toString());
+        line.setAttribute('stroke', staffColor);
     });
 }
 

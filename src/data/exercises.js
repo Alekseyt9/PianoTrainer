@@ -3,6 +3,7 @@
         id: 'octaves-1',
         title: 'Octaves: Low to High C',
         description: 'Play C notes from the low (C2) up to the high (C5) octave in order.',
+        displayWindow: 4,
         steps: [
             { notes: [36], label: 'C2' },
             { notes: [48], label: 'C3' },
@@ -15,6 +16,7 @@
         id: 'white-scale-up',
         title: 'White Keys: C-D-E-F',
         description: 'Short pattern on the white keys of the first octave.',
+        displayWindow: 4,
         steps: [
             { notes: [60], label: 'C4' },
             { notes: [62], label: 'D4' },
@@ -27,6 +29,7 @@
         id: 'c-major-octave',
         title: 'C Major Scale (C2 -> C5)',
         description: 'Full C major scale ascending from C2 to C5.',
+        displayWindow: 8,
         steps: [
             { notes: [36], label: 'C2' },
             { notes: [38], label: 'D2' },

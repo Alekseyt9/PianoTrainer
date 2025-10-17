@@ -26,6 +26,7 @@
     --notation-border: rgba(255, 182, 193, 0.55);
     --notation-shadow-inner: rgba(111, 38, 95, 0.12);
     --notation-shadow-outer: rgba(72, 15, 84, 0.2);
+    --notation-staff-line-color: rgba(74, 27, 60, 0.85);
     --keyboard-bg-top: rgba(255, 209, 183, 0.3);
     --keyboard-bg-bottom: rgba(255, 138, 181, 0.45);
     --accent: #ff9ecb;
@@ -53,6 +54,10 @@
     --theme-select-bg: rgba(255, 218, 185, 0.4);
     --accent-pulse-low: rgba(255, 158, 203, 0.42);
     --accent-pulse-high: rgba(255, 212, 242, 0.85);
+    --exercise-note-current: #4a1b3c;
+    --exercise-note-completed: rgba(111, 38, 95, 0.75);
+    --exercise-note-upcoming: rgba(199, 112, 169, 0.78);
+    --playback-note-stroke: rgba(108, 42, 92, 0.85);
 }
 
 

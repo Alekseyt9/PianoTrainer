@@ -2,9 +2,10 @@
 import { getNotationSvg } from '../core/context.js';
 import { getPressedKeyMap } from '../core/state.js';
 import { findNoteByMidi } from '../data/notes_metadata.js';
+import { getThemeColor } from './theme.js';
 
-const NOTE_SPACING = 90;
-const CHORD_OFFSET = 18;
+const NOTE_SPACING = 70;
+const CHORD_OFFSET = 16;
 
 export function getNoteCx({ stepIndex, chordIndex = 0, chordSize = 1, totalSteps }) {
     if (typeof stepIndex !== 'number' || typeof totalSteps !== 'number' || totalSteps < 1) {
@@ -19,11 +20,12 @@ let hintsEnabled = false;
 let exerciseSnapshot = { exercise: null, index: 0 };
 let exerciseElements = [];
 
-export function createVisualNote(meta, { color = 'gray', cx } = {}) {
+export function createVisualNote(meta, { color, cx } = {}) {
     if (!meta || typeof meta.y !== 'number') {
         return [];
     }
-    const options = { stroke: color };
+    const strokeColor = color ?? getThemeColor('--playback-note-stroke', '#4b5563');
+    const options = { stroke: strokeColor };
     if (typeof cx === 'number') {
         options.cx = cx;
     }
@@ -63,20 +65,30 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
     }
 
     const steps = exercise.steps;
-    const totalSteps = steps.length;
+    const windowSize = Math.max(1, Number(exercise.displayWindow) || steps.length);
+    const chunkStart = Math.floor(currentIndex / windowSize) * windowSize;
+    const chunkEnd = Math.min(chunkStart + windowSize, steps.length);
+    const visibleSteps = steps.slice(chunkStart, chunkEnd);
+    const totalSteps = visibleSteps.length;
 
-    steps.forEach((step, stepIndex) => {
-        if (!hintsEnabled && stepIndex > currentIndex) {
+    const completedColor = getThemeColor('--exercise-note-completed', '#6b7280');
+    const currentColor = getThemeColor('--exercise-note-current', '#1f2937');
+    const upcomingColor = getThemeColor('--exercise-note-upcoming', '#9ca3af');
+
+    visibleSteps.forEach((step, localIndex) => {
+        const globalIndex = chunkStart + localIndex;
+
+        if (!hintsEnabled && globalIndex > currentIndex) {
             return;
         }
 
-        const completed = stepIndex < currentIndex;
-        const isCurrent = stepIndex === currentIndex;
+        const completed = globalIndex < currentIndex;
+        const isCurrent = globalIndex === currentIndex;
         const strokeColor = completed
-            ? '#6b7280'
+            ? completedColor
             : isCurrent
-                ? '#1f2937'
-                : '#9ca3af';
+                ? currentColor
+                : upcomingColor;
 
         (step.notes || []).forEach((midiNumber, chordIndex) => {
             const meta = findNoteByMidi(midiNumber);
@@ -85,7 +97,7 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
             }
 
             const cx = getNoteCx({
-                stepIndex,
+                stepIndex: localIndex,
                 chordIndex,
                 chordSize: step.notes.length,
                 totalSteps
@@ -99,7 +111,7 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
 
             const [noteElement] = noteElements;
             if (noteElement && noteElement.tagName && noteElement.tagName.toLowerCase() === 'ellipse') {
-                noteElement.setAttribute('data-step-index', String(stepIndex));
+                noteElement.setAttribute('data-step-index', String(globalIndex));
                 noteElement.setAttribute('data-chord-index', String(chordIndex));
             }
 
@@ -160,8 +172,8 @@ function createNote(y, name, midiNum, options = {}) {
     const note = notationSvg.ownerDocument.createElementNS(xmlns, 'ellipse');
     note.setAttribute('cx', cx);
     note.setAttribute('cy', y);
-    note.setAttribute('rx', '20');
-    note.setAttribute('ry', '14');
+    note.setAttribute('rx', '16');
+    note.setAttribute('ry', '11');
     note.setAttribute('fill', 'none');
     note.setAttribute('stroke', stroke);
     note.setAttribute('stroke-width', strokeWidth);

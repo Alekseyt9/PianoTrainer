@@ -81,18 +81,22 @@
     gap: 16px;
     min-height: 0;
     overflow: hidden;
+    align-items: stretch;
 }
 
 #exercise-panel {
     display: flex;
     flex-direction: column;
     gap: 14px;
-    width: 240px;
+    width: min(240px, 100%);
+    max-width: 100%;
+    flex: 0 1 240px;
     padding: 18px 20px;
     background: var(--panel-bg);
     border-radius: 18px;
     overflow: hidden;
     min-height: 0;
+    box-sizing: border-box;
 }
 
 .panel-title {
@@ -346,18 +350,19 @@
     gap: 16px;
     padding: 18px 0;
     background: var(--container-bg);
-    border-radius: 18px;
+    border-radius: 0;
     flex: 1 1 auto;
     width: 100%;
     min-width: 0;
     overflow: visible;
+    box-sizing: border-box;
 }
 
 #notation {
     margin: 0;
     background: transparent;
-    border: 1px solid var(--notation-border);
-    border-radius: 14px;
+    border: none;
+    border-radius: 0;
     height: clamp(260px, 45vh, 400px);
     width: 100%;
     max-width: 100%;
@@ -371,6 +376,17 @@
     background: linear-gradient(180deg, var(--keyboard-bg-top) 0%, var(--keyboard-bg-bottom) 100%);
     border-radius: 0;
     overflow: hidden;
+}
+
+@media (max-width: 900px) {
+    #workspace {
+        flex-direction: column;
+    }
+
+    #exercise-panel {
+        flex: 1 1 auto;
+        width: 100%;
+    }
 }
 
 .key {
