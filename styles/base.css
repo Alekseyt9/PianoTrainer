@@ -127,13 +127,14 @@
     font-weight: 500;
     text-align: left;
     cursor: pointer;
-    transition: background 0.2s ease, border 0.2s ease, transform 0.2s ease;
+    transition: background 0.2s ease, border 0.2s ease;
+    transform: translateY(0);
 }
 
 .exercise-item:hover {
     background: rgba(255, 255, 255, 0.12);
     border-color: rgba(255, 255, 255, 0.2);
-    transform: translateY(-1px);
+    transform: translateY(0);
 }
 
 .exercise-item.active {
@@ -354,7 +355,7 @@
 
 #notation {
     margin: 0;
-    background: var(--notation-bg);
+    background: transparent;
     border: 1px solid var(--notation-border);
     border-radius: 14px;
     height: clamp(260px, 45vh, 400px);
@@ -364,11 +365,11 @@
 }
 
 #keyboard {
-    /* ensure svg respects container rounding */
+    /* keyboard container styling */
     width: 100%;
     max-width: 900px;
     background: linear-gradient(180deg, var(--keyboard-bg-top) 0%, var(--keyboard-bg-bottom) 100%);
-    border-radius: 18px;
+    border-radius: 0;
     overflow: hidden;
 }
 

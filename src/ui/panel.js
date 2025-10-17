@@ -2,7 +2,7 @@
 import { setHintsEnabled, areHintsEnabled } from './notes_generator.js';
 
 const SETTINGS_STORAGE_KEY = 'pianoTrainerSettings';
-const AVAILABLE_THEMES = ['midnight', 'light', 'aurora', 'sunrise', 'citrus'];
+const AVAILABLE_THEMES = ['midnight', 'light', 'aurora', 'sunrise'];
 
 let midiContainerElement = null;
 let midiValueElement = null;

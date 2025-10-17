@@ -10,6 +10,7 @@ export function initNotation() {
     }
 
     notationSvg.innerHTML = '';
+    updateNotationViewBox(notationSvg);
     drawStaff(notationSvg, startY, 'black');
     refreshStaffWidth();
     observeNotationResize(notationSvg);
@@ -70,6 +71,7 @@ export function refreshStaffWidth() {
         return;
     }
 
+    updateNotationViewBox(notationSvg);
     const width = getStaffWidth(notationSvg);
     if (!width) {
         return;
@@ -79,4 +81,24 @@ export function refreshStaffWidth() {
         line.setAttribute('x1', '0');
         line.setAttribute('x2', width.toString());
     });
+}
+
+function updateNotationViewBox(svg) {
+    const rect = svg.getBoundingClientRect();
+    const width = Math.round(rect.width);
+    const height = Math.round(rect.height);
+    if (!width || !height) {
+        return;
+    }
+
+    const currentViewBox = svg.viewBox ? svg.viewBox.baseVal : null;
+    if (
+        currentViewBox &&
+        currentViewBox.width === width &&
+        currentViewBox.height === height
+    ) {
+        return;
+    }
+
+    svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
 }

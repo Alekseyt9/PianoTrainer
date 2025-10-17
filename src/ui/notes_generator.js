@@ -6,17 +6,28 @@ import { findNoteByMidi } from '../data/notes_metadata.js';
 const NOTE_SPACING = 90;
 const CHORD_OFFSET = 18;
 
+export function getNoteCx({ stepIndex, chordIndex = 0, chordSize = 1, totalSteps }) {
+    if (typeof stepIndex !== 'number' || typeof totalSteps !== 'number' || totalSteps < 1) {
+        return getNotationCenterX();
+    }
+
+    const stepX = getStepX(stepIndex, totalSteps);
+    return stepX + getChordOffset(chordIndex, chordSize);
+}
+
 let hintsEnabled = false;
 let exerciseSnapshot = { exercise: null, index: 0 };
 let exerciseElements = [];
 
-export function createVisualNote(meta, { color = 'gray' } = {}) {
+export function createVisualNote(meta, { color = 'gray', cx } = {}) {
     if (!meta || typeof meta.y !== 'number') {
         return [];
     }
-    return createNote(meta.y, meta.name, meta.midiNum, {
-        stroke: color
-    });
+    const options = { stroke: color };
+    if (typeof cx === 'number') {
+        options.cx = cx;
+    }
+    return createNote(meta.y, meta.name, meta.midiNum, options);
 }
 
 export function removeVisualNote(elements) {
@@ -52,14 +63,13 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
     }
 
     const steps = exercise.steps;
-    const baseX = getNotationCenterX() - ((steps.length - 1) * NOTE_SPACING) / 2;
+    const totalSteps = steps.length;
 
     steps.forEach((step, stepIndex) => {
         if (!hintsEnabled && stepIndex > currentIndex) {
             return;
         }
 
-        const stepX = baseX + stepIndex * NOTE_SPACING;
         const completed = stepIndex < currentIndex;
         const isCurrent = stepIndex === currentIndex;
         const strokeColor = completed
@@ -74,14 +84,24 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
                 return;
             }
 
-            const offset = (chordIndex - ((step.notes.length - 1) / 2)) * CHORD_OFFSET;
-            const cx = stepX + offset;
+            const cx = getNoteCx({
+                stepIndex,
+                chordIndex,
+                chordSize: step.notes.length,
+                totalSteps
+            });
             const noteElements = createNote(meta.y, meta.name, meta.midiNum, {
                 cx,
                 stroke: strokeColor,
                 strokeWidth: isCurrent ? 3.2 : 2.6,
                 opacity: completed ? 0.9 : isCurrent ? 1 : 0.9
             });
+
+            const [noteElement] = noteElements;
+            if (noteElement && noteElement.tagName && noteElement.tagName.toLowerCase() === 'ellipse') {
+                noteElement.setAttribute('data-step-index', String(stepIndex));
+                noteElement.setAttribute('data-chord-index', String(chordIndex));
+            }
 
             exerciseElements.push(...noteElements);
         });
@@ -217,6 +237,19 @@ function getNotationCenterX() {
 
 function generateRandomId() {
     return `note-${Math.random().toString(36).slice(2, 11)}`;
+}
+
+function getStepX(stepIndex, totalSteps) {
+    const centerX = getNotationCenterX();
+    const baseX = centerX - ((totalSteps - 1) * NOTE_SPACING) / 2;
+    return baseX + stepIndex * NOTE_SPACING;
+}
+
+function getChordOffset(chordIndex = 0, chordSize = 1) {
+    if (!chordSize || chordSize <= 1) {
+        return 0;
+    }
+    return (chordIndex - ((chordSize - 1) / 2)) * CHORD_OFFSET;
 }
 
 
