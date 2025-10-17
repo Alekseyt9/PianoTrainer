@@ -87,6 +87,7 @@
     font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: uppercase;
+    color: var(--heading-color, var(--text-primary));
 }
 
 .info-button {
@@ -153,6 +154,7 @@
     font-weight: 600;
     letter-spacing: 0.05em;
     text-transform: uppercase;
+    color: var(--heading-color, var(--text-primary));
 }
 
 #exercise-panel > .panel-title {
@@ -282,6 +284,7 @@
     margin: 0 0 6px 0;
     font-size: 1rem;
     font-weight: 600;
+    color: var(--heading-color, var(--text-primary));
 }
 
 #exercise-details-description {
@@ -549,12 +552,13 @@
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: var(--text-muted);
+    color: var(--heading-color, var(--text-primary));
 }
 
 .status-item span:last-child {
     font-size: 1.05rem;
     font-weight: 600;
+    color: var(--heading-color, var(--text-primary));
 }
 
 .midi-status.connected #status-midi-value {
@@ -613,9 +617,10 @@
 
 
 
-\n.app-title, .panel-title, .status-label {\n    color: var(--heading-color, var(--text-primary));\n}\n
-
 .theme-picker span {
     color: var(--heading-color, var(--text-primary));
 }
+
+
+
 
