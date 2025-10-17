@@ -62,5 +62,13 @@
     --exercise-note-completed: rgba(203, 213, 225, 0.95);
     --exercise-note-upcoming: rgba(148, 163, 184, 0.9);
     --playback-note-stroke: rgba(226, 232, 240, 0.95);
+    --exercise-tile-bg: rgba(255, 255, 255, 0.08);
+    --exercise-tile-bg-hover: rgba(255, 255, 255, 0.12);
+    --exercise-tile-bg-active: rgba(138, 180, 248, 0.24);
+    --exercise-tile-border: rgba(148, 163, 184, 0.2);
+    --exercise-tile-border-hover: rgba(148, 163, 184, 0.35);
+    --exercise-tile-number-bg: rgba(15, 23, 42, 0.55);
+    --scrollbar-track: rgba(47, 53, 69, 0.9);
+    --scrollbar-thumb: rgba(138, 180, 248, 0.6);
 }
 

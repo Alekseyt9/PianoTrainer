@@ -62,4 +62,12 @@ body.theme-aurora {
     --exercise-note-completed: rgba(26, 86, 138, 0.85);
     --exercise-note-upcoming: rgba(59, 130, 246, 0.7);
     --playback-note-stroke: rgba(17, 78, 134, 0.85);
+    --exercise-tile-bg: rgba(31, 76, 138, 0.18);
+    --exercise-tile-bg-hover: rgba(31, 76, 138, 0.24);
+    --exercise-tile-bg-active: rgba(122, 224, 255, 0.32);
+    --exercise-tile-border: rgba(122, 224, 255, 0.35);
+    --exercise-tile-border-hover: rgba(183, 243, 255, 0.5);
+    --exercise-tile-number-bg: rgba(14, 56, 120, 0.45);
+    --scrollbar-track: rgba(22, 48, 100, 0.85);
+    --scrollbar-thumb: rgba(122, 224, 255, 0.65);
 }
