@@ -1,5 +1,6 @@
 ﻿body.theme-light {
     --body-bg: #f6f8fc;
+    --heading-color: #1f2937;
     --text-primary: #1f2937;
     --text-muted: rgba(31, 41, 55, 0.6);
     --panel-bg: #ffffff;

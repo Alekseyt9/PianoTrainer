@@ -1,4 +1,4 @@
-const midiLabels = {
+﻿const midiLabels = {
     36: 'C2',
     38: 'D2',
     40: 'E2',
@@ -48,7 +48,7 @@ export const exerciseGroups = [
                 id: 'warmup-middle-c',
                 title: 'Middle C Focus',
                 description: 'Повторяй ноту C4 и соседние белые клавиши для разогрева.',
-                displayWindow: 14,
+                displayWindow: 12,
                 steps: [
                     createStep(60),
                     createStep(62),
@@ -89,7 +89,7 @@ export const exerciseGroups = [
                 id: 'warmup-steps-up',
                 title: 'Step Up',
                 description: 'Пройди по белым клавишам от C4 до верхних нот.',
-                displayWindow: 14,
+                displayWindow: 12,
                 steps: [
                     createStep(60),
                     createStep(62),
@@ -134,7 +134,7 @@ export const exerciseGroups = [
                 id: 'warmup-steps-down',
                 title: 'Step Down',
                 description: 'Спустись от F4 к нижним нотам и вернись вверх.',
-                displayWindow: 14,
+                displayWindow: 12,
                 steps: [
                     createStep(65),
                     createStep(64),
@@ -177,7 +177,7 @@ export const exerciseGroups = [
                 id: 'warmup-skip',
                 title: 'Skip Practice',
                 description: 'Чередуй секунды и терции вокруг C4.',
-                displayWindow: 14,
+                displayWindow: 12,
                 steps: [
                     createStep(60),
                     createStep(64),
@@ -226,7 +226,7 @@ export const exerciseGroups = [
                 id: 'intervals-thirds-c',
                 title: 'Thirds in C',
                 description: 'Проигрывай терции вокруг середины клавиатуры.',
-                displayWindow: 14,
+                displayWindow: 12,
                 steps: [
                     createStep(60, 64),
                     createStep(62, 65),
@@ -267,7 +267,7 @@ export const exerciseGroups = [
                 id: 'intervals-fifths',
                 title: 'Simple Fifths',
                 description: 'Строй устойчивые квинты на белых клавишах.',
-                displayWindow: 3,
+                displayWindow: 12,
                 steps: [
                     createStep(60, 67),
                     createStep(62, 69),
@@ -310,7 +310,7 @@ export const exerciseGroups = [
                 id: 'intervals-echo',
                 title: 'Echo Interval',
                 description: 'Повторяй интервал терции в разных октавах.',
-                displayWindow: 4,
+                displayWindow: 12,
                 steps: [
                     createStep(48, 52),
                     createStep(60, 64),
@@ -357,7 +357,7 @@ export const exerciseGroups = [
                 id: 'white-cde',
                 title: 'C-D-E Line',
                 description: 'Лёгкая мелодия по трём белым клавишам.',
-                displayWindow: 3,
+                displayWindow: 12,
                 steps: [
                     createStep(60),
                     createStep(62),
@@ -399,7 +399,7 @@ export const exerciseGroups = [
                 id: 'white-echo',
                 title: 'Echo Motion',
                 description: 'Повторяй восходящую и нисходящую фразу.',
-                displayWindow: 4,
+                displayWindow: 12,
                 steps: [
                     createStep(60),
                     createStep(62),
@@ -442,7 +442,7 @@ export const exerciseGroups = [
                 id: 'white-c-major-frag',
                 title: 'C Major Fragment',
                 description: 'Мини-участок гаммы C мажор.',
-                displayWindow: 5,
+                displayWindow: 12,
                 steps: [
                     createStep(60),
                     createStep(62),
@@ -486,7 +486,7 @@ export const exerciseGroups = [
                 id: 'white-descend',
                 title: 'Descending Five',
                 description: 'Спуск от G4 до C4 с устойчивыми опорами.',
-                displayWindow: 5,
+                displayWindow: 12,
                 steps: [
                     createStep(67),
                     createStep(65),
@@ -529,7 +529,7 @@ export const exerciseGroups = [
                 id: 'white-pattern',
                 title: 'White Key Pattern',
                 description: 'Попеременно играй ноты C, E и G.',
-                displayWindow: 3,
+                displayWindow: 12,
                 steps: [
                     createStep(60),
                     createStep(64),
@@ -580,7 +580,7 @@ export const exerciseGroups = [
                 id: 'scale-c-one-octave',
                 title: 'C Major 1 Octave',
                 description: 'Возьми одну октаву C мажор вверх и вниз несколько раз.',
-                displayWindow: 6,
+                displayWindow: 12,
                 steps: [
                     createStep(60),
                     createStep(62),
@@ -632,7 +632,7 @@ export const exerciseGroups = [
                 id: 'scale-g-fragment',
                 title: 'G Major Fragment',
                 description: 'Короткий фрагмент гаммы G мажор с одним диезом.',
-                displayWindow: 6,
+                displayWindow: 12,
                 steps: [
                     createStep(55),
                     createStep(57),
@@ -681,7 +681,7 @@ export const exerciseGroups = [
                 id: 'scale-f-fragment',
                 title: 'F Major Fragment',
                 description: 'Гамма F мажор с бемолем B♭.',
-                displayWindow: 6,
+                displayWindow: 12,
                 steps: [
                     createStep(53),
                     createStep(55),
@@ -730,7 +730,7 @@ export const exerciseGroups = [
                 id: 'scale-c-wide',
                 title: 'C Major Wide',
                 description: 'Две октавы гаммы C мажор с возвратом вниз.',
-                displayWindow: 8,
+                displayWindow: 12,
                 steps: [
                     createStep(48),
                     createStep(50),
@@ -793,7 +793,7 @@ export const exerciseGroups = [
                 id: 'pattern-triad-c',
                 title: 'C Triad Broken',
                 description: 'Пройди арпеджио C мажор по белым клавишам.',
-                displayWindow: 4,
+                displayWindow: 12,
                 steps: [
                     createStep(60),
                     createStep(64),
@@ -838,7 +838,7 @@ export const exerciseGroups = [
                 id: 'pattern-triad-f',
                 title: 'F Triad Broken',
                 description: 'Арпеджио F мажор с верхней октавой.',
-                displayWindow: 4,
+                displayWindow: 12,
                 steps: [
                     createStep(53),
                     createStep(60),
@@ -881,7 +881,7 @@ export const exerciseGroups = [
                 id: 'pattern-triplet',
                 title: 'Triplet Motion',
                 description: 'Попробуй паттерн из трёх нот с переносом вверх.',
-                displayWindow: 6,
+                displayWindow: 12,
                 steps: [
                     createStep(60),
                     createStep(64),

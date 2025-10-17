@@ -1,5 +1,6 @@
 ﻿body.theme-sunrise {
     --body-bg: #7a2e69;
+    --heading-color: #fff7f0;
     --text-primary: #fff9f2;
     --text-muted: rgba(255, 247, 240, 0.7);
     --panel-bg: rgba(101, 33, 95, 0.82);
