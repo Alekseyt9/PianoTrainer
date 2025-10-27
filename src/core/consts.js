@@ -1,5 +1,5 @@
 export const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 export const xmlns = 'http://www.w3.org/2000/svg';
-export const shiftY = 24;
-export const startY = 60;
-export const distY = 24;
+export const shiftY = 10;
+export const startY = 40;
+export const distY = 10;

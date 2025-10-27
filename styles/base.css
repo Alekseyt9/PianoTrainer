@@ -471,12 +471,19 @@
 }
 
 
+#notation-container {
+    width: 100%;
+    max-width: 100%;
+    height: clamp(260px, 45vh, 400px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
 #notation {
     margin: 0;
     background: transparent;
     border: none;
     border-radius: 0;
-    height: clamp(260px, 45vh, 400px);
     width: 100%;
     max-width: 100%;
     display: block;

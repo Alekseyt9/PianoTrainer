@@ -1,7 +1,7 @@
-﻿import { findNoteByMidi, getStepMidiNumbers } from '../data/notes_metadata.js';
+﻿import { findNoteByMidi } from '../data/notes_metadata.js';
 import { getKeyboardSvg, getNotationSvg } from './context.js';
 import { setPressedKey, getPressedKey, deletePressedKey } from './state.js';
-import { createVisualNote, getNoteCx, removeVisualNote } from '../ui/notes_generator.js';
+import { createVisualNote, removeVisualNote, resolveStepPosition } from '../ui/notes_generator.js';
 import { getCurrentExercise, getCurrentIndex, handleNoteInput, handleNoteRelease } from './exercise.js';
 import { getThemeColor } from '../ui/theme.js';
 
@@ -27,11 +27,12 @@ export function noteOn(noteNumber) {
         return;
     }
 
-    const targetCx = resolveCurrentStepCx(noteNumber);
+    const { cx: targetCx, offsetY } = resolveCurrentStepPosition(noteNumber);
     const playbackColor = getThemeColor('--playback-note-stroke', '#4b5563');
     const visualElements = createVisualNote(noteMeta, {
         color: playbackColor,
-        cx: targetCx
+        cx: targetCx,
+        offsetY
     });
     setPressedKey(noteNumber, visualElements);
 
@@ -59,55 +60,29 @@ export function noteOff(noteNumber) {
     }
 }
 
-function resolveCurrentStepCx(noteNumber) {
+function resolveCurrentStepPosition(noteNumber) {
     const notationSvg = getNotationSvg();
     const currentIndex = getCurrentIndex();
 
     if (notationSvg) {
-        const selector = `ellipse[data-step-index="${currentIndex}"][data-midi-num="${Number(noteNumber)}"]`;
+        const normalized = Number(noteNumber);
+        const selector = `ellipse[data-step-index="${currentIndex}"][data-midi-num="${normalized}"]`;
         const noteElement = notationSvg.querySelector(selector);
         if (noteElement) {
             const cxAttr = noteElement.getAttribute('cx');
+            const offsetAttr = noteElement.getAttribute('data-offset-y');
             const cx = cxAttr != null ? Number(cxAttr) : NaN;
+            const offsetY = offsetAttr != null ? Number(offsetAttr) : 0;
             if (!Number.isNaN(cx)) {
-                return cx;
+                return { cx, offsetY };
             }
         }
     }
 
     const exercise = getCurrentExercise();
-    if (!exercise || !Array.isArray(exercise.steps) || !exercise.steps.length) {
-        return undefined;
+    if (!exercise) {
+        return { cx: undefined, offsetY: 0 };
     }
 
-    const step = exercise.steps[currentIndex];
-    const chord = getStepMidiNumbers(step);
-    if (!chord.length) {
-        return undefined;
-    }
-
-    const normalizedNote = Number(noteNumber);
-    const chordIndex = chord.findIndex(n => n === normalizedNote);
-    const windowSize = Math.max(1, Number(exercise.displayWindow) || exercise.steps.length);
-    const chunkStart = Math.floor(currentIndex / windowSize) * windowSize;
-    const chunkEnd = Math.min(chunkStart + windowSize, exercise.steps.length);
-    const visibleSteps = Math.max(1, chunkEnd - chunkStart);
-    const localStepIndex = currentIndex - chunkStart;
-
-    if (chordIndex === -1) {
-        const centerIndex = (chord.length - 1) / 2;
-        return getNoteCx({
-            stepIndex: localStepIndex,
-            chordIndex: centerIndex,
-            chordSize: chord.length,
-            totalSteps: visibleSteps
-        });
-    }
-
-    return getNoteCx({
-        stepIndex: localStepIndex,
-        chordIndex,
-        chordSize: chord.length,
-        totalSteps: visibleSteps
-    });
+    return resolveStepPosition(exercise, currentIndex, noteNumber);
 }

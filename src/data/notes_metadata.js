@@ -26,15 +26,15 @@ function normalizeNoteName(value) {
     if (!trimmed) {
         return null;
     }
-    const match = trimmed.match(/^([A-Ga-g])([#b♯♭]?)(\d)$/);
+    const match = trimmed.match(/^([A-Ga-g])([#b\u266F\u266D]?)(\d)$/);
     if (!match) {
         return null;
     }
     const letter = match[1].toUpperCase();
     let accidental = match[2] || '';
-    if (accidental === '♯') {
+    if (accidental === '\u266F') {
         accidental = '#';
-    } else if (accidental === '♭') {
+    } else if (accidental === '\u266D') {
         accidental = 'b';
     } else if (accidental !== '#' && accidental !== 'b') {
         accidental = '';

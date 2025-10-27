@@ -1,6 +1,7 @@
 import { getNotationSvg } from '../core/context.js';
-import { shiftY, startY } from '../core/consts.js';
+import { startY, distY } from '../core/consts.js';
 import { getThemeColor } from './theme.js';
+import { STAFF_ROW_COUNT, getStaffRowHeight, getTotalNotationHeight } from '../core/layout.js';
 
 let notationResizeObserver;
 
@@ -11,15 +12,11 @@ export function initNotation() {
     }
 
     notationSvg.innerHTML = '';
-    updateNotationViewBox(notationSvg);
-    const staffColor = getThemeColor('--notation-staff-line-color', '#000000');
-    drawStaff(notationSvg, startY, staffColor);
     refreshStaffWidth();
     observeNotationResize(notationSvg);
 }
 
-function drawStaff(svg, offsetY, color) {
-    const width = getStaffWidth(svg);
+function drawStaffSystem(svg, offsetY, width, color) {
     for (let i = 0; i < 11; i++) {
         if (i === 5) {
             continue;
@@ -27,28 +24,14 @@ function drawStaff(svg, offsetY, color) {
 
         const line = svg.ownerDocument.createElementNS(svg.namespaceURI, 'line');
         line.setAttribute('x1', '0');
-        line.setAttribute('y1', offsetY + i * shiftY);
+        line.setAttribute('y1', offsetY + i * distY);
         line.setAttribute('x2', width.toString());
-        line.setAttribute('y2', offsetY + i * shiftY);
+        line.setAttribute('y2', offsetY + i * distY);
         line.setAttribute('stroke', color);
         line.setAttribute('stroke-width', '1');
         line.classList.add('staff-line');
         svg.appendChild(line);
     }
-}
-
-function getStaffWidth(svg) {
-    const viewBox = svg.viewBox && svg.viewBox.baseVal;
-    if (viewBox && viewBox.width) {
-        return viewBox.width;
-    }
-
-    const { width } = svg.getBoundingClientRect();
-    if (width) {
-        return width;
-    }
-
-    return svg.clientWidth || 0;
 }
 
 function observeNotationResize(svg) {
@@ -73,14 +56,22 @@ export function refreshStaffWidth() {
         return;
     }
 
-    updateNotationViewBox(notationSvg);
-    const width = getStaffWidth(notationSvg);
+    const width = getSvgWidth(notationSvg);
     if (!width) {
         return;
     }
 
+    const totalHeight = getTotalNotationHeight();
+    updateNotationViewBox(notationSvg, width, totalHeight);
+    notationSvg.setAttribute('height', totalHeight);
+
     const staffColor = getThemeColor('--notation-staff-line-color', '#000000');
 
+    Array.from(notationSvg.querySelectorAll('line.staff-line')).forEach(line => line.remove());
+    for (let row = 0; row < STAFF_ROW_COUNT; row++) {
+        const offset = startY + row * getStaffRowHeight();
+        drawStaffSystem(notationSvg, offset, width, staffColor);
+    }
     Array.from(notationSvg.querySelectorAll('line.staff-line')).forEach(line => {
         line.setAttribute('x1', '0');
         line.setAttribute('x2', width.toString());
@@ -88,10 +79,9 @@ export function refreshStaffWidth() {
     });
 }
 
-function updateNotationViewBox(svg) {
-    const rect = svg.getBoundingClientRect();
-    const width = Math.round(rect.width);
-    const height = Math.round(rect.height);
+function updateNotationViewBox(svg, width, height) {
+    const roundedWidth = Math.round(width);
+    const roundedHeight = Math.round(height);
     if (!width || !height) {
         return;
     }
@@ -99,11 +89,29 @@ function updateNotationViewBox(svg) {
     const currentViewBox = svg.viewBox ? svg.viewBox.baseVal : null;
     if (
         currentViewBox &&
-        currentViewBox.width === width &&
-        currentViewBox.height === height
+        currentViewBox.width === roundedWidth &&
+        currentViewBox.height === roundedHeight
     ) {
         return;
     }
 
-    svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    svg.setAttribute('viewBox', `0 0 ${roundedWidth} ${roundedHeight}`);
+}
+
+function getSvgWidth(svg) {
+    const rect = svg.getBoundingClientRect();
+    if (rect && rect.width) {
+        return rect.width;
+    }
+    if (svg.clientWidth) {
+        return svg.clientWidth;
+    }
+    const parent = svg.parentElement;
+    if (parent) {
+        const parentRect = parent.getBoundingClientRect();
+        if (parentRect && parentRect.width) {
+            return parentRect.width;
+        }
+    }
+    return 0;
 }
