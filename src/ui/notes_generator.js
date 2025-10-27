@@ -1,11 +1,10 @@
 ﻿import { xmlns, startY, distY } from '../core/consts.js';
 import { getNotationSvg } from '../core/context.js';
 import { getPressedKeyMap } from '../core/state.js';
-import { findNoteByMidi } from '../data/notes_metadata.js';
+import { getStepNoteMetas } from '../data/notes_metadata.js';
 import { getThemeColor } from './theme.js';
 
 const NOTE_SPACING = 70;
-const CHORD_OFFSET = 16;
 
 export function getNoteCx({ stepIndex, chordIndex = 0, chordSize = 1, totalSteps }) {
     if (typeof stepIndex !== 'number' || typeof totalSteps !== 'number' || totalSteps < 1) {
@@ -29,7 +28,8 @@ export function createVisualNote(meta, { color, cx } = {}) {
     if (typeof cx === 'number') {
         options.cx = cx;
     }
-    return createNote(meta.y, meta.name, meta.midiNum, options);
+    const label = meta.displayName || meta.name;
+    return createNote(meta.y, label, meta.midiNum, options);
 }
 
 export function removeVisualNote(elements) {
@@ -90,8 +90,8 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
                 ? currentColor
                 : upcomingColor;
 
-        (step.notes || []).forEach((midiNumber, chordIndex) => {
-            const meta = findNoteByMidi(midiNumber);
+        const noteMetas = getStepNoteMetas(step);
+        noteMetas.forEach((meta, chordIndex) => {
             if (!meta || typeof meta.y !== 'number') {
                 return;
             }
@@ -99,10 +99,10 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
             const cx = getNoteCx({
                 stepIndex: localIndex,
                 chordIndex,
-                chordSize: step.notes.length,
+                chordSize: noteMetas.length,
                 totalSteps
             });
-            const noteElements = createNote(meta.y, meta.name, meta.midiNum, {
+            const noteElements = createNote(meta.y, meta.displayName || meta.name, meta.midiNum, {
                 cx,
                 stroke: strokeColor,
                 strokeWidth: isCurrent ? 3.2 : 2.6,
@@ -258,10 +258,7 @@ function getStepX(stepIndex, totalSteps) {
 }
 
 function getChordOffset(chordIndex = 0, chordSize = 1) {
-    if (!chordSize || chordSize <= 1) {
-        return 0;
-    }
-    return (chordIndex - ((chordSize - 1) / 2)) * CHORD_OFFSET;
+    return 0;
 }
 
 

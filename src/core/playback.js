@@ -1,8 +1,8 @@
-﻿import { findNoteByMidi } from '../data/notes_metadata.js';
+﻿import { findNoteByMidi, getStepMidiNumbers } from '../data/notes_metadata.js';
 import { getKeyboardSvg, getNotationSvg } from './context.js';
 import { setPressedKey, getPressedKey, deletePressedKey } from './state.js';
 import { createVisualNote, getNoteCx, removeVisualNote } from '../ui/notes_generator.js';
-import { getCurrentExercise, getCurrentIndex, handleNoteInput } from './exercise.js';
+import { getCurrentExercise, getCurrentIndex, handleNoteInput, handleNoteRelease } from './exercise.js';
 import { getThemeColor } from '../ui/theme.js';
 
 let onScoreIncrement = null;
@@ -50,6 +50,8 @@ export function noteOff(noteNumber) {
         }
     }
 
+    handleNoteRelease(noteNumber);
+
     const elements = getPressedKey(noteNumber);
     if (elements) {
         removeVisualNote(elements);
@@ -79,11 +81,11 @@ function resolveCurrentStepCx(noteNumber) {
     }
 
     const step = exercise.steps[currentIndex];
-    if (!step || !Array.isArray(step.notes) || !step.notes.length) {
+    const chord = getStepMidiNumbers(step);
+    if (!chord.length) {
         return undefined;
     }
 
-    const chord = step.notes.map(Number);
     const normalizedNote = Number(noteNumber);
     const chordIndex = chord.findIndex(n => n === normalizedNote);
     const windowSize = Math.max(1, Number(exercise.displayWindow) || exercise.steps.length);

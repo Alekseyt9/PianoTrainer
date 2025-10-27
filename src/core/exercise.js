@@ -1,10 +1,13 @@
-import { exercises } from '../data/exercises.js';
+import { exercises } from '../data/exercises/index.js';
+import { getStepMidiNumbers } from '../data/notes_metadata.js';
 
 let currentExercise = exercises[0] || null;
 let currentIndex = 0;
+let chordState = createChordState(currentIndex);
 const listeners = new Set();
 
 export function initExercise() {
+    chordState = createChordState(currentIndex);
     notify();
 }
 
@@ -21,6 +24,7 @@ export function loadExerciseById(id) {
     if (found) {
         currentExercise = found;
         currentIndex = 0;
+        chordState = createChordState(currentIndex);
         notify();
     }
 }
@@ -40,23 +44,58 @@ export function handleNoteInput(midiNumber) {
     }
 
     const step = exercise.steps[currentIndex];
-    if (!step || !Array.isArray(step.notes)) {
+    const expectedNotes = getStepMidiNumbers(step);
+    if (!expectedNotes.length) {
         return { correct: false, finished: false };
     }
 
-    const match = step.notes.map(Number).includes(Number(midiNumber));
+    if (chordState.stepIndex !== currentIndex) {
+        chordState = createChordState(currentIndex);
+    }
+
+    const normalizedInput = Number(midiNumber);
+    const match = expectedNotes.includes(normalizedInput);
     if (!match) {
+        chordState = createChordState(currentIndex);
         return { correct: false, finished: false };
     }
 
+    chordState.pressed.add(normalizedInput);
+    const allPressed = expectedNotes.every(note => chordState.pressed.has(note));
+    if (!allPressed) {
+        return { correct: false, finished: false };
+    }
+
+    chordState = createChordState(currentIndex + 1);
     currentIndex += 1;
     let finished = false;
     if (currentIndex >= exercise.steps.length) {
         finished = true;
         advanceToNextExercise();
+    } else {
+        notify();
     }
-    notify();
     return { correct: true, finished };
+}
+
+export function handleNoteRelease(midiNumber) {
+    if (!chordState || !(chordState.pressed instanceof Set)) {
+        return;
+    }
+    const normalized = Number(midiNumber);
+    if (Number.isNaN(normalized)) {
+        return;
+    }
+    if (chordState.pressed.has(normalized)) {
+        chordState.pressed.delete(normalized);
+    }
+}
+
+function createChordState(stepIndex) {
+    return {
+        stepIndex,
+        pressed: new Set()
+    };
 }
 
 function notify() {
@@ -73,6 +112,8 @@ function advanceToNextExercise() {
     const nextExercise = exercises[(currentIndexInList + 1) % exercises.length];
     currentExercise = nextExercise;
     currentIndex = 0;
+    chordState = createChordState(currentIndex);
+    notify();
 }
 
 function getSnapshot() {

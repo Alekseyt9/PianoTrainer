@@ -1,4 +1,4 @@
-import { exerciseGroups } from '../data/exercises.js';
+import { exerciseGroups } from '../data/exercises/index.js';
 import { loadExerciseById, onExerciseChange } from '../core/exercise.js';
 
 let listElement = null;
