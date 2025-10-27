@@ -1,7 +1,7 @@
 import { getNotationSvg } from '../core/context.js';
 import { startY, distY } from '../core/consts.js';
 import { getThemeColor } from './theme.js';
-import { STAFF_ROW_COUNT, getStaffRowHeight, getTotalNotationHeight } from '../core/layout.js';
+import { getStaffRowHeight, getTotalNotationHeight } from '../core/layout.js';
 
 let notationResizeObserver;
 
@@ -12,6 +12,7 @@ export function initNotation() {
     }
 
     notationSvg.innerHTML = '';
+    notationSvg.setAttribute('data-staff-rows', '1');
     refreshStaffWidth();
     observeNotationResize(notationSvg);
 }
@@ -61,22 +62,19 @@ export function refreshStaffWidth() {
         return;
     }
 
-    const totalHeight = getTotalNotationHeight();
+    const rowAttr = notationSvg.getAttribute('data-staff-rows');
+    const rowCount = Math.max(1, Number(rowAttr) || 1);
+    const totalHeight = getTotalNotationHeight(rowCount);
     updateNotationViewBox(notationSvg, width, totalHeight);
     notationSvg.setAttribute('height', totalHeight);
 
     const staffColor = getThemeColor('--notation-staff-line-color', '#000000');
 
     Array.from(notationSvg.querySelectorAll('line.staff-line')).forEach(line => line.remove());
-    for (let row = 0; row < STAFF_ROW_COUNT; row++) {
+    for (let row = 0; row < rowCount; row++) {
         const offset = startY + row * getStaffRowHeight();
         drawStaffSystem(notationSvg, offset, width, staffColor);
     }
-    Array.from(notationSvg.querySelectorAll('line.staff-line')).forEach(line => {
-        line.setAttribute('x1', '0');
-        line.setAttribute('x2', width.toString());
-        line.setAttribute('stroke', staffColor);
-    });
 }
 
 function updateNotationViewBox(svg, width, height) {
@@ -114,4 +112,18 @@ function getSvgWidth(svg) {
         }
     }
     return 0;
+}
+
+export function setStaffRowCount(rowCount) {
+    const notationSvg = getNotationSvg();
+    if (!notationSvg) {
+        return;
+    }
+    const normalized = Math.max(1, Number(rowCount) || 1);
+    const current = Number(notationSvg.getAttribute('data-staff-rows')) || 1;
+    if (current === normalized) {
+        return;
+    }
+    notationSvg.setAttribute('data-staff-rows', String(normalized));
+    refreshStaffWidth();
 }

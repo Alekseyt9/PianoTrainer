@@ -1,29 +1,25 @@
-import { STEPS_PER_ROW } from './layout.js';
-
 export function computeExerciseWindow(exercise, currentIndex) {
     const steps = Array.isArray(exercise?.steps) ? exercise.steps : [];
-    const windowSize = Math.max(1, Number(exercise?.displayWindow) || steps.length || 1);
-    const chunkStart = Math.floor(currentIndex / windowSize) * windowSize;
-    const chunkEnd = Math.min(chunkStart + windowSize, steps.length);
-    const visibleSteps = steps.slice(chunkStart, chunkEnd);
-
+    const windowSize = steps.length || 1;
     return {
         steps,
-        visibleSteps,
-        chunkStart,
-        chunkEnd,
+        visibleSteps: steps,
+        chunkStart: 0,
+        chunkEnd: steps.length,
         windowSize
     };
 }
 
-export function getRowLayout(localIndex, visibleLength) {
-    const rowIndex = Math.max(0, Math.floor(localIndex / STEPS_PER_ROW));
-    const indexInRow = localIndex % STEPS_PER_ROW;
-    const remaining = Math.max(0, visibleLength - rowIndex * STEPS_PER_ROW);
-    const stepsInRow = Math.max(1, Math.min(STEPS_PER_ROW, remaining));
+export function getRowLayout(localIndex, visibleLength, rowCapacity = visibleLength) {
+    const capacity = Math.max(1, Number(rowCapacity) || visibleLength || 1);
+    const rowIndex = Math.max(0, Math.floor(localIndex / capacity));
+    const indexInRow = localIndex % capacity;
+    const remaining = Math.max(0, visibleLength - rowIndex * capacity);
+    const stepsInRow = Math.max(1, Math.min(capacity, remaining));
     return {
         rowIndex,
         indexInRow,
-        stepsInRow
+        stepsInRow,
+        rowCapacity: capacity
     };
 }

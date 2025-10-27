@@ -1,26 +1,25 @@
-﻿import { xmlns, startY, distY } from '../core/consts.js';
+import { xmlns, startY, distY } from '../core/consts.js';
 import { getNotationSvg } from '../core/context.js';
 import { getPressedKeyMap, setPressedKey } from '../core/state.js';
-import { getStepNoteMetas, findNoteByMidi, getStepMidiNumbers } from '../data/notes_metadata.js';
+import { getStepNoteMetas, findNoteByMidi, getStepMidiNumbers, getPreferredNoteName } from '../data/notes_metadata.js';
 import { getThemeColor } from './theme.js';
-import { getRowOffset, STEPS_PER_ROW } from '../core/layout.js';
+import { getRowOffset } from '../core/layout.js';
 import { computeExerciseWindow, getRowLayout } from '../core/exercise_layout.js';
+import { setStaffRowCount } from './notation.js';
 
-const NOTE_SPACING = 60;
-const UNDERLINE_HALF_WIDTH = 22;
+const NOTE_SPACING = 48;
+const UNDERLINE_HALF_WIDTH = 16;
+const DEFAULT_ACCIDENTAL_PREFERENCE = 'sharp';
 
 export function resolveStepPosition(exercise, currentIndex, midiNumber) {
-    const { visibleSteps, chunkStart } = computeExerciseWindow(exercise, currentIndex);
+    const notationSvg = getNotationSvg();
+    const { visibleSteps } = computeExerciseWindow(exercise, currentIndex);
     if (!visibleSteps.length) {
         return { cx: getNotationCenterX(), offsetY: 0 };
     }
 
-    const localIndex = currentIndex - chunkStart;
-    if (localIndex < 0 || localIndex >= visibleSteps.length) {
-        return { cx: getNotationCenterX(), offsetY: 0 };
-    }
-
-    const step = visibleSteps[localIndex];
+    const clampedIndex = Math.max(0, Math.min(visibleSteps.length - 1, currentIndex));
+    const step = visibleSteps[clampedIndex];
     const chord = getStepMidiNumbers(step);
     if (!chord.length) {
         return { cx: getNotationCenterX(), offsetY: 0 };
@@ -28,7 +27,8 @@ export function resolveStepPosition(exercise, currentIndex, midiNumber) {
 
     const normalized = Number(midiNumber);
     const chordIndex = chord.findIndex(value => value === normalized);
-    const { rowIndex, indexInRow, stepsInRow } = getRowLayout(localIndex, visibleSteps.length);
+    const rowCapacity = computeRowCapacity(notationSvg);
+    const { rowIndex, indexInRow, stepsInRow } = getRowLayout(clampedIndex, visibleSteps.length, rowCapacity);
     const offsetY = getRowOffset(rowIndex);
     const chordSize = chord.length;
     const resolvedChordIndex = chordIndex === -1 ? Math.floor((chordSize - 1) / 2) : chordIndex;
@@ -41,7 +41,6 @@ export function resolveStepPosition(exercise, currentIndex, midiNumber) {
 
     return { cx, offsetY };
 }
-
 
 
 export function getNoteCx({ stepIndex, chordIndex = 0, chordSize = 1, totalSteps }) {
@@ -57,7 +56,7 @@ let hintsEnabled = false;
 let exerciseSnapshot = { exercise: null, index: 0 };
 let exerciseElements = [];
 
-export function createVisualNote(meta, { color, cx, offsetY } = {}) {
+export function createVisualNote(meta, { color, cx, offsetY, label } = {}) {
     if (!meta || typeof meta.y !== 'number') {
         return [];
     }
@@ -69,8 +68,8 @@ export function createVisualNote(meta, { color, cx, offsetY } = {}) {
     if (typeof offsetY === 'number') {
         options.offsetY = offsetY;
     }
-    const label = meta.displayName || meta.name;
-    return createNote(meta.y, label, meta.midiNum, options);
+    const noteLabel = label ?? meta.displayName ?? meta.name;
+    return createNote(meta.y, noteLabel, meta.midiNum, options);
 }
 
 export function removeVisualNote(elements) {
@@ -96,24 +95,29 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
 
     clearExerciseElements();
 
-    if (!exercise || !exercise.steps || !exercise.steps.length) {
-        return;
-    }
-
     const notationSvg = getNotationSvg();
+    const steps = Array.isArray(exercise?.steps) ? exercise.steps : [];
+
     if (!notationSvg) {
         return;
     }
 
-    const { visibleSteps, chunkStart } = computeExerciseWindow(exercise, currentIndex);
-    const totalSteps = visibleSteps.length;
+    if (!exercise || !steps.length) {
+        setStaffRowCount(1);
+        return;
+    }
+
+    const rowCapacity = computeRowCapacity(notationSvg);
+    const totalSteps = steps.length;
+    const rowCount = Math.max(1, Math.ceil(totalSteps / rowCapacity));
+    setStaffRowCount(rowCount);
 
     const completedColor = getThemeColor('--exercise-note-completed', '#6b7280');
     const currentColor = getThemeColor('--exercise-note-current', '#1f2937');
     const upcomingColor = getThemeColor('--exercise-note-upcoming', '#9ca3af');
 
-    visibleSteps.forEach((step, localIndex) => {
-        const globalIndex = chunkStart + localIndex;
+    steps.forEach((step, localIndex) => {
+        const globalIndex = localIndex;
 
         if (!hintsEnabled && globalIndex > currentIndex) {
             return;
@@ -128,7 +132,7 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
                 : upcomingColor;
 
         const noteMetas = getStepNoteMetas(step);
-        const { rowIndex, indexInRow, stepsInRow } = getRowLayout(localIndex, totalSteps);
+        const { rowIndex, indexInRow, stepsInRow } = getRowLayout(localIndex, totalSteps, rowCapacity);
         const offsetY = getRowOffset(rowIndex);
 
         noteMetas.forEach((meta, chordIndex) => {
@@ -145,7 +149,7 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
             const noteElements = createNote(meta.y, meta.displayName || meta.name, meta.midiNum, {
                 cx,
                 stroke: strokeColor,
-                strokeWidth: isCurrent ? 2.6 : 2.2,
+                strokeWidth: isCurrent ? 1.9 : 1.5,
                 opacity: completed ? 0.85 : isCurrent ? 1 : 0.9,
                 offsetY
             });
@@ -155,6 +159,7 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
                 noteElement.setAttribute('data-step-index', String(globalIndex));
                 noteElement.setAttribute('data-chord-index', String(chordIndex));
                 noteElement.setAttribute('data-row-index', String(rowIndex));
+                noteElement.setAttribute('data-offset-y', String(offsetY));
             }
 
             exerciseElements.push(...noteElements);
@@ -168,6 +173,8 @@ export function rebuildNotationCenter() {
         return;
     }
 
+    const exercise = exerciseSnapshot.exercise;
+    const preference = exercise?.accidentalPreference ?? DEFAULT_ACCIDENTAL_PREFERENCE;
     const playbackColor = getThemeColor('--playback-note-stroke', '#4b5563');
     const pressedEntries = Array.from(getPressedKeyMap().entries());
 
@@ -184,11 +191,13 @@ export function rebuildNotationCenter() {
             setPressedKey(normalized, []);
             return;
         }
-        const { cx, offsetY } = resolveStepPosition(exerciseSnapshot.exercise, exerciseSnapshot.index, normalized);
+        const { cx, offsetY } = resolveStepPosition(exercise, exerciseSnapshot.index, normalized);
+        const label = getPreferredNoteName(normalized, preference) ?? meta.name;
         const visualElements = createVisualNote(meta, {
             color: playbackColor,
             cx,
-            offsetY
+            offsetY,
+            label
         });
         setPressedKey(normalized, visualElements);
     });
@@ -210,7 +219,7 @@ function createNote(y, name, midiNum, options = {}) {
     const {
         cx = getNotationCenterX(),
         stroke = '#374151',
-        strokeWidth = 2,
+        strokeWidth = 1.6,
         opacity = 1,
         offsetY = 0
     } = options;
@@ -220,8 +229,8 @@ function createNote(y, name, midiNum, options = {}) {
     const note = notationSvg.ownerDocument.createElementNS(xmlns, 'ellipse');
     note.setAttribute('cx', cx);
     note.setAttribute('cy', absoluteY);
-    note.setAttribute('rx', '12');
-    note.setAttribute('ry', '8');
+    note.setAttribute('rx', '7');
+    note.setAttribute('ry', '5');
     note.setAttribute('fill', 'none');
     note.setAttribute('stroke', stroke);
     note.setAttribute('stroke-width', strokeWidth);
@@ -243,9 +252,9 @@ function createNote(y, name, midiNum, options = {}) {
     const accidentalSymbol = resolveAccidentalSymbol(name);
     if (accidentalSymbol) {
         const accidental = notationSvg.ownerDocument.createElementNS(xmlns, 'text');
-        accidental.setAttribute('x', cx - 18);
+        accidental.setAttribute('x', cx - 12);
         accidental.setAttribute('y', absoluteY + 1);
-        accidental.setAttribute('font-size', '20');
+        accidental.setAttribute('font-size', '14');
         accidental.setAttribute('font-family', 'Arial, sans-serif');
         accidental.setAttribute('fill', stroke);
         accidental.setAttribute('opacity', opacity);
@@ -318,6 +327,31 @@ function drawUnderline(y, baseY, stroke, centerX, opacity, offsetY) {
     return line;
 }
 
+function computeRowCapacity(notationSvg) {
+    const width = getNotationWidth(notationSvg);
+    if (width <= 0) {
+        return 16;
+    }
+    }
+    const padding = NOTE_SPACING * 0.6;
+    const effectiveWidth = Math.max(NOTE_SPACING, width - padding);
+    return Math.max(1, Math.floor(effectiveWidth / NOTE_SPACING));
+}
+
+function getNotationWidth(notationSvg) {
+    if (!notationSvg) {
+        return 0;
+    }
+    const rect = notationSvg.getBoundingClientRect?.();
+    if (rect && rect.width) {
+        return rect.width;
+    }
+    if (notationSvg.clientWidth) {
+        return notationSvg.clientWidth;
+    }
+    return 0;
+}
+
 function getNotationCenterX() {
     const notationSvg = getNotationSvg();
     if (!notationSvg) {
@@ -358,3 +392,4 @@ function resolveAccidentalSymbol(name) {
     }
     return null;
 }
+

@@ -1,4 +1,4 @@
-﻿import { findNoteByMidi } from '../data/notes_metadata.js';
+﻿import { findNoteByMidi, getPreferredNoteName } from '../data/notes_metadata.js';
 import { getKeyboardSvg, getNotationSvg } from './context.js';
 import { setPressedKey, getPressedKey, deletePressedKey } from './state.js';
 import { createVisualNote, removeVisualNote, resolveStepPosition } from '../ui/notes_generator.js';
@@ -6,6 +6,7 @@ import { getCurrentExercise, getCurrentIndex, handleNoteInput, handleNoteRelease
 import { getThemeColor } from '../ui/theme.js';
 
 let onScoreIncrement = null;
+const DEFAULT_ACCIDENTAL_PREFERENCE = 'sharp';
 
 export function registerScoreHandler(handler) {
     onScoreIncrement = typeof handler === 'function' ? handler : null;
@@ -27,12 +28,16 @@ export function noteOn(noteNumber) {
         return;
     }
 
+    const exercise = getCurrentExercise();
+    const preference = exercise?.accidentalPreference ?? DEFAULT_ACCIDENTAL_PREFERENCE;
     const { cx: targetCx, offsetY } = resolveCurrentStepPosition(noteNumber);
     const playbackColor = getThemeColor('--playback-note-stroke', '#4b5563');
+    const label = getPreferredNoteName(noteNumber, preference) ?? noteMeta.name;
     const visualElements = createVisualNote(noteMeta, {
         color: playbackColor,
         cx: targetCx,
-        offsetY
+        offsetY,
+        label
     });
     setPressedKey(noteNumber, visualElements);
 

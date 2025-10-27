@@ -17,6 +17,14 @@ const semitoneDefinitions = [
 
 const midiToNote = new Map();
 const nameToNote = new Map();
+const sharpNameMap = semitoneDefinitions.map(definition => {
+    const preferred = definition.names.find(name => !name.includes('b'));
+    return preferred ?? definition.names[0];
+});
+const flatNameMap = semitoneDefinitions.map(definition => {
+    const preferred = definition.names.find(name => name.includes('b'));
+    return preferred ?? definition.names[0];
+});
 
 function normalizeNoteName(value) {
     if (typeof value !== 'string') {
@@ -111,6 +119,18 @@ export function getMidiNumberByName(name) {
 export function getNoteName(midiNumber) {
     const note = findNoteByMidi(midiNumber);
     return note ? note.name : null;
+}
+
+export function getPreferredNoteName(midiNumber, preference = 'sharp') {
+    const numeric = Number(midiNumber);
+    if (!Number.isFinite(numeric)) {
+        return null;
+    }
+    const index = ((numeric % 12) + 12) % 12;
+    const octave = Math.floor(numeric / 12) - 1;
+    const names = preference === 'flat' ? flatNameMap : sharpNameMap;
+    const baseName = names[index] ?? sharpNameMap[index] ?? 'C';
+    return `${baseName}${octave}`;
 }
 
 export function getAllNotesMeta() {

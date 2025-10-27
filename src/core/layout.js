@@ -1,8 +1,5 @@
 import { distY, startY } from './consts.js';
 
-export const STAFF_ROW_COUNT = 10;
-export const STEPS_PER_ROW = 4;
-
 const STAFF_GAP_MULTIPLIER = 6;
 const SYSTEM_LINE_COUNT = 10;
 
@@ -22,8 +19,9 @@ export function getRowOffset(rowIndex) {
     return rowIndex * getStaffRowHeight();
 }
 
-export function getTotalNotationHeight(rowCount = STAFF_ROW_COUNT) {
+export function getTotalNotationHeight(rowCount = 1) {
+    const rows = Math.max(1, Number(rowCount) || 1);
     const systemHeight = getStaffSystemHeight();
-    const contentHeight = startY + (Math.max(0, rowCount - 1) * getStaffRowHeight()) + systemHeight;
+    const contentHeight = startY + (rows - 1) * getStaffRowHeight() + systemHeight;
     return contentHeight + startY;
 }
