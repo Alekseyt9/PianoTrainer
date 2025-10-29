@@ -10,6 +10,8 @@ import { setStaffRowCount } from './notation.js';
 const NOTE_SPACING = 48;
 const UNDERLINE_HALF_WIDTH = 16;
 const DEFAULT_ACCIDENTAL_PREFERENCE = 'sharp';
+let lastKnownNotationWidth = 0;
+let lastKnownRowCapacity = 16;
 
 export function resolveStepPosition(exercise, currentIndex, midiNumber) {
     const notationSvg = getNotationSvg();
@@ -112,8 +114,7 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
     const rowCount = Math.max(1, Math.ceil(totalSteps / rowCapacity));
     setStaffRowCount(rowCount);
 
-    const completedColor = getThemeColor('--exercise-note-completed', '#6b7280');
-    const currentColor = getThemeColor('--exercise-note-current', '#1f2937');
+    const completedColor = getThemeColor('--playback-note-stroke', '#4b5563');
     const upcomingColor = getThemeColor('--exercise-note-upcoming', '#9ca3af');
 
     steps.forEach((step, localIndex) => {
@@ -124,12 +125,9 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
         }
 
         const completed = globalIndex < currentIndex;
-        const isCurrent = globalIndex === currentIndex;
-        const strokeColor = completed
-            ? completedColor
-            : isCurrent
-                ? currentColor
-                : upcomingColor;
+        const strokeColor = completed ? completedColor : upcomingColor;
+        const strokeWidth = completed ? 2 : 1.5;
+        const noteOpacity = completed ? 1 : 0.9;
 
         const noteMetas = getStepNoteMetas(step);
         const { rowIndex, indexInRow, stepsInRow } = getRowLayout(localIndex, totalSteps, rowCapacity);
@@ -149,8 +147,9 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
             const noteElements = createNote(meta.y, meta.displayName || meta.name, meta.midiNum, {
                 cx,
                 stroke: strokeColor,
-                strokeWidth: isCurrent ? 1.9 : 1.5,
-                opacity: completed ? 0.85 : isCurrent ? 1 : 0.9,
+                fill: 'none',
+                strokeWidth,
+                opacity: noteOpacity,
                 offsetY
             });
 
@@ -328,14 +327,22 @@ function drawUnderline(y, baseY, stroke, centerX, opacity, offsetY) {
 }
 
 function computeRowCapacity(notationSvg) {
-    const width = getNotationWidth(notationSvg);
+    let width = getNotationWidth(notationSvg);
     if (width <= 0) {
-        return 16;
+        return lastKnownRowCapacity || 16;
     }
+    if (lastKnownNotationWidth && width < lastKnownNotationWidth) {
+        const shrink = lastKnownNotationWidth - width;
+        if (shrink < NOTE_SPACING) {
+            width = lastKnownNotationWidth;
+        }
     }
     const padding = NOTE_SPACING * 0.6;
     const effectiveWidth = Math.max(NOTE_SPACING, width - padding);
-    return Math.max(1, Math.floor(effectiveWidth / NOTE_SPACING));
+    const capacity = Math.max(1, Math.floor((effectiveWidth + NOTE_SPACING * 0.25) / NOTE_SPACING));
+    lastKnownNotationWidth = width;
+    lastKnownRowCapacity = capacity;
+    return capacity;
 }
 
 function getNotationWidth(notationSvg) {
@@ -348,6 +355,24 @@ function getNotationWidth(notationSvg) {
     }
     if (notationSvg.clientWidth) {
         return notationSvg.clientWidth;
+    }
+    const parent = notationSvg.parentElement;
+    if (parent) {
+        const parentRect = parent.getBoundingClientRect?.();
+        if (parentRect && parentRect.width) {
+            return parentRect.width;
+        }
+        if (parent.clientWidth) {
+            return parent.clientWidth;
+        }
+    }
+    const viewBox = notationSvg.viewBox?.baseVal;
+    if (viewBox && viewBox.width) {
+        return viewBox.width;
+    }
+    const attrWidth = Number(notationSvg.getAttribute('width'));
+    if (attrWidth) {
+        return attrWidth;
     }
     return 0;
 }
@@ -366,9 +391,11 @@ function generateRandomId() {
 }
 
 function getStepX(stepIndex, totalSteps) {
-    const centerX = getNotationCenterX();
-    const baseX = centerX - ((totalSteps - 1) * NOTE_SPACING) / 2;
-    return baseX + stepIndex * NOTE_SPACING;
+    if (typeof stepIndex !== 'number' || stepIndex < 0) {
+        return getNotationCenterX();
+    }
+    const leftMargin = NOTE_SPACING * 0.5;
+    return leftMargin + stepIndex * NOTE_SPACING;
 }
 
 function getChordOffset(chordIndex = 0, chordSize = 1) {

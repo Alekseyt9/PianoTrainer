@@ -1,8 +1,16 @@
-﻿body {
+﻿html {
+
+    height: 100%;
+
+}
+
+body {
 
     margin: 0;
 
     min-height: 100vh;
+
+    height: 100vh;
 
     display: flex;
 
@@ -10,7 +18,7 @@
 
     align-items: flex-start;
 
-    padding: 48px 24px 64px;
+    padding: 24px 24px;
 
     background: var(--body-bg);
 
@@ -18,7 +26,9 @@
 
     font-family: 'Segoe UI', Roboto, sans-serif;
 
-    overflow-x: hidden;
+    box-sizing: border-box;
+
+    overflow: hidden;
 
 }
 
@@ -34,7 +44,11 @@
 
     width: min(1040px, 100%);
 
-    min-height: calc(100vh - 112px);
+    height: 100%;
+
+    max-height: 100%;
+
+    flex: 1 1 auto;
 
 }
 
@@ -72,8 +86,12 @@
 
 .top-bar {
     position: relative;
-    min-height: 64px;
-    padding: 12px 24px;
+    min-height: 48px;
+    padding: 10px 20px;
+}
+
+.top-bar-inner {
+    gap: 16px;
 }
 
 .brand {
@@ -114,7 +132,23 @@
 }
 
 .settings-controls {
-    gap: 12px;
+    gap: 10px;
+}
+
+.midi-indicator {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--status-bar-bg);
+}
+
+.midi-indicator .status-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+}
+
+.midi-indicator #status-midi-value {
+    color: var(--midi-pending);
+    font-weight: 600;
 }
 
 #workspace {
@@ -137,10 +171,14 @@
     box-sizing: border-box;
 }
 
+.exercise-controls {
+    flex: 0 0 auto;
+}
+
 #container {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     gap: 16px;
     flex: 1 1 auto;
     min-width: 0;
@@ -474,7 +512,8 @@
 #notation-container {
     width: 100%;
     max-width: 100%;
-    height: clamp(260px, 45vh, 400px);
+    flex: 1 1 auto;
+    min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -553,6 +592,7 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
+    min-width: 120px;
 }
 
 .status-label {
@@ -627,7 +667,3 @@
 .theme-picker span {
     color: var(--heading-color, var(--text-primary));
 }
-
-
-
-

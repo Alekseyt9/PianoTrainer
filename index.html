@@ -10,42 +10,19 @@
     <body>
     <div id="app-wrapper" class="d-flex flex-column gap-3">
         <div id="app" class="d-flex flex-column gap-3">
-            <header class="top-bar card panel-card shadow-sm px-4 py-2">
-                <div class="d-flex align-items-center w-100 gap-3 flex-wrap">
-                    <div class="brand d-flex align-items-center gap-3">
+            <header class="top-bar card panel-card shadow-sm">
+                <div class="top-bar-inner d-flex align-items-center w-100 gap-3">
+                    <div class="brand d-flex align-items-center gap-2">
                         <span class="app-title">Piano Trainer</span>
                     </div>
-                    <div id="info-panel" class="info-panel" hidden>
+                    <div id="info-panel" class="info-panel ms-3" hidden>
                         <p>Right-click to select training keys, then play the prompted note on your MIDI keyboard.</p>
                     </div>
-                    <div class="range-controls hidden-control">
-                        <label for="range-start">Start Octave</label>
-                        <select id="range-start" aria-label="Start octave">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                        </select>
-                        <label for="range-end">End Octave</label>
-                        <select id="range-end" aria-label="End octave">
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                        </select>
+                    <div class="midi-indicator midi-status d-flex align-items-center gap-2">
+                        <span class="status-label mb-0">MIDI</span>
+                        <span id="status-midi-value">Waiting</span>
                     </div>
                     <div class="settings-controls d-flex align-items-center gap-2 ms-auto">
-                        <label class="switch-control hidden-control mb-0">
-                            <input type="checkbox" id="toggle-hints">
-                            <span class="switch-track">
-                                <span class="switch-handle"></span>
-                            </span>
-                            <span class="switch-label">Hints</span>
-                        </label>
                         <label class="theme-picker mb-0">
                             <span class="text-uppercase small">Theme</span>
                             <select id="theme-select" aria-label="Choose theme">
@@ -61,6 +38,35 @@
             <div id="workspace" class="d-flex flex-grow-1 gap-3 overflow-hidden align-items-stretch">
                 <aside id="exercise-panel" class="card panel-card d-flex flex-column p-4 gap-4">
                     <h2 class="panel-title text-uppercase mb-0">Exercises</h2>
+                    <div class="exercise-controls d-flex flex-column gap-3">
+                        <div class="range-controls hidden-control">
+                            <label for="range-start">Start Octave</label>
+                            <select id="range-start" aria-label="Start octave">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>
+                            <label for="range-end">End Octave</label>
+                            <select id="range-end" aria-label="End octave">
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                            </select>
+                        </div>
+                        <label class="switch-control hidden-control mb-0">
+                            <input type="checkbox" id="toggle-hints">
+                            <span class="switch-track">
+                                <span class="switch-handle"></span>
+                            </span>
+                            <span class="switch-label">Hints</span>
+                        </label>
+                    </div>
                     <nav id="exercise-list"></nav>
                     <div id="exercise-details">
                         <h3 id="exercise-details-title"></h3>
@@ -74,26 +80,6 @@
                     <svg id="keyboard" class="w-100" xmlns="http://www.w3.org/2000/svg"></svg>
                 </main>
             </div>
-            <footer class="status-bar card panel-card shadow-sm px-4 py-3">
-                <div class="row row-cols-2 row-cols-sm-4 g-3 align-items-center w-100">
-                    <div class="col status-item">
-                        <span class="status-label">Exercise</span>
-                        <span id="status-exercise-value">Note Hunt</span>
-                    </div>
-                    <div class="col status-item">
-                        <span class="status-label">Score</span>
-                        <span id="status-score-value">0</span>
-                    </div>
-                    <div class="col status-item">
-                        <span class="status-label">Time</span>
-                        <span id="status-time-value">00:00</span>
-                    </div>
-                    <div class="col status-item midi-status" id="status-midi">
-                        <span class="status-label">MIDI</span>
-                        <span id="status-midi-value">Waiting</span>
-                    </div>
-                </div>
-            </footer>
         </div>
     </div>
 
