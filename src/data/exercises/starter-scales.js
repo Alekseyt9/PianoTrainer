@@ -1,11 +1,11 @@
 export const starterScalesGroup = {
     "id": "starter-scales",
-    "title": "Начальные гаммы",
+    "title": "Starter Scale Drills",
     "exercises": [
         {
             "id": "scale-c-one-octave",
             "title": "C Major 1 Octave",
-            "description": "Возьми одну октаву C мажор вверх и вниз несколько раз.",
+            "description": "Play a single-octave C major scale and reverse it with a smooth turnaround.",
             "displayWindow": 10,
             "steps": [
                 "C4",
@@ -56,7 +56,7 @@ export const starterScalesGroup = {
         {
             "id": "scale-g-fragment",
             "title": "G Major Fragment",
-            "description": "Короткий фрагмент гаммы G мажор с одним диезом.",
+            "description": "Explore a G major fragment that highlights the leading tone F♯.",
             "displayWindow": 10,
             "steps": [
                 "G3",
@@ -104,7 +104,7 @@ export const starterScalesGroup = {
         {
             "id": "scale-f-fragment",
             "title": "F Major Fragment",
-            "description": "Гамма F мажор с бемолем B♭.",
+            "description": "Climb through an F major fragment, emphasising the B♭ to anchor the key.",
             "displayWindow": 10,
             "steps": [
                 "F3",
@@ -152,7 +152,7 @@ export const starterScalesGroup = {
         {
             "id": "scale-c-wide",
             "title": "C Major Wide",
-            "description": "Две октавы гаммы C мажор с возвратом вниз.",
+            "description": "Stretch across a wide-range C major scale that spans several octaves.",
             "displayWindow": 10,
             "steps": [
                 "C3",

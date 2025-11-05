@@ -7,6 +7,7 @@ import { renderExerciseSteps, setHintsEnabled } from './ui/notes_generator.js';
 import { initPanel, updateMidiStatus, incrementScore, getHintsEnabled, setCurrentExerciseTitle } from './ui/panel.js';
 import { initExerciseList } from './ui/exercise_list.js';
 import { initExercise, onExerciseChange, getCurrentExercise, getCurrentIndex } from './core/exercise.js';
+import { initStatsPanel, resetStats } from './ui/stats_panel.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const notationElement = document.getElementById('notation');
@@ -27,12 +28,14 @@ document.addEventListener('DOMContentLoaded', () => {
             renderExerciseSteps(getCurrentExercise(), getCurrentIndex(), { preserveSnapshot: true });
         }
     });
+    initStatsPanel();
     initExerciseList();
 
     setHintsEnabled(getHintsEnabled());
 
     initExercise();
     onExerciseChange(({ exercise, index }) => {
+        resetStats(exercise ? exercise.id : null);
         renderExerciseSteps(exercise, index);
         setCurrentExerciseTitle(exercise ? exercise.title : 'None');
     });

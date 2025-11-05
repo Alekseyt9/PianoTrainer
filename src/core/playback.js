@@ -4,6 +4,7 @@ import { setPressedKey, getPressedKey, deletePressedKey } from './state.js';
 import { createVisualNote, removeVisualNote, resolveStepPosition } from '../ui/notes_generator.js';
 import { getCurrentExercise, getCurrentIndex, handleNoteInput, handleNoteRelease } from './exercise.js';
 import { getThemeColor } from '../ui/theme.js';
+import { recordCorrectAttempt, recordErrorAttempt, isInputLocked } from '../ui/stats_panel.js';
 
 let onScoreIncrement = null;
 const DEFAULT_ACCIDENTAL_PREFERENCE = 'sharp';
@@ -13,6 +14,10 @@ export function registerScoreHandler(handler) {
 }
 
 export function noteOn(noteNumber) {
+    if (isInputLocked()) {
+        return;
+    }
+
     const keyboardSvg = getKeyboardSvg();
     if (!keyboardSvg) {
         return;
@@ -43,7 +48,18 @@ export function noteOn(noteNumber) {
 
     const result = handleNoteInput(noteNumber);
     if (result.correct) {
+        recordCorrectAttempt(exercise ? exercise.id : null);
         onScoreIncrement?.();
+    } else if (result.mistake) {
+        recordErrorAttempt(exercise ? exercise.id : null);
+        if (keyElement) {
+            keyElement.classList.remove('active');
+        }
+        const elements = getPressedKey(noteNumber);
+        if (elements) {
+            removeVisualNote(elements);
+            deletePressedKey(noteNumber);
+        }
     }
 }
 

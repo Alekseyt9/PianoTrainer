@@ -1,11 +1,11 @@
 export const whiteKeysGroup = {
     "id": "white-keys",
-    "title": "Белые клавиши",
+    "title": "White Key Exercises",
     "exercises": [
         {
             "id": "white-cde",
             "title": "C-D-E Line",
-            "description": "Лёгкая мелодия по трём белым клавишам.",
+            "description": "Travel across adjacent white keys with C–D–E at the centre of every phrase.",
             "displayWindow": 10,
             "steps": [
                 "C4",
@@ -46,7 +46,7 @@ export const whiteKeysGroup = {
         {
             "id": "white-echo",
             "title": "Echo Motion",
-            "description": "Повторяй восходящую и нисходящую фразу.",
+            "description": "Echo short white-key motives that mirror back and forth between registers.",
             "displayWindow": 10,
             "steps": [
                 "C4",
@@ -88,7 +88,7 @@ export const whiteKeysGroup = {
         {
             "id": "white-c-major-frag",
             "title": "C Major Fragment",
-            "description": "Мини-участок гаммы C мажор.",
+            "description": "Run fragments of the C major scale to reinforce stepwise white-key motion.",
             "displayWindow": 10,
             "steps": [
                 "C4",
@@ -131,7 +131,7 @@ export const whiteKeysGroup = {
         {
             "id": "white-descend",
             "title": "Descending Five",
-            "description": "Спуск от G4 до C4 с устойчивыми опорами.",
+            "description": "Glide from G4 down to C4, then explore the lower register with gentle turns.",
             "displayWindow": 10,
             "steps": [
                 "G4",
@@ -173,7 +173,7 @@ export const whiteKeysGroup = {
         {
             "id": "white-pattern",
             "title": "White Key Pattern",
-            "description": "Попеременно играй ноты C, E и G.",
+            "description": "Cycle the white-key triad C–E–G in evolving patterns to cement the shapes.",
             "displayWindow": 10,
             "steps": [
                 "C4",

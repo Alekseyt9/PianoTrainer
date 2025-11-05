@@ -1,11 +1,11 @@
 export const patternsGroup = {
     "id": "patterns",
-    "title": "Паттерны и арпеджио",
+    "title": "Pattern Workouts",
     "exercises": [
         {
             "id": "pattern-triad-c",
             "title": "C Triad Broken",
-            "description": "Пройди арпеджио C мажор по белым клавишам.",
+            "description": "Arpeggiate the C major triad through multiple octaves with steady timing.",
             "displayWindow": 10,
             "steps": [
                 "C4",
@@ -49,7 +49,7 @@ export const patternsGroup = {
         {
             "id": "pattern-triad-f",
             "title": "F Triad Broken",
-            "description": "Арпеджио F мажор с верхней октавой.",
+            "description": "Break apart the F major triad to reinforce hand shifts and inversions.",
             "displayWindow": 10,
             "steps": [
                 "F3",
@@ -91,7 +91,7 @@ export const patternsGroup = {
         {
             "id": "pattern-triplet",
             "title": "Triplet Motion",
-            "description": "Попробуй паттерн из трёх нот с переносом вверх.",
+            "description": "Flowing triplet arpeggios cycle through related chords for rhythmic control.",
             "displayWindow": 10,
             "steps": [
                 "C4",

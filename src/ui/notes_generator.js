@@ -6,12 +6,19 @@ import { getThemeColor } from './theme.js';
 import { getRowOffset } from '../core/layout.js';
 import { computeExerciseWindow, getRowLayout } from '../core/exercise_layout.js';
 import { setStaffRowCount } from './notation.js';
+import { updateRowProgress } from './stats_panel.js';
 
 const NOTE_SPACING = 48;
 const UNDERLINE_HALF_WIDTH = 16;
 const DEFAULT_ACCIDENTAL_PREFERENCE = 'sharp';
+const DEFAULT_ROW_CAPACITY = 20;
 let lastKnownNotationWidth = 0;
-let lastKnownRowCapacity = 16;
+let lastKnownRowCapacity = DEFAULT_ROW_CAPACITY;
+let configuredRowCapacity = null;
+
+export function getCurrentRowCapacity() {
+    return lastKnownRowCapacity || getTargetRowCapacity();
+}
 
 export function resolveStepPosition(exercise, currentIndex, midiNumber) {
     const notationSvg = getNotationSvg();
@@ -101,11 +108,23 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
     const steps = Array.isArray(exercise?.steps) ? exercise.steps : [];
 
     if (!notationSvg) {
+        updateRowProgress({
+            rowsCompleted: 0,
+            totalRows: 0,
+            completedNotes: 0,
+            totalNotes: 0
+        });
         return;
     }
 
     if (!exercise || !steps.length) {
         setStaffRowCount(1);
+        updateRowProgress({
+            rowsCompleted: 0,
+            totalRows: 1,
+            completedNotes: 0,
+            totalNotes: 0
+        });
         return;
     }
 
@@ -113,6 +132,27 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
     const totalSteps = steps.length;
     const rowCount = Math.max(1, Math.ceil(totalSteps / rowCapacity));
     setStaffRowCount(rowCount);
+
+    const clampedIndex = Math.max(0, Math.min(totalSteps, currentIndex));
+    const rowsCompleted = Math.max(0, Math.min(rowCount, Math.floor(clampedIndex / rowCapacity)));
+    const currentRowIndex = rowCount > 0
+        ? Math.min(rowCount - 1, rowsCompleted === rowCount ? rowCount - 1 : Math.floor(clampedIndex / rowCapacity))
+        : 0;
+    const currentRowStart = currentRowIndex * rowCapacity;
+    const currentRowTotalSteps = Math.min(rowCapacity, Math.max(0, totalSteps - currentRowStart));
+    let notesCompletedInRow = Math.max(0, clampedIndex - currentRowStart);
+    if (rowsCompleted === rowCount && currentRowTotalSteps > 0) {
+        notesCompletedInRow = currentRowTotalSteps;
+    } else {
+        notesCompletedInRow = Math.min(notesCompletedInRow, currentRowTotalSteps);
+    }
+
+    updateRowProgress({
+        rowsCompleted,
+        totalRows: rowCount,
+        completedNotes: notesCompletedInRow,
+        totalNotes: currentRowTotalSteps
+    });
 
     const completedColor = getThemeColor('--playback-note-stroke', '#4b5563');
     const upcomingColor = getThemeColor('--exercise-note-upcoming', '#9ca3af');
@@ -240,9 +280,6 @@ function createNote(y, name, midiNum, options = {}) {
     note.setAttribute('data-offset-y', offsetY);
     note.setAttribute('id', generateRandomId());
 
-    const noteTitle = notationSvg.ownerDocument.createElementNS(xmlns, 'title');
-    noteTitle.textContent = name;
-    note.appendChild(noteTitle);
     notationSvg.appendChild(note);
 
     const underlines = drawUnderlines(y, stroke, cx, opacity, offsetY);
@@ -326,10 +363,35 @@ function drawUnderline(y, baseY, stroke, centerX, opacity, offsetY) {
     return line;
 }
 
+function getTargetRowCapacity() {
+    if (typeof configuredRowCapacity === 'number' && configuredRowCapacity > 0) {
+        return configuredRowCapacity;
+    }
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+        return DEFAULT_ROW_CAPACITY;
+    }
+    try {
+        const styles = window.getComputedStyle(document.documentElement);
+        if (styles) {
+            const raw = styles.getPropertyValue('--notation-row-capacity');
+            const parsed = Number.parseInt(raw, 10);
+            if (Number.isFinite(parsed) && parsed > 0) {
+                configuredRowCapacity = parsed;
+                return configuredRowCapacity;
+            }
+        }
+    } catch (error) {
+        // ignore inability to read CSS variable and fall back to default
+    }
+    configuredRowCapacity = DEFAULT_ROW_CAPACITY;
+    return configuredRowCapacity;
+}
+
 function computeRowCapacity(notationSvg) {
+    const targetCapacity = getTargetRowCapacity();
     let width = getNotationWidth(notationSvg);
     if (width <= 0) {
-        return lastKnownRowCapacity || 16;
+        return lastKnownRowCapacity || targetCapacity;
     }
     if (lastKnownNotationWidth && width < lastKnownNotationWidth) {
         const shrink = lastKnownNotationWidth - width;
@@ -340,9 +402,10 @@ function computeRowCapacity(notationSvg) {
     const padding = NOTE_SPACING * 0.6;
     const effectiveWidth = Math.max(NOTE_SPACING, width - padding);
     const capacity = Math.max(1, Math.floor((effectiveWidth + NOTE_SPACING * 0.25) / NOTE_SPACING));
+    const normalizedCapacity = Math.max(1, Math.min(capacity, targetCapacity));
     lastKnownNotationWidth = width;
-    lastKnownRowCapacity = capacity;
-    return capacity;
+    lastKnownRowCapacity = normalizedCapacity;
+    return normalizedCapacity;
 }
 
 function getNotationWidth(notationSvg) {

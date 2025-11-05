@@ -7,7 +7,7 @@
         <link rel="icon" type="image/svg+xml" href="favicon.svg">
         <title>Piano Trainer</title>
     </head>
-    <body>
+    <body class="theme-light">
     <div id="app-wrapper" class="d-flex flex-column gap-3">
         <div id="app" class="d-flex flex-column gap-3">
             <header class="top-bar card panel-card shadow-sm">
@@ -27,7 +27,7 @@
                             <span class="text-uppercase small">Theme</span>
                             <select id="theme-select" aria-label="Choose theme">
                                 <option value="midnight">Midnight</option>
-                                <option value="light">Light</option>
+                                <option value="light" selected>Light</option>
                                 <option value="aurora">Aurora</option>
                                 <option value="sunrise">Sunrise</option>
                             </select>
@@ -35,7 +35,7 @@
                     </div>
                 </div>
             </header>
-            <div id="workspace" class="d-flex flex-grow-1 gap-3 overflow-hidden align-items-stretch">
+            <div id="workspace">
                 <aside id="exercise-panel" class="card panel-card d-flex flex-column p-4 gap-4">
                     <h2 class="panel-title text-uppercase mb-0">Exercises</h2>
                     <div class="exercise-controls d-flex flex-column gap-3">
@@ -73,12 +73,41 @@
                         <p id="exercise-details-description"></p>
                     </div>
                 </aside>
-                <main id="container" class="card content-card h-100 d-flex flex-column align-items-center gap-3 p-4 flex-grow-1">
-                    <div id="notation-container" class="notation-scroll w-100 flex-grow-1">
+                <main id="container" class="card content-card h-100 d-flex flex-column flex-grow-1">
+                    <div id="notation-container" class="notation-scroll w-100 flex-grow-1 position-relative">
+                        <div id="error-overlay" class="error-overlay" hidden>
+                            <div class="error-overlay-inner">
+                                <div class="error-overlay-circle">
+                                    <span class="error-overlay-label">Pause</span>
+                                    <span id="error-overlay-timer" class="error-overlay-timer">3</span>
+                                </div>
+                            </div>
+                        </div>
                         <svg id="notation" class="w-100" xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet"></svg>
                     </div>
                     <svg id="keyboard" class="w-100" xmlns="http://www.w3.org/2000/svg"></svg>
                 </main>
+                <aside id="stats-panel" class="card panel-card stats-panel d-flex flex-column p-4 gap-4">
+                    <h2 class="panel-title text-uppercase mb-0">Statistics</h2>
+                    <div class="stats-summary d-flex flex-column gap-3">
+                        <div class="stats-row d-flex align-items-center justify-content-between">
+                            <span class="stats-label">Correct</span>
+                            <span id="stats-correct-value" class="stats-value">0</span>
+                        </div>
+                        <div class="stats-row d-flex align-items-center justify-content-between">
+                            <span class="stats-label">Errors</span>
+                            <span id="stats-error-value" class="stats-value">0</span>
+                        </div>
+                        <div class="stats-row d-flex align-items-center justify-content-between">
+                            <span class="stats-label">Rows Completed</span>
+                            <span id="stats-rows-progress-value" class="stats-value">0 / 0</span>
+                        </div>
+                        <div class="stats-row d-flex align-items-center justify-content-between">
+                            <span class="stats-label">Current Row Notes</span>
+                            <span id="stats-notes-progress-value" class="stats-value">0 / 0</span>
+                        </div>
+                    </div>
+                </aside>
             </div>
         </div>
     </div>
@@ -87,3 +116,4 @@
         <script type="module" src="dist/app.bundle.js"></script>
 </body>
 </html>
+

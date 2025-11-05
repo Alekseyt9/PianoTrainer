@@ -1,11 +1,11 @@
 export const warmupGroup = {
     "id": "warmup",
-    "title": "Разогрев пальцев",
+    "title": "Warm-up Routines",
     "exercises": [
         {
             "id": "warmup-middle-c",
             "title": "Middle C Focus",
-            "description": "Повторяй ноту C4 и соседние белые клавиши для разогрева.",
+            "description": "Return to middle C between every neighbour to lock in your central position.",
             "displayWindow": 10,
             "steps": [
                 "C4",
@@ -45,7 +45,7 @@ export const warmupGroup = {
         {
             "id": "warmup-steps-up",
             "title": "Step Up",
-            "description": "Пройди по белым клавишам от C4 до верхних нот.",
+            "description": "Climb stepwise from C4 into the upper register and descend again for even scale motion.",
             "displayWindow": 10,
             "steps": [
                 "C4",
@@ -89,7 +89,7 @@ export const warmupGroup = {
         {
             "id": "warmup-steps-down",
             "title": "Step Down",
-            "description": "Спустись от F4 к нижним нотам и вернись вверх.",
+            "description": "Shape a controlled descent from F4 into the lower register before gliding back up.",
             "displayWindow": 10,
             "steps": [
                 "F4",
@@ -131,7 +131,7 @@ export const warmupGroup = {
         {
             "id": "warmup-skip",
             "title": "Skip Practice",
-            "description": "Чередуй секунды и терции вокруг C4.",
+            "description": "Alternate wide skips around C4 to strengthen your third and fourth leaps.",
             "displayWindow": 10,
             "steps": [
                 "C4",

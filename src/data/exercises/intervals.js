@@ -1,11 +1,11 @@
 export const intervalsGroup = {
     "id": "intervals",
-    "title": "Простые интервалы",
+    "title": "Interval Studies",
     "exercises": [
         {
             "id": "intervals-thirds-c",
             "title": "Thirds in C",
-            "description": "Проигрывай терции вокруг середины клавиатуры.",
+            "description": "Walk through diatonic thirds in C major with interlocking voices.",
             "displayWindow": 10,
             "steps": [
                 "C4 E4",
@@ -45,7 +45,7 @@ export const intervalsGroup = {
         {
             "id": "intervals-fifths",
             "title": "Simple Fifths",
-            "description": "Строй устойчивые квинты на белых клавишах.",
+            "description": "Outline stacked fifths and resolve them smoothly back to the tonic.",
             "displayWindow": 10,
             "steps": [
                 "C4 G4",
@@ -87,7 +87,7 @@ export const intervalsGroup = {
         {
             "id": "intervals-echo",
             "title": "Echo Interval",
-            "description": "Повторяй интервал терции в разных октавах.",
+            "description": "Echo the same interval in multiple octaves to internalise the spacing.",
             "displayWindow": 10,
             "steps": [
                 "C3 E3",

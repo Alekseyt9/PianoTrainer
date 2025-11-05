@@ -1,5 +1,6 @@
 import { exercises } from '../data/exercises/index.js';
 import { getStepMidiNumbers } from '../data/notes_metadata.js';
+import { getCurrentRowCapacity } from '../ui/notes_generator.js';
 
 let currentExercise = exercises[0] || null;
 let currentIndex = 0;
@@ -40,13 +41,13 @@ export function getCurrentIndex() {
 export function handleNoteInput(midiNumber) {
     const exercise = currentExercise;
     if (!exercise || !exercise.steps || !exercise.steps.length) {
-        return { correct: false, finished: false };
+        return { correct: false, finished: false, mistake: false };
     }
 
     const step = exercise.steps[currentIndex];
     const expectedNotes = getStepMidiNumbers(step);
     if (!expectedNotes.length) {
-        return { correct: false, finished: false };
+        return { correct: false, finished: false, mistake: false };
     }
 
     if (chordState.stepIndex !== currentIndex) {
@@ -56,14 +57,28 @@ export function handleNoteInput(midiNumber) {
     const normalizedInput = Number(midiNumber);
     const match = expectedNotes.includes(normalizedInput);
     if (!match) {
+        const previousIndex = currentIndex;
+        const capacityValue = Number(getCurrentRowCapacity());
+        const normalizedCapacity = Number.isFinite(capacityValue) && capacityValue > 0 ? capacityValue : 1;
+        const rowStart = Math.max(0, Math.floor(previousIndex / normalizedCapacity) * normalizedCapacity);
+        currentIndex = rowStart;
         chordState = createChordState(currentIndex);
-        return { correct: false, finished: false };
+        if (rowStart !== previousIndex) {
+            notify();
+        }
+        return {
+            correct: false,
+            finished: false,
+            mistake: true,
+            rowReset: rowStart !== previousIndex,
+            resetIndex: currentIndex
+        };
     }
 
     chordState.pressed.add(normalizedInput);
     const allPressed = expectedNotes.every(note => chordState.pressed.has(note));
     if (!allPressed) {
-        return { correct: false, finished: false };
+        return { correct: false, finished: false, mistake: false };
     }
 
     chordState = createChordState(currentIndex + 1);
@@ -75,7 +90,7 @@ export function handleNoteInput(midiNumber) {
     } else {
         notify();
     }
-    return { correct: true, finished };
+    return { correct: true, finished, mistake: false };
 }
 
 export function handleNoteRelease(midiNumber) {

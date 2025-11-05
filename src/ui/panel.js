@@ -47,7 +47,7 @@ export function initPanel({ onThemeChange } = {}) {
         });
     }
 
-    const initialTheme = AVAILABLE_THEMES.includes(settings.theme) ? settings.theme : 'midnight';
+    const initialTheme = AVAILABLE_THEMES.includes(settings.theme) ? settings.theme : 'light';
     applyTheme(initialTheme);
     if (themeSelectElement) {
         themeSelectElement.value = initialTheme;
@@ -82,7 +82,7 @@ export function incrementScore() {
 }
 
 export function getCurrentTheme() {
-    return themeSelectElement ? themeSelectElement.value : 'midnight';
+    return themeSelectElement ? themeSelectElement.value : 'light';
 }
 
 export function getHintsEnabled() {
