@@ -71,5 +71,6 @@
     --exercise-tile-number-bg: rgba(15, 23, 42, 0.55);
     --scrollbar-track: rgba(47, 53, 69, 0.9);
     --scrollbar-thumb: rgba(138, 180, 248, 0.6);
+    --notation-row-label-color: #f4f7fb;
 }
 

@@ -1,4 +1,5 @@
 import { warmupGroup as rawWarmupGroup } from './warmup.js';
+import { leftHandSmallOctaveGroup as rawLeftHandSmallOctaveGroup } from './left-hand-small.js';
 import { intervalsGroup as rawIntervalsGroup } from './intervals.js';
 import { whiteKeysGroup as rawWhiteKeysGroup } from './white-keys.js';
 import { starterScalesGroup as rawStarterScalesGroup } from './starter-scales.js';
@@ -98,10 +99,11 @@ function normalizeGroup(group) {
 }
 
 export const warmupGroup = normalizeGroup(rawWarmupGroup);
+export const leftHandSmallOctaveGroup = normalizeGroup(rawLeftHandSmallOctaveGroup);
 export const intervalsGroup = normalizeGroup(rawIntervalsGroup);
 export const whiteKeysGroup = normalizeGroup(rawWhiteKeysGroup);
 export const starterScalesGroup = normalizeGroup(rawStarterScalesGroup);
 export const patternsGroup = normalizeGroup(rawPatternsGroup);
 
-export const exerciseGroups = [warmupGroup, intervalsGroup, whiteKeysGroup, starterScalesGroup, patternsGroup];
+export const exerciseGroups = [warmupGroup, leftHandSmallOctaveGroup, intervalsGroup, whiteKeysGroup, starterScalesGroup, patternsGroup];
 export const exercises = exerciseGroups.flatMap(group => group.exercises);

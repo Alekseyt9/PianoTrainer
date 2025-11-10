@@ -57,6 +57,8 @@
     --switch-track-on: #3b82f6;
     --switch-handle: #ffffff;
     --theme-select-bg: rgba(248, 250, 255, 0.92);
+    --theme-select-text: #1f2937;
+    --notation-row-label-color: #0f172a;
     --accent-pulse-low: rgba(59, 130, 246, 0.32);
     --accent-pulse-high: rgba(96, 165, 250, 0.52);
     --exercise-note-current: #1f2937;

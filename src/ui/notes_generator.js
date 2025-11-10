@@ -3,7 +3,7 @@ import { getNotationSvg } from '../core/context.js';
 import { getPressedKeyMap, setPressedKey } from '../core/state.js';
 import { getStepNoteMetas, findNoteByMidi, getStepMidiNumbers, getPreferredNoteName } from '../data/notes_metadata.js';
 import { getThemeColor } from './theme.js';
-import { getRowOffset } from '../core/layout.js';
+import { getRowOffset, getStaffRowHeight, STAFF_LEFT_MARGIN, STAFF_RIGHT_MARGIN } from '../core/layout.js';
 import { computeExerciseWindow, getRowLayout } from '../core/exercise_layout.js';
 import { setStaffRowCount } from './notation.js';
 import { updateRowProgress } from './stats_panel.js';
@@ -12,9 +12,12 @@ const NOTE_SPACING = 48;
 const UNDERLINE_HALF_WIDTH = 16;
 const DEFAULT_ACCIDENTAL_PREFERENCE = 'sharp';
 const DEFAULT_ROW_CAPACITY = 20;
+const NOTATION_SCROLL_AREA_ID = 'notation-scroll-area';
 let lastKnownNotationWidth = 0;
 let lastKnownRowCapacity = DEFAULT_ROW_CAPACITY;
 let configuredRowCapacity = null;
+let lastAutoScrollRowIndex = null;
+let lastAutoScrollExerciseId = null;
 
 export function getCurrentRowCapacity() {
     return lastKnownRowCapacity || getTargetRowCapacity();
@@ -125,6 +128,7 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
             completedNotes: 0,
             totalNotes: 0
         });
+        resetAutoScrollState();
         return;
     }
 
@@ -152,6 +156,11 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
         totalRows: rowCount,
         completedNotes: notesCompletedInRow,
         totalNotes: currentRowTotalSteps
+    });
+    autoScrollRowIntoView({
+        rowIndex: currentRowIndex,
+        rowCount,
+        exerciseId: exercise?.id ?? null
     });
 
     const completedColor = getThemeColor('--playback-note-stroke', '#4b5563');
@@ -247,6 +256,57 @@ export function rebuildNotationCenter() {
 function clearExerciseElements() {
     exerciseElements.forEach(element => element.remove());
     exerciseElements = [];
+}
+
+function getNotationScrollElement() {
+    if (typeof document === 'undefined') {
+        return null;
+    }
+    return document.getElementById(NOTATION_SCROLL_AREA_ID);
+}
+
+function resetAutoScrollState(exerciseId = null) {
+    lastAutoScrollRowIndex = null;
+    lastAutoScrollExerciseId = exerciseId;
+}
+
+function autoScrollRowIntoView({ rowIndex, rowCount, exerciseId }) {
+    const scrollContainer = getNotationScrollElement();
+    if (!scrollContainer || typeof rowIndex !== 'number' || typeof rowCount !== 'number') {
+        return;
+    }
+
+    const normalizedRow = Math.max(0, Math.min(rowCount - 1, rowIndex));
+    const exerciseChanged = exerciseId && exerciseId !== lastAutoScrollExerciseId;
+    if (!exerciseChanged && lastAutoScrollRowIndex === normalizedRow) {
+        return;
+    }
+
+    const rowHeight = getStaffRowHeight();
+    const rowOffset = startY + getRowOffset(normalizedRow);
+    const hasNextRow = normalizedRow < rowCount - 1;
+    const rowsToCover = hasNextRow ? 2 : 1;
+    const desiredBottom = rowOffset + rowHeight * rowsToCover;
+    const viewportHeight = scrollContainer.clientHeight || scrollContainer.offsetHeight || 0;
+    const maxScrollTop = Math.max(0, scrollContainer.scrollHeight - viewportHeight);
+
+    let targetTop = Math.max(0, Math.min(rowOffset, maxScrollTop));
+    if (viewportHeight > 0) {
+        const candidateTop = Math.max(0, desiredBottom - viewportHeight);
+        const cappedTop = Math.min(rowOffset, candidateTop);
+        targetTop = Math.max(0, Math.min(cappedTop, maxScrollTop));
+    }
+
+    const distance = Math.abs((scrollContainer.scrollTop || 0) - targetTop);
+    const behavior = exerciseChanged || distance < rowHeight * 0.35 ? 'auto' : 'smooth';
+    if (typeof scrollContainer.scrollTo === 'function') {
+        scrollContainer.scrollTo({ top: targetTop, behavior });
+    } else {
+        scrollContainer.scrollTop = targetTop;
+    }
+
+    lastAutoScrollRowIndex = normalizedRow;
+    lastAutoScrollExerciseId = exerciseId ?? null;
 }
 
 function createNote(y, name, midiNum, options = {}) {
@@ -399,8 +459,9 @@ function computeRowCapacity(notationSvg) {
             width = lastKnownNotationWidth;
         }
     }
+    const contentWidth = Math.max(0, width - (STAFF_LEFT_MARGIN + STAFF_RIGHT_MARGIN));
     const padding = NOTE_SPACING * 0.6;
-    const effectiveWidth = Math.max(NOTE_SPACING, width - padding);
+    const effectiveWidth = Math.max(NOTE_SPACING, contentWidth - padding);
     const capacity = Math.max(1, Math.floor((effectiveWidth + NOTE_SPACING * 0.25) / NOTE_SPACING));
     const normalizedCapacity = Math.max(1, Math.min(capacity, targetCapacity));
     lastKnownNotationWidth = width;
@@ -445,8 +506,10 @@ function getNotationCenterX() {
     if (!notationSvg) {
         return 0;
     }
-    const svgWidth = notationSvg.clientWidth || notationSvg.getBoundingClientRect().width;
-    return svgWidth / 2;
+    const rect = notationSvg.getBoundingClientRect?.();
+    const svgWidth = rect?.width || notationSvg.clientWidth || 0;
+    const contentWidth = Math.max(0, svgWidth - (STAFF_LEFT_MARGIN + STAFF_RIGHT_MARGIN));
+    return STAFF_LEFT_MARGIN + contentWidth / 2;
 }
 
 function generateRandomId() {
@@ -457,7 +520,7 @@ function getStepX(stepIndex, totalSteps) {
     if (typeof stepIndex !== 'number' || stepIndex < 0) {
         return getNotationCenterX();
     }
-    const leftMargin = NOTE_SPACING * 0.5;
+    const leftMargin = STAFF_LEFT_MARGIN + NOTE_SPACING * 0.5;
     return leftMargin + stepIndex * NOTE_SPACING;
 }
 

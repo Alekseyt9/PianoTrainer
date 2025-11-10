@@ -53,6 +53,7 @@
     --switch-track-on: #ff9ecb;
     --switch-handle: #fff9f2;
     --theme-select-bg: rgba(255, 218, 185, 0.4);
+    --theme-select-text: #4a1b3c;
     --accent-pulse-low: rgba(255, 158, 203, 0.42);
     --accent-pulse-high: rgba(255, 212, 242, 0.85);
     --exercise-note-current: #4a1b3c;
@@ -67,6 +68,7 @@
     --exercise-tile-number-bg: rgba(93, 30, 80, 0.5);
     --scrollbar-track: rgba(88, 26, 76, 0.85);
     --scrollbar-thumb: rgba(255, 182, 193, 0.7);
+    --notation-row-label-color: #4a1b3c;
 }
 
 

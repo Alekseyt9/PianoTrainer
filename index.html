@@ -26,8 +26,8 @@
                         <label class="theme-picker mb-0">
                             <span class="text-uppercase small">Theme</span>
                             <select id="theme-select" aria-label="Choose theme">
-                                <option value="midnight">Midnight</option>
                                 <option value="light" selected>Light</option>
+                                <option value="midnight">Midnight</option>
                                 <option value="aurora">Aurora</option>
                                 <option value="sunrise">Sunrise</option>
                             </select>
@@ -75,6 +75,9 @@
                 </aside>
                 <main id="container" class="card content-card h-100 d-flex flex-column flex-grow-1">
                     <div id="notation-container" class="notation-scroll w-100 flex-grow-1 position-relative">
+                        <div id="notation-scroll-area" class="notation-scroll-area">
+                            <svg id="notation" class="w-100" xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet"></svg>
+                        </div>
                         <div id="error-overlay" class="error-overlay" hidden>
                             <div class="error-overlay-inner">
                                 <div class="error-overlay-circle">
@@ -83,7 +86,6 @@
                                 </div>
                             </div>
                         </div>
-                        <svg id="notation" class="w-100" xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet"></svg>
                     </div>
                     <svg id="keyboard" class="w-100" xmlns="http://www.w3.org/2000/svg"></svg>
                 </main>
