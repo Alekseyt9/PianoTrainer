@@ -26,7 +26,7 @@ const flatNameMap = semitoneDefinitions.map(definition => {
     return preferred ?? definition.names[0];
 });
 
-function normalizeNoteName(value) {
+export function normalizeNoteName(value) {
     if (typeof value !== 'string') {
         return null;
     }
@@ -135,6 +135,33 @@ export function getPreferredNoteName(midiNumber, preference = 'sharp') {
 
 export function getAllNotesMeta() {
     return notesMeta.slice();
+}
+
+export function getAccidentalPair(midiNumber) {
+    const note = findNoteByMidi(midiNumber);
+    if (!note) {
+        return null;
+    }
+    const names = [note.name, ...(Array.isArray(note.aliases) ? note.aliases : [])];
+    const pair = {
+        sharp: null,
+        flat: null
+    };
+    names.forEach(name => {
+        const canonical = normalizeNoteName(name);
+        if (!canonical) {
+            return;
+        }
+        if (canonical.includes('#')) {
+            pair.sharp = canonical;
+        } else if (canonical.includes('b')) {
+            pair.flat = canonical;
+        }
+    });
+    if (!pair.sharp && !pair.flat) {
+        return null;
+    }
+    return pair;
 }
 
 export function normalizeStepNoteNames(step) {

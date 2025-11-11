@@ -1,5 +1,9 @@
 import { exercises } from '../data/exercises/index.js';
-import { getStepMidiNumbers } from '../data/notes_metadata.js';
+import {
+    getStepNoteMetas,
+    getAccidentalPair,
+    normalizeNoteName
+} from '../data/notes_metadata.js';
 import { getCurrentRowCapacity } from '../ui/notes_generator.js';
 
 let currentExercise = exercises[0] || null;
@@ -45,17 +49,21 @@ export function handleNoteInput(midiNumber) {
     }
 
     const step = exercise.steps[currentIndex];
-    const expectedNotes = getStepMidiNumbers(step);
-    if (!expectedNotes.length) {
+    const expectedDetails = getExpectedNoteDetails(step);
+    if (!expectedDetails.length) {
         return { correct: false, finished: false, mistake: false };
     }
+    const expectedNotes = expectedDetails.map(detail => detail.midi);
 
     if (chordState.stepIndex !== currentIndex) {
         chordState = createChordState(currentIndex);
     }
 
     const normalizedInput = Number(midiNumber);
-    const match = expectedNotes.includes(normalizedInput);
+    const matchedDetail = expectedDetails.find(detail =>
+        matchesExpectedAccidental(detail, normalizedInput)
+    );
+    const match = Boolean(matchedDetail);
     if (!match) {
         const previousIndex = currentIndex;
         const capacityValue = Number(getCurrentRowCapacity());
@@ -111,6 +119,48 @@ function createChordState(stepIndex) {
         stepIndex,
         pressed: new Set()
     };
+}
+
+function getExpectedNoteDetails(step) {
+    const metas = getStepNoteMetas(step);
+    if (!Array.isArray(metas)) {
+        return [];
+    }
+    return metas
+        .map(meta => {
+            if (!meta || typeof meta.midiNum !== 'number') {
+                return null;
+            }
+            const canonical = normalizeNoteName(meta.displayName || meta.name);
+            return canonical ? { midi: meta.midiNum, name: canonical } : null;
+        })
+        .filter(Boolean);
+}
+
+function matchesExpectedAccidental(detail, midiNumber) {
+    if (!detail || detail.midi !== midiNumber) {
+        return false;
+    }
+    const name = detail.name;
+    if (!name) {
+        return true;
+    }
+    const hasSharp = name.includes('#');
+    const hasFlat = name.includes('b');
+    if (!hasSharp && !hasFlat) {
+        return true;
+    }
+    const pair = getAccidentalPair(midiNumber);
+    if (!pair) {
+        return false;
+    }
+    if (hasSharp) {
+        return pair.sharp === name;
+    }
+    if (hasFlat) {
+        return pair.flat === name;
+    }
+    return false;
 }
 
 function notify() {

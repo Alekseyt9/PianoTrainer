@@ -174,16 +174,16 @@ export const patternsGroup = {
         {
             "id": "accidentals-mixed-chords",
             "title": "Accidental Chords",
-            "description": "Broken chords combining sharps and flats for finger control.",
+            "description": "Broken chords that reinforce flat spellings across familiar shapes.",
             "displayWindow": 8,
             "steps": [
-                "C#4 E4 G#4",
-                "Bb3 D4 F#4",
                 "Db4 F4 Ab4",
-                "A#3 C#4 F4",
+                "Bb3 D4 Gb4",
+                "Db4 F4 Ab4",
+                "Bb3 Db4 F4",
                 "Eb4 G4 Bb4",
                 "Gb3 Bb3 Db4",
-                "F#4 A4 C#5",
+                "Gb4 A4 Db5",
                 "Ab3 C4 Eb4"
             ]
         }

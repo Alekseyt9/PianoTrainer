@@ -1,4 +1,4 @@
-import { getKeyboardSvg } from '../core/context.js';
+import { getKeyboardSvg, getNotationSvg } from '../core/context.js';
 import { noteOn, noteOff } from '../core/playback.js';
 import { rebuildNotationCenter } from './notes_generator.js';
 
@@ -66,12 +66,16 @@ function renderKeyboard() {
         return;
     }
 
-    const keyboardWidth = keyboardSvg.clientWidth || keyboardSvg.getBoundingClientRect().width;
+    const keyboardWidth = resolveKeyboardWidth(keyboardSvg);
+    if (!keyboardWidth) {
+        return;
+    }
     const whiteKeyWidth = keyboardWidth / (7 * octaveCount);
     const blackKeyWidth = whiteKeyWidth * 0.6;
     const blackKeyHeight = whiteKeyWidth * 2.4;
     const whiteKeyHeight = whiteKeyWidth * 4;
 
+    keyboardSvg.setAttribute('width', keyboardWidth.toString());
     keyboardSvg.setAttribute('height', whiteKeyHeight);
 
     const defs = keyboardSvg.ownerDocument.createElementNS(keyboardSvg.namespaceURI, 'defs');
@@ -177,3 +181,117 @@ function createGradient(id, stops) {
 window.addEventListener('resize', () => {
     rebuildKeyboardPreservingState();
 });
+
+function resolveKeyboardWidth(keyboardSvg) {
+    if (!keyboardSvg) {
+        return 0;
+    }
+
+    const directWidth = measureElementWidth(keyboardSvg);
+    if (directWidth) {
+        return directWidth;
+    }
+
+    const parentWidth = measureElementWidth(keyboardSvg.parentElement);
+    if (parentWidth) {
+        return parentWidth;
+    }
+
+    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+        const inlineStyles = window.getComputedStyle?.(keyboardSvg);
+        const inlineWidth = parseCssDimension(inlineStyles?.width, keyboardSvg);
+        if (inlineWidth) {
+            return inlineWidth;
+        }
+
+        const rootStyles = window.getComputedStyle?.(document.documentElement);
+        if (rootStyles) {
+            const trackWidth = parseCssDimension(rootStyles.getPropertyValue('--notation-track-width'), keyboardSvg);
+            if (trackWidth) {
+                return trackWidth;
+            }
+            const staffPadding = getCssNumber(rootStyles, '--notation-staff-padding', 0);
+            const noteSpacing = getCssNumber(rootStyles, '--notation-note-spacing', 0);
+            const rowCapacity = getCssNumber(rootStyles, '--notation-row-capacity', 0);
+            const computedTrackWidth = staffPadding * 2 + noteSpacing * rowCapacity;
+            if (computedTrackWidth > 0) {
+                return computedTrackWidth;
+            }
+        }
+    }
+
+    const notationSvg = getNotationSvg();
+    const notationWidth = measureElementWidth(notationSvg);
+    if (notationWidth) {
+        return notationWidth;
+    }
+    if (notationSvg) {
+        const viewBoxWidth = notationSvg.viewBox?.baseVal?.width;
+        if (Number.isFinite(viewBoxWidth) && viewBoxWidth > 0) {
+            return viewBoxWidth;
+        }
+        const attrNotationWidth = Number.parseFloat(notationSvg.getAttribute('width') || '');
+        if (Number.isFinite(attrNotationWidth) && attrNotationWidth > 0) {
+            return attrNotationWidth;
+        }
+    }
+
+    const attrWidth = Number.parseFloat(keyboardSvg.getAttribute('width') || '');
+    if (Number.isFinite(attrWidth) && attrWidth > 0) {
+        return attrWidth;
+    }
+
+    return 0;
+}
+
+function parseCssDimension(value, referenceElement) {
+    if (typeof value !== 'string') {
+        return null;
+    }
+    const trimmed = value.trim();
+    if (!trimmed) {
+        return null;
+    }
+    const hasExpression = trimmed.includes('calc(') || trimmed.includes('var(');
+    if (!hasExpression) {
+        const parsed = Number.parseFloat(trimmed);
+        return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+    }
+    const doc = referenceElement?.ownerDocument || (typeof document !== 'undefined' ? document : null);
+    if (!doc || !doc.body) {
+        return null;
+    }
+    const probe = doc.createElement('div');
+    probe.style.position = 'absolute';
+    probe.style.visibility = 'hidden';
+    probe.style.pointerEvents = 'none';
+    probe.style.height = '0';
+    probe.style.width = trimmed;
+    doc.body.appendChild(probe);
+    const resolved = probe.getBoundingClientRect().width;
+    probe.remove();
+    return resolved || null;
+}
+
+function measureElementWidth(element) {
+    if (!element) {
+        return 0;
+    }
+    const rect = element.getBoundingClientRect?.();
+    if (rect && rect.width) {
+        return rect.width;
+    }
+    if (element.clientWidth) {
+        return element.clientWidth;
+    }
+    return 0;
+}
+
+function getCssNumber(styles, property, fallback = 0) {
+    if (!styles) {
+        return fallback;
+    }
+    const raw = styles.getPropertyValue(property);
+    const parsed = Number.parseFloat(raw);
+    return Number.isFinite(parsed) ? parsed : fallback;
+}

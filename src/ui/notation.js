@@ -12,7 +12,7 @@ import {
 let notationResizeObserver;
 let manualScrollCleanup = null;
 const ROW_LABEL_CLASS = 'staff-row-label';
-const ROW_LABEL_OFFSET = 22;
+const ROW_LABEL_OFFSET = 8;
 
 export function initNotation() {
     const notationSvg = getNotationSvg();

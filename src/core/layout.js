@@ -2,8 +2,8 @@ import { distY, startY } from './consts.js';
 
 const STAFF_GAP_MULTIPLIER = 6;
 const SYSTEM_LINE_COUNT = 10;
-export const STAFF_LEFT_MARGIN = 48;
-export const STAFF_RIGHT_MARGIN = 48;
+export const STAFF_LEFT_MARGIN = 32;
+export const STAFF_RIGHT_MARGIN = 32;
 
 export function getStaffSystemHeight() {
     return distY * SYSTEM_LINE_COUNT;

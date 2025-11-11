@@ -59,13 +59,14 @@ function convertStep(step, preference) {
     if (!noteNames.length) {
         return step.trim();
     }
-    const midiNumbers = noteNames
-        .map(getMidiNumberByName)
-        .filter(midi => typeof midi === 'number');
-    if (!midiNumbers.length) {
-        return step.trim();
-    }
-    const converted = midiNumbers.map(midi => getPreferredNoteName(midi, preference));
+    const targetPreference = preference === 'flat' ? 'flat' : 'sharp';
+    const converted = noteNames.map(name => {
+        const midi = getMidiNumberByName(name);
+        if (typeof midi !== 'number') {
+            return name.trim();
+        }
+        return getPreferredNoteName(midi, targetPreference);
+    });
     return converted.join(' ');
 }
 

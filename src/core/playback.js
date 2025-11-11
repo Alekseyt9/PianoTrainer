@@ -14,18 +14,16 @@ export function registerScoreHandler(handler) {
 }
 
 export function noteOn(noteNumber) {
-    if (isInputLocked()) {
-        return;
-    }
-
     const keyboardSvg = getKeyboardSvg();
-    if (!keyboardSvg) {
-        return;
-    }
-
-    const keyElement = keyboardSvg.querySelector(`[data-note-number="${noteNumber}"]`);
+    const keyElement = keyboardSvg
+        ? keyboardSvg.querySelector(`[data-note-number="${noteNumber}"]`)
+        : null;
     if (keyElement) {
         keyElement.classList.add('active');
+    }
+
+    if (isInputLocked()) {
+        return;
     }
 
     const noteMeta = findNoteByMidi(noteNumber);
@@ -35,9 +33,12 @@ export function noteOn(noteNumber) {
 
     const exercise = getCurrentExercise();
     const preference = exercise?.accidentalPreference ?? DEFAULT_ACCIDENTAL_PREFERENCE;
-    const { cx: targetCx, offsetY } = resolveCurrentStepPosition(noteNumber);
+    const { cx: targetCx, offsetY, displayName } = resolveCurrentStepPosition(noteNumber);
     const playbackColor = getThemeColor('--playback-note-stroke', '#4b5563');
-    const label = getPreferredNoteName(noteNumber, preference) ?? noteMeta.name;
+    const label =
+        displayName ||
+        getPreferredNoteName(noteNumber, preference) ||
+        noteMeta.name;
     const visualElements = createVisualNote(noteMeta, {
         color: playbackColor,
         cx: targetCx,
@@ -52,9 +53,6 @@ export function noteOn(noteNumber) {
         onScoreIncrement?.();
     } else if (result.mistake) {
         recordErrorAttempt(exercise ? exercise.id : null);
-        if (keyElement) {
-            keyElement.classList.remove('active');
-        }
         const elements = getPressedKey(noteNumber);
         if (elements) {
             removeVisualNote(elements);
@@ -92,18 +90,24 @@ function resolveCurrentStepPosition(noteNumber) {
         if (noteElement) {
             const cxAttr = noteElement.getAttribute('cx');
             const offsetAttr = noteElement.getAttribute('data-offset-y');
+            const labelAttr = noteElement.getAttribute('data-display-name');
             const cx = cxAttr != null ? Number(cxAttr) : NaN;
             const offsetY = offsetAttr != null ? Number(offsetAttr) : 0;
             if (!Number.isNaN(cx)) {
-                return { cx, offsetY };
+                return {
+                    cx,
+                    offsetY,
+                    displayName: labelAttr || undefined
+                };
             }
         }
     }
 
     const exercise = getCurrentExercise();
     if (!exercise) {
-        return { cx: undefined, offsetY: 0 };
+        return { cx: undefined, offsetY: 0, displayName: undefined };
     }
 
-    return resolveStepPosition(exercise, currentIndex, noteNumber);
+    const { cx, offsetY } = resolveStepPosition(exercise, currentIndex, noteNumber);
+    return { cx, offsetY, displayName: undefined };
 }

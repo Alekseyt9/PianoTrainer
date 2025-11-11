@@ -28,7 +28,7 @@ body {
 
     box-sizing: border-box;
 
-    overflow-x: hidden;
+    overflow-x: auto;
 
     overflow-y: hidden;
 
@@ -38,19 +38,21 @@ body {
 
     --notation-note-spacing: 48px;
 
-    --notation-row-capacity: 20;
+    --notation-row-capacity: 15;
 
-    --exercise-panel-width: 260px;
+    --notation-staff-padding: 32px;
 
-    --stats-panel-width: 220px;
+    --exercise-panel-width: clamp(220px, 18vw, 260px);
 
-    --keyboard-max-width: 900px;
+    --stats-panel-width: clamp(180px, 14vw, 220px);
 
-    --notation-track-base: calc(var(--notation-note-spacing) * (var(--notation-row-capacity) + 1));
+    --keyboard-max-width: calc(var(--notation-staff-padding) * 2 + var(--notation-note-spacing) * var(--notation-row-capacity));
 
-    --workspace-horizontal-gap: 144px;
+    --notation-track-base: calc(var(--notation-staff-padding) * 2 + var(--notation-note-spacing) * var(--notation-row-capacity));
 
-    --notation-track-width: max(var(--keyboard-max-width), var(--notation-track-base));
+    --workspace-horizontal-gap: clamp(48px, 6vw, 144px);
+
+    --notation-track-width: var(--notation-track-base);
 
     --notation-container-width: var(--notation-track-width);
 
@@ -77,7 +79,11 @@ body {
 
     gap: 16px;
 
-    width: min(1700px, 100%);
+    width: var(--workspace-max-width);
+
+    min-width: var(--workspace-max-width);
+
+    max-width: var(--workspace-max-width);
 
     height: 100%;
 
@@ -104,7 +110,11 @@ body {
 
     min-height: 0;
 
-    width: min(100%, var(--workspace-max-width));
+    width: var(--workspace-max-width);
+
+    min-width: var(--workspace-max-width);
+
+    max-width: var(--workspace-max-width);
 
     margin-inline: auto;
 
@@ -133,7 +143,9 @@ body {
     min-height: 44px;
     padding: 6px 24px;
     border-radius: 0 0 18px 18px;
-    width: min(100%, var(--workspace-max-width));
+    width: var(--workspace-max-width);
+    min-width: var(--workspace-max-width);
+    max-width: var(--workspace-max-width);
     margin-inline: auto;
     box-sizing: border-box;
 }
@@ -206,12 +218,16 @@ body {
     gap: clamp(16px, 3vw, 28px);
     align-items: stretch;
     flex: 1 1 auto;
-    min-height: calc(100vh - var(--app-vertical-offset));
-    width: min(100%, var(--workspace-max-width));
+    height: calc(100vh - var(--app-vertical-offset));
+    max-height: calc(100vh - var(--app-vertical-offset));
+    width: var(--workspace-max-width);
+    min-width: var(--workspace-max-width);
+    max-width: var(--workspace-max-width);
     margin-inline: auto;
-    padding-inline: clamp(16px, 5vw, 56px);
+    padding-inline: 0;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow-x: visible;
+    overflow-y: hidden;
 }
 
 #exercise-panel {
@@ -222,7 +238,7 @@ body {
     max-width: 100%;
     min-height: 0;
     height: 100%;
-    overflow-x: hidden;
+    overflow-x: auto;
     overflow-y: auto;
     box-sizing: border-box;
     grid-column: 1;
@@ -238,7 +254,7 @@ body {
     max-width: 100%;
     min-height: 0;
     height: 100%;
-    overflow-x: hidden;
+    overflow-x: auto;
     overflow-y: auto;
     box-sizing: border-box;
     grid-column: 3;
@@ -286,20 +302,21 @@ body {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: clamp(8px, 1.8vh, 18px);
-    flex: 0 0 auto;
-    width: min(100%, var(--notation-container-width));
-    min-width: min(100%, var(--notation-container-width));
+    gap: 0;
+    flex: 1 1 auto;
+    width: var(--notation-container-width);
+    min-width: var(--notation-container-width);
     max-width: var(--notation-container-width);
     min-height: 0;
+    height: 100%;
     margin-inline: 0;
-    padding: clamp(16px, 2vh, 24px) clamp(24px, 4vw, 36px) 0;
+    padding: clamp(14px, 2vh, 22px) 0 0;
     grid-column: 2;
     grid-row: 1;
     align-self: center;
     justify-content: flex-start;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow: visible;
 }
 
 
@@ -620,23 +637,22 @@ body {
     padding: 8px 12px;
 }
 
-#container {
-    min-height: 0;
-}
-
-
 #notation-container {
-    width: 100%;
-    max-width: 100%;
+    width: var(--notation-track-width);
+    max-width: var(--notation-track-width);
+    min-width: var(--notation-track-width);
     flex: 1 1 auto;
     min-height: 0;
-    min-width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     margin-bottom: 0;
     overflow: hidden;
     position: relative;
 }
 
 .notation-scroll-area {
+    flex: 1 1 auto;
     position: relative;
     width: 100%;
     height: 100%;
@@ -656,9 +672,9 @@ body {
     background: transparent;
     border: none;
     border-radius: 0;
-    width: min(100%, var(--notation-track-width));
-    min-width: min(100%, var(--notation-track-width));
-    max-width: none;
+    width: var(--notation-track-width);
+    min-width: var(--notation-track-width);
+    max-width: var(--notation-track-width);
     display: block;
 }
 
@@ -739,14 +755,15 @@ body {
 #keyboard {
     /* keyboard container styling */
     display: block;
-    width: 100%;
-    max-width: 100%;
+    width: var(--notation-track-width);
+    min-width: var(--notation-track-width);
+    max-width: var(--notation-track-width);
     flex: 0 0 auto;
     height: auto;
     min-height: 0;
     margin-top: 0;
     margin-bottom: 0;
-    align-self: stretch;
+    align-self: flex-start;
     background: linear-gradient(180deg, var(--keyboard-bg-top) 0%, var(--keyboard-bg-bottom) 100%);
     border-radius: 0;
     overflow: hidden;

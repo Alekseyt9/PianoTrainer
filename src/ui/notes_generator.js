@@ -1,7 +1,7 @@
 import { xmlns, startY, distY } from '../core/consts.js';
 import { getNotationSvg } from '../core/context.js';
 import { getPressedKeyMap, setPressedKey } from '../core/state.js';
-import { getStepNoteMetas, findNoteByMidi, getStepMidiNumbers, getPreferredNoteName } from '../data/notes_metadata.js';
+import { getStepNoteMetas, findNoteByMidi, findNoteByName, getStepMidiNumbers, getPreferredNoteName } from '../data/notes_metadata.js';
 import { getThemeColor } from './theme.js';
 import { getRowOffset, getStaffRowHeight, STAFF_LEFT_MARGIN, STAFF_RIGHT_MARGIN } from '../core/layout.js';
 import { computeExerciseWindow, getRowLayout } from '../core/exercise_layout.js';
@@ -11,7 +11,7 @@ import { updateRowProgress } from './stats_panel.js';
 const NOTE_SPACING = 48;
 const UNDERLINE_HALF_WIDTH = 16;
 const DEFAULT_ACCIDENTAL_PREFERENCE = 'sharp';
-const DEFAULT_ROW_CAPACITY = 20;
+const DEFAULT_ROW_CAPACITY = 15;
 const NOTATION_SCROLL_AREA_ID = 'notation-scroll-area';
 let lastKnownNotationWidth = 0;
 let lastKnownRowCapacity = DEFAULT_ROW_CAPACITY;
@@ -81,7 +81,8 @@ export function createVisualNote(meta, { color, cx, offsetY, label } = {}) {
         options.offsetY = offsetY;
     }
     const noteLabel = label ?? meta.displayName ?? meta.name;
-    return createNote(meta.y, noteLabel, meta.midiNum, options);
+    const displayY = resolveDisplayY(meta, noteLabel);
+    return createNote(displayY, noteLabel, meta.midiNum, options);
 }
 
 export function removeVisualNote(elements) {
@@ -193,7 +194,9 @@ export function renderExerciseSteps(exercise, currentIndex, { preserveSnapshot =
                 chordSize: noteMetas.length,
                 totalSteps: stepsInRow
             });
-            const noteElements = createNote(meta.y, meta.displayName || meta.name, meta.midiNum, {
+            const noteLabel = meta.displayName || meta.name;
+            const displayY = resolveDisplayY(meta, noteLabel);
+            const noteElements = createNote(displayY, noteLabel, meta.midiNum, {
                 cx,
                 stroke: strokeColor,
                 fill: 'none',
@@ -338,6 +341,9 @@ function createNote(y, name, midiNum, options = {}) {
     note.setAttribute('data-midi-num', midiNum);
     note.setAttribute('data-base-y', y);
     note.setAttribute('data-offset-y', offsetY);
+    if (typeof name === 'string' && name.length) {
+        note.setAttribute('data-display-name', name);
+    }
     note.setAttribute('id', generateRandomId());
 
     notationSvg.appendChild(note);
@@ -345,20 +351,23 @@ function createNote(y, name, midiNum, options = {}) {
     const underlines = drawUnderlines(y, stroke, cx, opacity, offsetY);
     const elements = [note, ...underlines];
 
-    const accidentalSymbol = resolveAccidentalSymbol(name);
-    if (accidentalSymbol) {
+    const accidentalData = resolveAccidentalSymbol(name);
+    if (accidentalData) {
+        const { symbol, position } = accidentalData;
+        const xOffset = position === 'flat' ? -10 : 18;
+        const textAnchor = position === 'flat' ? 'end' : 'start';
         const accidental = notationSvg.ownerDocument.createElementNS(xmlns, 'text');
-        accidental.setAttribute('x', cx - 12);
+        accidental.setAttribute('x', cx + xOffset);
         accidental.setAttribute('y', absoluteY + 1);
         accidental.setAttribute('font-size', '14');
         accidental.setAttribute('font-family', 'Arial, sans-serif');
         accidental.setAttribute('fill', stroke);
         accidental.setAttribute('opacity', opacity);
-        accidental.setAttribute('text-anchor', 'middle');
+        accidental.setAttribute('text-anchor', textAnchor);
         accidental.setAttribute('dominant-baseline', 'middle');
         accidental.setAttribute('data-base-y', y);
         accidental.setAttribute('data-offset-y', offsetY);
-        accidental.textContent = accidentalSymbol;
+        accidental.textContent = symbol;
         notationSvg.appendChild(accidental);
         elements.push(accidental);
     }
@@ -453,6 +462,12 @@ function computeRowCapacity(notationSvg) {
     if (width <= 0) {
         return lastKnownRowCapacity || targetCapacity;
     }
+    const expectedWidth = STAFF_LEFT_MARGIN + STAFF_RIGHT_MARGIN + NOTE_SPACING * targetCapacity;
+    if (width >= expectedWidth - 0.5) {
+        lastKnownNotationWidth = width;
+        lastKnownRowCapacity = targetCapacity;
+        return targetCapacity;
+    }
     if (lastKnownNotationWidth && width < lastKnownNotationWidth) {
         const shrink = lastKnownNotationWidth - width;
         if (shrink < NOTE_SPACING) {
@@ -538,11 +553,32 @@ function resolveAccidentalSymbol(name) {
     }
     const accidental = match[1];
     if (accidental === '#' || accidental === '\u266F') {
-        return '\u266F';
+        return { symbol: '\u266F', position: 'sharp' };
     }
     if (accidental === 'b' || accidental === '\u266D') {
-        return '\u266D';
+        return { symbol: '\u266D', position: 'flat' };
     }
     return null;
+}
+
+function resolveDisplayY(meta, label) {
+    if (!meta || typeof meta.y !== 'number') {
+        return meta?.y ?? 0;
+    }
+    if (typeof label !== 'string') {
+        return meta.y;
+    }
+    const match = label.trim().match(/^([A-Ga-g])([#b\u266F\u266D]?)(\d)$/);
+    if (!match) {
+        return meta.y;
+    }
+    const baseLetter = match[1].toUpperCase();
+    const octave = match[3];
+    const naturalName = `${baseLetter}${octave}`;
+    const naturalMeta = findNoteByName(naturalName);
+    if (naturalMeta && typeof naturalMeta.y === 'number') {
+        return naturalMeta.y;
+    }
+    return meta.y;
 }
 
